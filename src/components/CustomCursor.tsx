@@ -9,8 +9,9 @@ export function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only activate on non-touch devices
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    // Only activate on non-touch devices for users who haven't asked for reduced motion
+    // (must match the cursor: none media query in index.css)
+    if (!window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
 
     const dot = dotRef.current!;
     const ring = ringRef.current!;
@@ -24,7 +25,12 @@ export function CustomCursor() {
     let hovering = false;
     let clicking = false;
     let entered = false;
-    let rafId: number;
+    let rafId = 0;
+
+    // Run the animation loop only while something is still moving
+    function wake() {
+      if (!rafId) rafId = requestAnimationFrame(animate);
+    }
 
     const INTERACTIVE = "a, button, input, select, textarea, label, [role='button']";
 
@@ -42,10 +48,11 @@ export function CustomCursor() {
 
       const target = document.elementFromPoint(e.clientX, e.clientY);
       hovering = !!target?.closest(INTERACTIVE);
+      wake();
     }
 
-    function onMouseDown() { clicking = true; }
-    function onMouseUp() { clicking = false; }
+    function onMouseDown() { clicking = true; wake(); }
+    function onMouseUp() { clicking = false; wake(); }
 
     function animate() {
       // Lerp ring position toward dot
@@ -64,13 +71,15 @@ export function CustomCursor() {
         ? "var(--portfolio-accent)"
         : "rgba(255, 255, 255, 0.75)";
 
-      rafId = requestAnimationFrame(animate);
+      const settled =
+        Math.abs(ringX - mouseX) < 0.1 && Math.abs(ringY - mouseY) < 0.1 &&
+        Math.abs(dotScale - targetDotScale) < 0.001 && Math.abs(ringScale - targetRingScale) < 0.001;
+      rafId = settled ? 0 : requestAnimationFrame(animate);
     }
 
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
-    rafId = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener("mousemove", onMouseMove);

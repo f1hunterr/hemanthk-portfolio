@@ -190,7 +190,7 @@ const previousRoles = [
   },
   {
     title: "Field Representative",
-    company: "Hbs (Halcyon Business Solutions)",
+    company: "HBS (Halcyon Business Solutions)",
     period: "2018 – 2019",
     location: "Bangalore, India",
     points: [

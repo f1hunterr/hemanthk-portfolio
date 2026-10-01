@@ -8,6 +8,7 @@ const CY = H / 2;
 const CORE_R = 36;
 const SPAWN_MS = 1100;
 const BETWEEN_MS = 2400;
+const FRAME_MS = 1000 / 60;
 
 type TType = "virus" | "ddos" | "ransom" | "zeroday";
 type GState = "idle" | "playing" | "between" | "over";
@@ -82,6 +83,7 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
   const gsRef = useRef<GS>(makeGS());
   const rafRef = useRef<number>(0);
   const lastTRef = useRef<number>(0);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -313,6 +315,8 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
       const delta = Math.min(ts - lastTRef.current, 50);
       lastTRef.current = ts;
       const gs = gsRef.current;
+      // Speeds are tuned per 60fps frame; scale by elapsed time so high-refresh displays aren't faster
+      const f = delta / FRAME_MS;
 
       if (gs.state === "playing") {
         gs.spawnT += delta;
@@ -323,8 +327,8 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
 
         for (let i = gs.threats.length - 1; i >= 0; i--) {
           const t = gs.threats[i];
-          t.x += t.dx;
-          t.y += t.dy;
+          t.x += t.dx * f;
+          t.y += t.dy * f;
           if (t.flash > 0) t.flash -= delta;
           if (Math.hypot(t.x - CX, t.y - CY) < CORE_R + t.r * 0.55) {
             burst(gs, t.x, t.y, "#ef4444", 6);
@@ -334,7 +338,7 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
           }
         }
 
-        if (gs.queue.length === 0 && gs.threats.length === 0) {
+        if (gs.state === "playing" && gs.queue.length === 0 && gs.threats.length === 0) {
           gs.state = "between";
           gs.betweenT = 0;
         }
@@ -347,9 +351,10 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
 
       for (let i = gs.particles.length - 1; i >= 0; i--) {
         const p = gs.particles[i];
-        p.x += p.vx; p.y += p.vy;
-        p.vx *= 0.93; p.vy *= 0.93;
-        p.alpha -= 0.022;
+        p.x += p.vx * f; p.y += p.vy * f;
+        const drag = Math.pow(0.93, f);
+        p.vx *= drag; p.vy *= drag;
+        p.alpha -= 0.022 * f;
         if (p.alpha <= 0) gs.particles.splice(i, 1);
       }
 
@@ -361,15 +366,44 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
+  // Modal behaviour: Esc closes, page behind doesn't scroll, focus moves in and is restored on close
+  useEffect(() => {
+    const prevFocus = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "Tab") { e.preventDefault(); closeRef.current?.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+      prevFocus?.focus();
+    };
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="relative rounded-2xl border border-border shadow-2xl overflow-hidden flex flex-col" style={{ background: "#091525", maxWidth: W }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="network-defense-title"
+        className="relative rounded-2xl border border-border shadow-2xl overflow-hidden flex flex-col"
+        style={{ background: "#091525", maxWidth: W }}
+      >
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-bold text-white tracking-widest" style={{ fontFamily: "'Courier New', monospace" }}>NETWORK DEFENSE</span>
+            <span id="network-defense-title" className="text-sm font-bold text-white tracking-widest" style={{ fontFamily: "'Courier New', monospace" }}>NETWORK DEFENSE</span>
             <span className="text-xs text-slate-400 hidden sm:inline" style={{ fontFamily: "'Inter', sans-serif" }}>Click threats before they reach the core</span>
           </div>
           <button
+            ref={closeRef}
             onClick={onClose}
             className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
             aria-label="Close game"
@@ -380,7 +414,7 @@ export function NetworkDefenseGame({ onClose }: { onClose: () => void }) {
         <canvas
           ref={canvasRef}
           onClick={handleClick}
-          style={{ display: "block", width: "100%", cursor: "crosshair" }}
+          style={{ display: "block", width: "100%" }}
         />
       </div>
     </div>

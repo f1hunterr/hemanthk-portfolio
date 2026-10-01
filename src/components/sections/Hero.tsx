@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Download, Mail, Server, Users, Monitor, Cpu, Briefcase, Github, Linkedin } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 const TITLES = [
   "IT Manager & Infrastructure Lead",
@@ -15,8 +15,10 @@ export function Hero() {
   const [titleIdx, setTitleIdx] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reduceMotion) return;
     const current = TITLES[titleIdx];
     let timer: ReturnType<typeof setTimeout>;
 
@@ -38,7 +40,7 @@ export function Hero() {
     }
 
     return () => clearTimeout(timer);
-  }, [displayed, phase, titleIdx]);
+  }, [displayed, phase, titleIdx, reduceMotion]);
 
   const handleScrollTo = (href: string) => {
     const element = document.querySelector(href);
@@ -102,8 +104,10 @@ export function Hero() {
               className="text-base md:text-lg font-medium text-primary mb-5 leading-snug min-h-[1.75rem]"
               style={{ fontFamily: "'Poppins', sans-serif" }}
             >
-              {displayed}
-              <span className="animate-pulse ml-0.5 inline-block w-0.5 h-5 bg-primary align-middle" />
+              {reduceMotion ? TITLES[0] : displayed}
+              {!reduceMotion && (
+                <span className="animate-pulse ml-0.5 inline-block w-0.5 h-5 bg-primary align-middle" aria-hidden="true" />
+              )}
             </p>
 
             <p className="text-base text-muted-foreground mb-8 leading-relaxed max-w-lg" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -169,7 +173,7 @@ export function Hero() {
                 className="w-9 h-9 rounded-lg flex items-center justify-center border border-border text-muted-foreground hover:text-[#25D366] hover:border-[#25D366]/40 transition-colors"
                 aria-label="WhatsApp"
               >
-                <FaWhatsapp size={17} />
+                <WhatsAppIcon size={17} />
               </a>
             </div>
           </motion.div>
@@ -189,6 +193,9 @@ export function Hero() {
                 <img
                   src={`${import.meta.env.BASE_URL}profile.jpg`}
                   alt="Hemanth K"
+                  width={640}
+                  height={791}
+                  fetchPriority="high"
                   className="w-full h-full object-cover object-top"
                 />
               </div>

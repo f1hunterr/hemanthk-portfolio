@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, Suspense, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +6,10 @@ import {
   Cpu, Workflow, Database, Shield, Package, MessageSquare,
   Activity, Thermometer, BookOpen, ExternalLink, Globe, Gamepad2, Play
 } from "lucide-react";
-import { NetworkDefenseGame } from "@/components/game/NetworkDefenseGame";
+// Loaded on demand: most visitors never open the game, so keep it out of the main bundle
+const NetworkDefenseGame = lazy(() =>
+  import("@/components/game/NetworkDefenseGame").then((m) => ({ default: m.NetworkDefenseGame }))
+);
 
 const projects = [
   {
@@ -103,6 +106,7 @@ const gameProject = {
 
 export function Projects() {
   const [gameOpen, setGameOpen] = useState(false);
+  const closeGame = useCallback(() => setGameOpen(false), []);
   return (
     <section id="projects" className="py-20" style={{ backgroundColor: "var(--portfolio-section-alt)" }}>
       <div className="container mx-auto px-4 md:px-8">
@@ -254,7 +258,11 @@ export function Projects() {
         </div>
       </div>
 
-      {gameOpen && <NetworkDefenseGame onClose={() => setGameOpen(false)} />}
+      {gameOpen && (
+        <Suspense fallback={null}>
+          <NetworkDefenseGame onClose={closeGame} />
+        </Suspense>
+      )}
     </section>
   );
 }

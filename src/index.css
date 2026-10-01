@@ -1,13 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
-@media (pointer: fine) {
+/* Must match the media query in CustomCursor.tsx */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
   *, *::before, *::after {
     cursor: none !important;
+  }
+  /* Keep the text caret indicator where people type */
+  input, textarea, [contenteditable] {
+    cursor: text !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

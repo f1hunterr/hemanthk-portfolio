@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Linkedin, Send, Building2 } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -44,7 +44,7 @@ const contactInfo = [
     href: "https://www.linkedin.com/in/hemanth-k-8609b4255",
   },
   {
-    icon: <FaWhatsapp className="w-5 h-5" />,
+    icon: <WhatsAppIcon className="w-5 h-5" />,
     label: "WhatsApp",
     value: "+91 80884 61724",
     href: "https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!",
@@ -64,6 +64,8 @@ const contactInfo = [
 export function Contact() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Honeypot: hidden from people, bots fill it in; Formspree silently drops submissions where it's set
+  const gotchaRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,7 +82,7 @@ export function Contact() {
       const res = await fetch("https://formspree.io/f/mojrrnqd", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, _gotcha: gotchaRef.current?.value ?? "" }),
       });
       if (res.ok) {
         toast({
@@ -220,6 +222,15 @@ export function Contact() {
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                  <input
+                    ref={gotchaRef}
+                    type="text"
+                    name="_gotcha"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                  />
                   <div className="grid sm:grid-cols-2 gap-5">
                     <FormField
                       control={form.control}

@@ -12,8 +12,15 @@ export default function NotFound() {
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground">
-            Did you forget to add the page to the router?
+            The page you're looking for doesn't exist or has moved.
           </p>
+          <a
+            href={import.meta.env.BASE_URL}
+            className="inline-block mt-6 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:opacity-85 transition-opacity"
+            style={{ backgroundColor: "var(--portfolio-navy)" }}
+          >
+            Back to home
+          </a>
         </CardContent>
       </Card>
     </div>

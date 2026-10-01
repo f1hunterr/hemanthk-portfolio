@@ -35,7 +35,7 @@ export function Navbar() {
         }
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -156,6 +156,8 @@ export function Navbar() {
           className="md:hidden p-2 text-foreground rounded-lg hover:bg-secondary transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle Menu"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu"
           data-testid="button-mobile-menu"
         >
           {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -164,7 +166,7 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-background border-b border-border shadow-md py-4 px-4 flex flex-col gap-2">
+        <div id="mobile-menu" className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-background border-b border-border shadow-md py-4 px-4 flex flex-col gap-2">
           {NAV_LINKS.map((link) => (
             <a
               key={link.name}
@@ -183,6 +185,7 @@ export function Navbar() {
               <button
                 key={value}
                 onClick={() => setTheme(value)}
+                aria-pressed={theme === value}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   theme === value
                     ? "text-white"
