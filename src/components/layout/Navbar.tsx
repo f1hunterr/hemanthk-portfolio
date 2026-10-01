@@ -74,17 +74,11 @@ export function Navbar() {
         <a
           href="#home"
           onClick={(e) => handleScrollTo(e, "#home")}
-          className="flex items-center gap-2.5 text-foreground"
+          className="flex items-center text-foreground"
           data-testid="link-logo"
         >
           <span
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white shrink-0"
-            style={{ backgroundColor: "var(--portfolio-navy)", fontFamily: "'Poppins', sans-serif" }}
-          >
-            HK
-          </span>
-          <span
-            className="font-semibold text-base hidden lg:inline-block"
+            className="font-semibold text-lg whitespace-nowrap"
             style={{ color: "var(--portfolio-accent)", fontFamily: "'Poppins', sans-serif" }}
           >
             Hemanth K

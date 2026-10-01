@@ -77,13 +77,7 @@
       .no-boot #boot { display: none; }
       #boot.boot-done { opacity: 0; visibility: hidden; }
       .boot-inner { width: min(340px, calc(100vw - 48px)); }
-      .boot-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
-      .boot-mark {
-        width: 44px; height: 44px; border-radius: 10px; background: #1f3a5f; color: #fff;
-        display: flex; align-items: center; justify-content: center;
-        font: 700 17px 'Poppins', system-ui, sans-serif; animation: boot-pulse 1.6s ease-in-out infinite;
-      }
-      .boot-name { font: 600 18px 'Poppins', system-ui, sans-serif; }
+      .boot-name { margin-bottom: 20px; font: 600 24px 'Poppins', system-ui, sans-serif; }
       .boot-lines { list-style: none; margin: 0 0 18px; padding: 0; font-size: 12.5px; line-height: 1.9; color: var(--boot-muted); }
       .boot-lines li { opacity: 0; transform: translateY(4px); animation: boot-in .35s ease forwards; }
       .boot-lines li:nth-child(1) { animation-delay: .05s; }
@@ -101,16 +95,12 @@
       #boot.boot-ready .boot-bar { width: 100% !important; animation: none; transition: width .25s ease; }
       @keyframes boot-progress { to { width: 85%; } }
       @keyframes boot-in { to { opacity: 1; transform: none; } }
-      @keyframes boot-pulse { 50% { transform: scale(.94); opacity: .85; } }
     </style>
   </head>
   <body>
     <div id="boot" role="status" aria-live="polite" aria-label="Loading portfolio">
       <div class="boot-inner">
-        <div class="boot-logo">
-          <span class="boot-mark">HK</span>
-          <span class="boot-name">Hemanth K</span>
-        </div>
+        <div class="boot-name">Hemanth K</div>
         <ul class="boot-lines" aria-hidden="true">
           <li>initializing infrastructure…</li>
           <li>connecting 200+ endpoints…</li>
