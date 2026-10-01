@@ -53,10 +53,101 @@
         try { stored = localStorage.getItem('portfolio-theme'); } catch (e) {}
         var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (dark) document.documentElement.classList.add('dark');
+
+        // Boot screen: once per tab session, never for reduced-motion users
+        var seen = false;
+        try { seen = sessionStorage.getItem('hk-booted') === '1'; } catch (e) {}
+        if (seen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('no-boot');
+        }
       })();
     </script>
+
+    <!-- Boot screen styles live here (not in the bundle) so it paints before any JS/CSS arrives -->
+    <style>
+      #boot {
+        --boot-bg: #ffffff; --boot-fg: #1f3a5f; --boot-muted: #6b7280; --boot-track: #e5e7eb; --boot-ok: #16a34a;
+        position: fixed; inset: 0; z-index: 10000;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--boot-bg); color: var(--boot-fg);
+        font-family: Menlo, Consolas, 'Courier New', monospace;
+        transition: opacity .45s ease, visibility .45s ease;
+      }
+      .dark #boot { --boot-bg: #0b1220; --boot-fg: #93c5fd; --boot-muted: #94a3b8; --boot-track: #1e293b; --boot-ok: #4ade80; }
+      .no-boot #boot { display: none; }
+      #boot.boot-done { opacity: 0; visibility: hidden; }
+      .boot-inner { width: min(340px, calc(100vw - 48px)); }
+      .boot-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+      .boot-mark {
+        width: 44px; height: 44px; border-radius: 10px; background: #1f3a5f; color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font: 700 17px 'Poppins', system-ui, sans-serif; animation: boot-pulse 1.6s ease-in-out infinite;
+      }
+      .boot-name { font: 600 18px 'Poppins', system-ui, sans-serif; }
+      .boot-lines { list-style: none; margin: 0 0 18px; padding: 0; font-size: 12.5px; line-height: 1.9; color: var(--boot-muted); }
+      .boot-lines li { opacity: 0; transform: translateY(4px); animation: boot-in .35s ease forwards; }
+      .boot-lines li:nth-child(1) { animation-delay: .05s; }
+      .boot-lines li:nth-child(2) { animation-delay: .3s; }
+      .boot-lines li:nth-child(3) { animation-delay: .55s; }
+      .boot-lines li::before { content: '> '; color: var(--boot-fg); }
+      .boot-lines .boot-ok { color: var(--boot-ok); animation-play-state: paused; }
+      #boot.boot-ready .boot-ok { animation-play-state: running; animation-delay: 0s; }
+      .boot-track { height: 3px; border-radius: 3px; background: var(--boot-track); overflow: hidden; }
+      .boot-bar {
+        height: 100%; width: 0; background: var(--boot-fg); border-radius: 3px;
+        /* Creeps toward 85% while loading; jumps to 100% only when the page is actually ready */
+        animation: boot-progress 2.5s cubic-bezier(.1,.7,.3,1) forwards;
+      }
+      #boot.boot-ready .boot-bar { width: 100% !important; animation: none; transition: width .25s ease; }
+      @keyframes boot-progress { to { width: 85%; } }
+      @keyframes boot-in { to { opacity: 1; transform: none; } }
+      @keyframes boot-pulse { 50% { transform: scale(.94); opacity: .85; } }
+    </style>
   </head>
   <body>
+    <div id="boot" role="status" aria-live="polite" aria-label="Loading portfolio">
+      <div class="boot-inner">
+        <div class="boot-logo">
+          <span class="boot-mark">HK</span>
+          <span class="boot-name">Hemanth K</span>
+        </div>
+        <ul class="boot-lines" aria-hidden="true">
+          <li>initializing infrastructure…</li>
+          <li>connecting 200+ endpoints…</li>
+          <li class="boot-ok">all systems operational ✓</li>
+        </ul>
+        <div class="boot-track"><div class="boot-bar"></div></div>
+      </div>
+    </div>
+    <script>
+      (function() {
+        var boot = document.getElementById('boot');
+        if (!boot || document.documentElement.classList.contains('no-boot')) {
+          if (boot) boot.remove();
+          return;
+        }
+        var start = Date.now();
+        var MIN_MS = 900, MAX_MS = 3000, finished = false;
+
+        function finish() {
+          if (finished) return;
+          finished = true;
+          try { sessionStorage.setItem('hk-booted', '1'); } catch (e) {}
+          // Keep the boot lines on screen long enough to read, then show "operational" briefly
+          setTimeout(function() {
+            boot.classList.add('boot-ready');
+            setTimeout(function() {
+              boot.classList.add('boot-done');
+              setTimeout(function() { boot.remove(); }, 500);
+            }, 450);
+          }, Math.max(0, MIN_MS - (Date.now() - start)));
+        }
+
+        if (document.readyState === 'complete') finish();
+        else window.addEventListener('load', finish);
+        setTimeout(finish, MAX_MS); // never hold a visitor hostage on a slow image
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
