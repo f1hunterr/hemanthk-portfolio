@@ -295,10 +295,10 @@
 
   /* ---------- Hero rings + orbiting tool labels ---------- */
   .hero-orbit {
-    --orbit-0: clamp(150px, 20vw, 290px);
-    --orbit-1: clamp(260px, 33vw, 470px);
-    --orbit-2: clamp(340px, 46vw, 660px);
-    --orbit-3: clamp(420px, 60vw, 860px);
+    --orbit-0: clamp(120px, 14vw, 200px);
+    --orbit-1: clamp(190px, 21vw, 310px);
+    --orbit-2: clamp(270px, 33vw, 480px);
+    --orbit-3: clamp(350px, 46vw, 670px);
     position: absolute;
     left: 50%;
     top: 50%;
@@ -318,18 +318,97 @@
   .hero-ring-1 { width: calc(var(--orbit-1) * 2); height: calc(var(--orbit-1) * 2); }
   .hero-ring-2 { width: calc(var(--orbit-2) * 2); height: calc(var(--orbit-2) * 2); border-color: var(--line-strong); }
   .hero-ring-3 { width: calc(var(--orbit-3) * 2); height: calc(var(--orbit-3) * 2); }
-  .hero-chip {
+  /* Each ring spins as a whole; cards spin back by the same amount so photos stay upright */
+  .orbit-spin {
     position: absolute;
     left: 0;
     top: 0;
-    padding: 6px 10px;
-    white-space: nowrap;
-    background: var(--bg-raised);
-    border: 1px solid var(--line-strong);
-    color: var(--muted);
-    font-size: 10px;
+    width: 0;
+    height: 0;
+    animation: orbit-spin var(--spin) linear infinite;
+    will-change: transform;
   }
+  .orbit-spin-1 { --spin: 150s; }
+  .orbit-spin-2 { --spin: 210s; }
+  .orbit-spin-3 { --spin: 280s; }
+  .orbit-rev,
+  .orbit-rev .orbit-card { animation-direction: reverse; }
+  .orbit-slot { position: absolute; left: 0; top: 0; }
+  .orbit-card {
+    width: var(--card-w);
+    aspect-ratio: 16 / 10;
+    animation: orbit-counter var(--spin) linear infinite;
+    will-change: transform;
+  }
+  .orbit-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.45);
+  }
+  /* Outer rings feel closer: bigger cards */
+  .orbit-card-1 { --card-w: clamp(84px, 8vw, 128px); opacity: 0.9; }
+  .orbit-card-2 { --card-w: clamp(100px, 10.5vw, 168px); }
+  .orbit-card-3 { --card-w: clamp(124px, 14vw, 230px); }
+  @keyframes orbit-spin { to { transform: rotate(360deg); } }
+  @keyframes orbit-counter {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+
+  /* Coloured arcs riding on rings 1 and 2: a conic gradient masked down to a thin circle */
+  .hero-arc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 9999px;
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+    animation: arc-spin var(--spin) linear infinite;
+    will-change: transform;
+  }
+  .hero-arc-1 {
+    --spin: 60s;
+    width: calc(var(--orbit-1) * 2);
+    height: calc(var(--orbit-1) * 2);
+    background: conic-gradient(from 0deg, transparent 0 62%, #2d81ff 74%, #7c3aed 84%, transparent 90%);
+  }
+  .hero-arc-2 {
+    --spin: 85s;
+    width: calc(var(--orbit-2) * 2);
+    height: calc(var(--orbit-2) * 2);
+    background: conic-gradient(from 180deg, transparent 0 70%, #22c55e 78%, #2d81ff 88%, transparent 94%);
+    animation-direction: reverse;
+    opacity: 0.8;
+  }
+  @keyframes arc-spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* Small hero text gets a halo in the page colour, for when a card drifts behind it */
+  .legible { text-shadow: 0 0 10px var(--bg), 0 0 18px var(--bg), 0 0 2px var(--bg); }
+
+  .hero-veil {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 40% 44% at 50% 50%,
+      var(--bg) 30%,
+      color-mix(in oklab, var(--bg) 80%, transparent) 58%,
+      transparent 100%
+    );
+  }
+
+  /* Phones: smaller cards, the innermost ring would sit right under the text */
   @media (max-width: 767px) {
-    .hero-chip { display: none; }
+    .orbit-spin-1, .orbit-spin-2 { display: none; }
+    .orbit-card-3 { --card-w: 112px; }
+    .hero-veil { background: radial-gradient(ellipse 70% 42% at 50% 50%, var(--bg) 40%, color-mix(in oklab, var(--bg) 80%, transparent) 65%, transparent 100%); }
   }
 }

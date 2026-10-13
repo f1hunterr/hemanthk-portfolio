@@ -5,12 +5,15 @@ import { ArrowDown, Download } from "lucide-react";
 // The italic word in the tagline cycles through these
 const WORDS = ["reliable.", "automated.", "secure.", "monitored."];
 
-// Tool labels placed around the rings: [label, ring (1-3), angle in degrees]
-const ORBIT: [string, 1 | 2 | 3, number][] = [
-  ["Proxmox", 1, 228], ["TrueNAS", 1, 312], ["Zabbix", 1, 132], ["n8n", 1, 48],
-  ["Tailscale", 2, 200], ["WireGuard", 2, 338], ["GLPI", 2, 160], ["Sophos", 2, 22],
-  ["Unreal Engine", 3, 250], ["PowerShell", 3, 290], ["VMware ESXi", 3, 112], ["Cloudflare", 3, 68],
+// Photo cards on the rotating rings (public/hero, see CREDITS.txt there).
+// Each ring holds its cards at fixed angles; the whole ring spins and each card spins back to stay upright.
+const RINGS: { ring: 1 | 2 | 3; reverse?: boolean; offset: number; photos: number[] }[] = [
+  { ring: 1, offset: 30, photos: [1, 2, 3, 4, 5, 6] },
+  { ring: 2, reverse: true, offset: 10, photos: [7, 8, 9, 10, 11, 12, 13, 14, 15] },
+  // 19 photos, 27 slots: the outer ring reuses some, spaced so repeats never sit side by side
+  { ring: 3, offset: 20, photos: [16, 17, 18, 19, 2, 8, 5, 12, 1, 10, 4, 14] },
 ];
+const photoSrc = (n: number) => `${import.meta.env.BASE_URL}hero/h${String(n).padStart(2, "0")}.webp`;
 
 const STATS = [
   { value: "200+", label: "Systems managed" },
@@ -54,25 +57,40 @@ export function Hero() {
 
   return (
     <section id="home" className="relative pt-[49px] min-h-[100svh] flex flex-col overflow-hidden">
-      {/* Rings + orbiting tool labels, centred on the content block */}
+      {/* Rings, colour arcs and orbiting photo cards, centred on the content block */}
       <div className="relative flex-1 flex items-center justify-center">
         <div className="hero-orbit" aria-hidden="true">
+          <span className="hero-ring hero-ring-0" />
           {[1, 2, 3].map((r) => (
             <span key={r} className={`hero-ring hero-ring-${r}`} />
           ))}
-          <span className="hero-ring hero-ring-0" />
-          {ORBIT.map(([label, ring, angle]) => (
-            <span
-              key={label}
-              className="hero-chip mono-label"
-              style={{
-                transform: `translate(calc(${Math.cos((angle * Math.PI) / 180).toFixed(4)} * var(--orbit-${ring})), calc(${Math.sin((angle * Math.PI) / 180).toFixed(4)} * var(--orbit-${ring}))) translate(-50%, -50%)`,
-              }}
-            >
-              {label}
-            </span>
+          <span className="hero-arc hero-arc-1" />
+          <span className="hero-arc hero-arc-2" />
+
+          {RINGS.map(({ ring, reverse, offset, photos }) => (
+            <div key={ring} className={`orbit-spin orbit-spin-${ring}${reverse ? " orbit-rev" : ""}`}>
+              {photos.map((n, i) => {
+                const a = ((offset + (360 / photos.length) * i) * Math.PI) / 180;
+                return (
+                  <div
+                    key={n}
+                    className="orbit-slot"
+                    style={{
+                      transform: `translate(calc(${Math.cos(a).toFixed(4)} * var(--orbit-${ring})), calc(${Math.sin(a).toFixed(4)} * var(--orbit-${ring})))`,
+                    }}
+                  >
+                    <div className={`orbit-card orbit-card-${ring}`}>
+                      <img src={photoSrc(n)} alt="" width={360} height={225} decoding="async" fetchPriority="low" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           ))}
         </div>
+
+        {/* Soft fade behind the text so it stays readable over the photos */}
+        <div className="hero-veil" aria-hidden="true" />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -80,7 +98,7 @@ export function Hero() {
           transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
           className="relative z-10 text-center px-5 py-20 md:py-28 max-w-5xl"
         >
-          <p className="mono-label text-[var(--muted)] mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          <p className="legible mono-label text-[var(--muted)] mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <span className="inline-flex items-center gap-2 whitespace-nowrap">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--ok)] opacity-60" />
@@ -94,7 +112,7 @@ export function Hero() {
 
           <h1 className="display-wide whitespace-nowrap text-[var(--ink-strong)] text-[clamp(2.6rem,8.6vw,8rem)]">Hemanth K</h1>
 
-          <p className="mt-8 font-[family-name:var(--font-display)] font-[620] text-[clamp(1.6rem,3.2vw,2.25rem)] leading-[1.05] tracking-[-0.03em] text-[var(--ink-strong)]">
+          <p className="legible mt-8 font-[family-name:var(--font-display)] font-[620] text-[clamp(1.6rem,3.2vw,2.25rem)] leading-[1.05] tracking-[-0.03em] text-[var(--ink-strong)]">
             Infrastructure that stays{" "}
             <span className="serif-em inline-block min-w-[6.5ch] text-left">
               {reduceMotion ? WORDS[0] : displayed}
@@ -104,7 +122,7 @@ export function Hero() {
             </span>
           </p>
 
-          <p className="lede mt-6 max-w-[34rem] mx-auto">
+          <p className="legible lede mt-6 max-w-[34rem] mx-auto">
             Building reliable IT systems, automating day-to-day operations, and managing infrastructure at scale — with
             hands-on experience across servers, networks, and enterprise IT environments.
           </p>
@@ -118,7 +136,7 @@ export function Hero() {
             </a>
           </div>
 
-          <p className="mt-8 mono-label text-[var(--muted)] flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+          <p className="legible mt-8 mono-label text-[var(--muted)] flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             <a className="hover:text-[var(--ink)] transition-colors" href="https://www.linkedin.com/in/hemanth-k-8609b4255" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <span className="text-[var(--faint)]">·</span>
             <a className="hover:text-[var(--ink)] transition-colors" href="https://github.com/f1hunterr" target="_blank" rel="noopener noreferrer">GitHub</a>
