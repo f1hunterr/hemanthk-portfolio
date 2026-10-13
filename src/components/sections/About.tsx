@@ -1,161 +1,96 @@
-import { motion } from "framer-motion";
-import {
-  Server, Shield, Activity, Users, Zap, HardDrive
-} from "lucide-react";
+import { Section, Reveal } from "@/components/frame/Section";
 
-const highlights = [
-  {
-    icon: <Server className="w-5 h-5" />,
-    title: "Infrastructure at Scale",
-    desc: "200+ endpoints, multi-server environment, and the full network — kept running reliably around the clock.",
-  },
-  {
-    icon: <Users className="w-5 h-5" />,
-    title: "Remote Workforce Access",
-    desc: "Always-on, zero-downtime VPN connectivity for 100+ distributed freelancers.",
-  },
-  {
-    icon: <Zap className="w-5 h-5" />,
-    title: "IT Automation",
-    desc: "Ticket alerts, daily reports, and workflows fully automated — manual effort reduced to near zero.",
-  },
-  {
-    icon: <Activity className="w-5 h-5" />,
-    title: "Proactive Monitoring",
-    desc: "Real-time alerts across servers, network, and server room environment. Issues resolved before users notice.",
-  },
-  {
-    icon: <HardDrive className="w-5 h-5" />,
-    title: "Data Protection",
-    desc: "Centralized shared storage, automated backup schedules, and tested disaster recovery procedures.",
-  },
-  {
-    icon: <Shield className="w-5 h-5" />,
-    title: "Software Compliance",
-    desc: "License tracking for Autodesk, Adobe & V-Ray with renewal alerts and complete audit trails.",
-  },
+const FACTS = [
+  { label: "Role", value: "Manager - IT, Production Automation & Infrastructure" },
+  { label: "Company", value: "House of Blue Beans (HOBB)" },
+  { label: "Location", value: "Hennur, Bangalore, Karnataka" },
+  { label: "Experience", value: "6+ Years" },
+  { label: "Email", value: "Hemanth2608@hotmail.com" },
+  { label: "Phone", value: "+91 80884 61724" },
+  { label: "Systems", value: "200+ Managed" },
+  { label: "Languages", value: "English, Tamil, Kannada, Hindi, Telugu" },
+];
+
+const COMPETENCIES = [
+  { title: "Infrastructure at Scale", desc: "200+ endpoints, multi-server environment, and the full network — kept running reliably around the clock." },
+  { title: "Remote Workforce Access", desc: "Always-on, zero-downtime VPN connectivity for 100+ distributed freelancers." },
+  { title: "IT Automation", desc: "Ticket alerts, daily reports, and workflows fully automated — manual effort reduced to near zero." },
+  { title: "Proactive Monitoring", desc: "Real-time alerts across servers, network, and server room environment. Issues resolved before users notice." },
+  { title: "Data Protection", desc: "Centralized shared storage, automated backup schedules, and tested disaster recovery procedures." },
+  { title: "Software Compliance", desc: "License tracking for Autodesk, Adobe & V-Ray with renewal alerts and complete audit trails." },
 ];
 
 export function About() {
   return (
-    <section id="about" className="py-20" style={{ backgroundColor: "var(--portfolio-section-alt)" }}>
-      <div className="container mx-auto px-4 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="max-w-6xl mx-auto"
-        >
-          <div className="text-center mb-14">
-            <h2
-              className="text-3xl font-bold tracking-tight text-foreground mb-4"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              About Me
-            </h2>
-            <div className="w-14 h-1 rounded-full mx-auto mb-5" style={{ backgroundColor: "var(--portfolio-accent)" }}></div>
-            <p className="text-muted-foreground max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
-              IT professional with a systems-first mindset — building infrastructure that scales, automating what slows teams down, and keeping everything running reliably.
-            </p>
-          </div>
+    <Section id="about" index="01" label="About" meta="House of Blue Beans · Bangalore">
+      {/* Headline, story and portrait */}
+      <div className="grid lg:grid-cols-[1fr_auto] gap-12 px-5 md:px-10 pt-14 pb-14 md:pt-20 md:pb-20">
+        <Reveal>
+          <h2 className="headline max-w-[14ch]">
+            Systems-first. <em>Always</em> on.
+          </h2>
+          <p className="lede mt-6 max-w-[38rem]">
+            IT professional with a systems-first mindset — building infrastructure that scales, automating what
+            slows teams down, and keeping everything running reliably.
+          </p>
+          <p className="mt-5 max-w-[38rem] text-[var(--muted)] leading-relaxed">
+            I manage the complete IT operations at House of Blue Beans (HOBB) — covering 200+ endpoints, multi-server
+            infrastructure, network security, and the automation pipelines that keep everything running.
+          </p>
+          <p className="mt-4 max-w-[38rem] text-[var(--muted)] leading-relaxed">
+            My approach is systems-first: build once, automate everything, monitor proactively. Whether it's
+            centralized storage, VPN access for 100+ remote freelancers, or real-time infrastructure alerts, every
+            solution is built to cut manual work and keep things running without surprises.
+          </p>
+        </Reveal>
 
-          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
-            {/* Left: Summary text */}
-            <div className="lg:col-span-3 space-y-5">
-              <p
-                className="text-base text-foreground/80 leading-relaxed"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
-                I manage the complete IT operations at House of Blue Beans (HOBB) — covering 200+ endpoints, multi-server infrastructure, network security, and the automation pipelines that keep everything running.
-              </p>
-              <p
-                className="text-base text-foreground/80 leading-relaxed"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
-                My approach is systems-first: build once, automate everything, monitor proactively. Whether it's centralized storage, VPN access for 100+ remote freelancers, or real-time infrastructure alerts, every solution is built to cut manual work and keep things running without surprises.
-              </p>
+        <Reveal delay={0.1} className="lg:pt-2">
+          <figure className="w-[200px] md:w-[220px]">
+            <div className="border border-[var(--line-strong)] p-2 bg-[var(--bg-raised)]">
+              <img
+                src={`${import.meta.env.BASE_URL}profile.jpg`}
+                alt="Hemanth K"
+                width={640}
+                height={791}
+                loading="lazy"
+                className="w-full aspect-[4/5] object-cover object-top grayscale-[35%]"
+              />
             </div>
-
-            {/* Right: Quick facts */}
-            <div className="lg:col-span-2">
-              <div className="rounded-xl border border-border bg-white dark:bg-card p-6 shadow-sm space-y-4">
-                <h3
-                  className="text-base font-semibold text-foreground pb-3 border-b border-border"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
-                >
-                  Quick Facts
-                </h3>
-                {[
-                  { label: "Role", value: "Manager - IT, Production Automation & Infrastructure" },
-                  { label: "Company", value: "House of Blue Beans (HOBB)" },
-                  { label: "Location", value: "Hennur, Bangalore, Karnataka" },
-                  { label: "Email", value: "Hemanth2608@hotmail.com" },
-                  { label: "Phone", value: "+91 80884 61724" },
-                  { label: "Experience", value: "6+ Years" },
-                  { label: "Systems", value: "200+ Managed" },
-                  { label: "Languages", value: "English, Tamil, Kannada, Hindi, Telugu" },
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3 text-sm">
-                    <span
-                      className="font-medium shrink-0 w-28"
-                      style={{ color: "var(--portfolio-accent)", fontFamily: "'Inter', sans-serif" }}
-                    >
-                      {item.label}
-                    </span>
-                    <span className="text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Competencies grid */}
-          <div>
-            <h3
-              className="text-lg font-semibold text-foreground mb-5"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Core Competencies
-            </h3>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {highlights.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.06 }}
-                  className="flex flex-col gap-3 p-5 rounded-xl border border-border bg-white dark:bg-card hover:border-primary/25 hover:shadow-sm transition-all"
-                >
-                  <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "var(--portfolio-icon-bg)", color: "var(--portfolio-accent)" }}
-                  >
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4
-                      className="font-semibold text-foreground text-sm mb-1.5"
-                      style={{ fontFamily: "'Poppins', sans-serif" }}
-                    >
-                      {item.title}
-                    </h4>
-                    <p
-                      className="text-xs text-muted-foreground leading-relaxed"
-                      style={{ fontFamily: "'Inter', sans-serif" }}
-                    >
-                      {item.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
+            <figcaption className="mono-label text-[var(--muted)] mt-3 flex justify-between">
+              <span>Fig. 01</span>
+              <span>Hemanth K</span>
+            </figcaption>
+          </figure>
+        </Reveal>
       </div>
-    </section>
+
+      {/* Quick facts */}
+      <div className="hairgrid sm:grid-cols-2 lg:grid-cols-4">
+        {FACTS.map((f) => (
+          <div key={f.label} className="px-5 md:px-8 py-6">
+            <div className="mono-label text-[var(--muted)]">{f.label}</div>
+            <div className="mt-2 text-[var(--ink)] break-words">{f.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Core competencies */}
+      <div className="cell-strip mono-label">
+        <span>Core competencies</span>
+        <span className="text-[var(--faint)]">A — F</span>
+      </div>
+      <div className="hairgrid md:grid-cols-2 lg:grid-cols-3 border-t-0">
+        {COMPETENCIES.map((c, i) => (
+          // The fade sits inside the cell: a fading cell would let the grid's line colour show through
+          <div key={c.title} className="px-5 md:px-8 py-10">
+            <Reveal delay={(i % 3) * 0.06}>
+              <div className="mono-label text-[var(--muted)]">{String.fromCharCode(65 + i)}</div>
+              <h3 className="mt-6 text-2xl tracking-[-0.02em]">{c.title}</h3>
+              <p className="mt-3 text-[var(--muted)] leading-relaxed">{c.desc}</p>
+            </Reveal>
+          </div>
+        ))}
+      </div>
+    </Section>
   );
 }

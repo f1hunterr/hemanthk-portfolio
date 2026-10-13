@@ -1,14 +1,8 @@
-import { motion } from "framer-motion";
-import {
-  Briefcase, Building2, MapPin, Calendar, CheckCircle2, GraduationCap, BookOpen,
-  Server, Network, Zap, Users, Cpu, Activity, Code2, Shield, HardDrive, Award,
-  FileText
-} from "lucide-react";
+import { Section, SectionIntro, Reveal } from "@/components/frame/Section";
 
 const responsibilityCategories = [
   {
     title: "IT Infrastructure & Operations",
-    icon: <Server className="w-4 h-4" />,
     points: [
       "Managed 200+ desktops, laptops, and servers for full production operations",
       "Maintained server room infrastructure, power management, and cable organization",
@@ -18,7 +12,6 @@ const responsibilityCategories = [
   },
   {
     title: "Network & Security",
-    icon: <Network className="w-4 h-4" />,
     points: [
       "Designed secure office network with VLAN segmentation for department isolation",
       "Configured Sophos firewall rules and monitored security logs and alerts",
@@ -28,7 +21,6 @@ const responsibilityCategories = [
   },
   {
     title: "Automation & Productivity",
-    icon: <Zap className="w-4 h-4" />,
     points: [
       "Automated IT operations using PowerShell, Bash, and n8n workflows",
       "Built automated alerting for monitoring and ticket escalation via Slack",
@@ -38,7 +30,6 @@ const responsibilityCategories = [
   },
   {
     title: "Support & Operations",
-    icon: <Users className="w-4 h-4" />,
     points: [
       "Provided technical support for 200+ systems across office and remote locations",
       "Diagnosed and resolved hardware, software, and network issues",
@@ -48,7 +39,6 @@ const responsibilityCategories = [
   },
   {
     title: "Hardware Maintenance & Repair",
-    icon: <HardDrive className="w-4 h-4" />,
     points: [
       "Diagnosed and repaired 200+ computers and servers — CPU, RAM, storage, PSU, and motherboard-level troubleshooting",
       "Performed RAM, SSD, and GPU upgrades to extend device lifespan across the fleet",
@@ -58,7 +48,6 @@ const responsibilityCategories = [
   },
   {
     title: "Production & Render Infrastructure",
-    icon: <Cpu className="w-4 h-4" />,
     highlight: true,
     points: [
       "Built and maintained distributed Unreal Engine render farm infrastructure",
@@ -69,7 +58,6 @@ const responsibilityCategories = [
   },
   {
     title: "Monitoring & Reliability",
-    icon: <Activity className="w-4 h-4" />,
     points: [
       "Implemented centralized monitoring with Zabbix and proactive threshold alerting",
       "Monitored UPS systems and server room temperature conditions continuously",
@@ -79,7 +67,6 @@ const responsibilityCategories = [
   },
   {
     title: "Development & Internal Platforms",
-    icon: <Code2 className="w-4 h-4" />,
     points: [
       "Developed tools and web portals using Python, PHP, and MySQL",
       "Hosted and maintained operational web portals on Apache infrastructure",
@@ -89,7 +76,6 @@ const responsibilityCategories = [
   },
   {
     title: "Leadership & Management",
-    icon: <Shield className="w-4 h-4" />,
     points: [
       "Managed end-to-end IT operations independently across all departments",
       "Planned infrastructure upgrades, scalability improvements, and roadmap",
@@ -99,7 +85,6 @@ const responsibilityCategories = [
   },
   {
     title: "Customer Success Support",
-    icon: <FileText className="w-4 h-4" />,
     points: [
       "Researched client and brand backgrounds to structure briefs using a 9-section template",
       "Translated raw inputs — Slack threads, PDF scope decks, style guides — into structured creative briefs",
@@ -111,37 +96,30 @@ const responsibilityCategories = [
 
 const achievements = [
   {
-    icon: <Cpu className="w-5 h-5" />,
     title: "Distributed Render Farm",
     desc: "Built Unreal Engine render farm infrastructure from scratch, cutting production turnaround time.",
   },
   {
-    icon: <Zap className="w-5 h-5" />,
     title: "IT Workflow Automation",
     desc: "n8n + GLPI + Slack pipelines eliminated all manual ticketing, alerts, and daily reporting.",
   },
   {
-    icon: <Server className="w-5 h-5" />,
     title: "200+ Systems Managed",
     desc: "Complete endpoint management across office desktops, laptops, and distributed remote users.",
   },
   {
-    icon: <Users className="w-5 h-5" />,
     title: "Secure Remote Access",
     desc: "VPN infrastructure enabling 100+ freelancers to work securely from any location.",
   },
   {
-    icon: <HardDrive className="w-5 h-5" />,
     title: "Centralized Storage",
     desc: "NAS-based shared storage with automated backup schedules and disaster recovery.",
   },
   {
-    icon: <Activity className="w-5 h-5" />,
     title: "Proactive Monitoring",
     desc: "Zabbix-based alerting system reducing downtime across production and IT systems.",
   },
   {
-    icon: <Award className="w-5 h-5" />,
     title: "Infrastructure Modernization",
     desc: "Led full server room setup, virtualization rollout, and IT process automation.",
   },
@@ -216,275 +194,119 @@ const education = [
 ];
 
 export function Experience() {
-
   return (
-    <section id="experience" className="py-20 bg-white dark:bg-background">
-      <div className="container mx-auto px-4 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14"
-        >
-          <h2
-            className="text-3xl font-bold tracking-tight text-foreground mb-4"
-            style={{ fontFamily: "'Poppins', sans-serif" }}
-          >
-            Work Experience
-          </h2>
-          <div className="w-14 h-1 rounded-full mx-auto mb-5" style={{ backgroundColor: "var(--portfolio-accent)" }}></div>
-          <p className="text-muted-foreground max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Six years of hands-on IT management — from infrastructure and automation to hardware, security, and cross-team support.
+    <Section id="experience" index="04" label="Experience" meta="Current role + previous">
+      <SectionIntro
+        title={<>Hands-on, <em>end to end.</em></>}
+        lede="Six years of hands-on IT management — from infrastructure and automation to hardware, security, and cross-team support."
+      />
+
+      {/* Current role */}
+      <div className="border-t border-[var(--line)] px-5 md:px-10 py-10 md:py-12 bg-[var(--bg-raised)]">
+        <Reveal>
+          <p className="mono-label text-[var(--muted)] flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="inline-flex items-center gap-2 text-[var(--ok)]">
+              <span className="h-2 w-2 rounded-full bg-[var(--ok)]" /> Current
+            </span>
+            <span className="text-[var(--faint)]">·</span> House of Blue Beans (HOBB)
+            <span className="text-[var(--faint)]">·</span> Bangalore, India
           </p>
-        </motion.div>
+          <h3 className="mt-5 text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.08] tracking-[-0.03em] max-w-[22ch]">
+            Manager - IT, Production Automation &amp; Infrastructure
+          </h3>
+          <p className="mt-3 text-[var(--muted)]">
+            Full-stack IT management — infrastructure, automation, security &amp; support
+          </p>
+        </Reveal>
+      </div>
 
-        <div className="max-w-6xl mx-auto space-y-8">
-
-          {/* Current Role — House of Blue Beans (HOBB) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="rounded-xl border border-border bg-white dark:bg-card shadow-sm overflow-hidden">
-              {/* Role header */}
-              <div
-                className="px-6 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-                style={{ backgroundColor: "var(--portfolio-navy)" }}
-              >
-                <div className="flex items-start gap-4">
-                  <div
-                    className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
-                  >
-                    <Briefcase className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3
-                      className="text-xl font-bold text-white leading-tight"
-                      style={{ fontFamily: "'Poppins', sans-serif" }}
-                    >
-                      Manager - IT, Production Automation & Infrastructure
-                    </h3>
-                    <p className="text-white/70 text-sm mt-1" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      Full-stack IT management — infrastructure, automation, security & support
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 md:items-end shrink-0">
-                  <div className="flex items-center gap-2 text-white/80 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-                    <Building2 className="w-4 h-4" />
-                    <span>House of Blue Beans (HOBB)</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-                    <MapPin className="w-4 h-4" />
-                    <span>Bangalore, India</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-semibold" style={{ color: "#93c5fd", fontFamily: "'Inter', sans-serif" }}>
-                    <Calendar className="w-4 h-4" />
-                    <span>Current Position</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Categorized responsibilities */}
-              <div className="px-6 py-6">
-                <h4
-                  className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-5"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
-                >
-                  Key Responsibilities
+      {/* Responsibilities: 10 areas, so 2 columns keep the grid even */}
+      <div className="cell-strip mono-label border-t border-[var(--line)]">
+        <span>Key responsibilities</span>
+        <span className="text-[var(--faint)]">{String(responsibilityCategories.length).padStart(2, "0")} areas</span>
+      </div>
+      <div className="hairgrid md:grid-cols-2 border-t-0">
+        {responsibilityCategories.map((cat, idx) => (
+          <div key={cat.title} className="px-5 md:px-8 py-8">
+            <Reveal delay={(idx % 2) * 0.05}>
+              <div className="flex items-baseline justify-between gap-4">
+                <h4 className="text-lg tracking-[-0.02em]">
+                  <span className="mono-label text-[var(--muted)] mr-3">{String(idx + 1).padStart(2, "0")}</span>
+                  {cat.title}
                 </h4>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-start">
-                  {responsibilityCategories.map((cat, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: idx * 0.05 }}
-                      className={`rounded-lg p-4 border ${cat.highlight ? "border-blue-200 bg-blue-50/60 dark:border-blue-800/50 dark:bg-blue-950/30" : "border-border/60 bg-secondary/30"}`}
-                    >
-                      <div className="flex items-center gap-2 mb-3">
-                        <span style={{ color: "var(--portfolio-accent)" }}>{cat.icon}</span>
-                        <h5
-                          className="text-xs font-semibold text-foreground leading-tight"
-                          style={{ fontFamily: "'Poppins', sans-serif" }}
-                        >
-                          {cat.title}
-                          {cat.highlight && (
-                            <span className="ml-1.5 inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--portfolio-navy)", color: "#93c5fd" }}>
-                              Key
-                            </span>
-                          )}
-                        </h5>
-                      </div>
-                      <ul className="space-y-1.5">
-                        {cat.points.map((point, pIdx) => (
-                          <li key={pIdx} className="flex gap-2 items-start">
-                            <div className="w-1 h-1 rounded-full mt-2 shrink-0" style={{ backgroundColor: "var(--portfolio-accent)" }} />
-                            <span className="text-xs text-muted-foreground leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
-                              {point}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  ))}
-                </div>
+                {cat.highlight && <span className="mono-label text-[var(--accent-ink)] shrink-0">Key</span>}
               </div>
-            </div>
-          </motion.div>
+              <ul className="mt-4 space-y-2">
+                {cat.points.map((point) => (
+                  <li key={point} className="grid grid-cols-[18px_1fr] text-[15px] leading-relaxed text-[var(--muted)]">
+                    <span className="text-[var(--faint)]">—</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+        ))}
+      </div>
 
-          {/* Key Achievements at HOBB */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3
-              className="text-lg font-semibold text-foreground mb-5"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Key Achievements at HOBB
-            </h3>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {achievements.map((item, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.07 }}
-                  className="flex flex-col gap-3 p-5 rounded-xl border border-border bg-white dark:bg-card shadow-sm hover:border-primary/25 hover:shadow-md transition-all"
-                >
-                  <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "var(--portfolio-icon-bg)", color: "var(--portfolio-accent)" }}
-                  >
-                    {item.icon}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground text-sm mb-1" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                      {item.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      {item.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+      {/* Achievements */}
+      <div className="cell-strip mono-label">
+        <span>Key achievements at HOBB</span>
+        <span className="text-[var(--faint)]">A — {String.fromCharCode(64 + achievements.length)}</span>
+      </div>
+      <div className="hairgrid border-t-0">
+        {achievements.map((item, idx) => (
+          <div key={item.title} className="grid md:grid-cols-[48px_320px_1fr] gap-x-6 gap-y-1 px-5 md:px-10 py-5">
+            <span className="mono-label text-[var(--muted)] pt-[5px]">{String.fromCharCode(65 + idx)}</span>
+            <h4 className="text-lg tracking-[-0.02em]">{item.title}</h4>
+            <p className="text-[var(--muted)] leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
 
-          {/* Previous Roles */}
-          <div>
-            <h3
-              className="text-lg font-semibold text-foreground mb-5"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Previous Experience
-            </h3>
-            <div className="space-y-4">
-              {previousRoles.map((role, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="rounded-xl border border-border bg-white dark:bg-card shadow-sm overflow-hidden"
-                >
-                  <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-border bg-secondary/40">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: "var(--portfolio-icon-bg)", color: "var(--portfolio-accent)" }}
-                      >
-                        <Briefcase className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                          {role.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                          {role.company}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground shrink-0" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5" />
-                        {role.period}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {role.location}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="px-6 py-4">
-                    <ul className="space-y-2">
-                      {role.points.map((point, pIdx) => (
-                        <li key={pIdx} className="flex gap-2 items-start text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "var(--portfolio-accent)" }} />
-                          {point}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </motion.div>
-              ))}
+      {/* Previous roles */}
+      <div className="cell-strip mono-label">
+        <span>Previous experience</span>
+        <span className="text-[var(--faint)]">{String(previousRoles.length).padStart(2, "0")} roles</span>
+      </div>
+      <div className="hairgrid border-t-0">
+        {previousRoles.map((role) => (
+          <div key={role.company} className="grid md:grid-cols-[200px_1fr] gap-x-10 gap-y-3 px-5 md:px-10 py-8">
+            <div className="mono-label text-[var(--muted)] pt-[6px]">{role.period}</div>
+            <Reveal>
+              <h4 className="text-xl tracking-[-0.02em]">{role.title}</h4>
+              <p className="mt-1 text-[var(--muted)]">
+                {role.company} <span className="text-[var(--faint)]">·</span> {role.location}
+              </p>
+              <ul className="mt-4 grid lg:grid-cols-2 gap-x-10 gap-y-2">
+                {role.points.map((point) => (
+                  <li key={point} className="grid grid-cols-[18px_1fr] text-[15px] leading-relaxed text-[var(--muted)]">
+                    <span className="text-[var(--faint)]">—</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+        ))}
+      </div>
+
+      {/* Education */}
+      <div className="cell-strip mono-label">
+        <span>Education</span>
+        <span className="text-[var(--faint)]">{String(education.length).padStart(2, "0")}</span>
+      </div>
+      <div className="hairgrid border-t-0">
+        {education.map((edu) => (
+          <div key={edu.degree} className="grid md:grid-cols-[200px_1fr] gap-x-10 gap-y-1 px-5 md:px-10 py-6">
+            <div className="mono-label text-[var(--muted)] pt-[5px]">{edu.period}</div>
+            <div>
+              <h4 className="text-lg tracking-[-0.02em]">{edu.degree}</h4>
+              <p className="text-[var(--muted)]">{edu.institution}</p>
             </div>
           </div>
-
-          {/* Education */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3
-              className="text-lg font-semibold text-foreground mb-5"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Education
-            </h3>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {education.map((edu, idx) => (
-                <div
-                  key={idx}
-                  className="flex gap-4 p-5 rounded-xl border border-border bg-white dark:bg-card shadow-sm hover:border-primary/25 hover:shadow-md transition-all"
-                >
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "var(--portfolio-icon-bg)", color: "var(--portfolio-accent)" }}
-                  >
-                    <GraduationCap className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                      {edu.degree}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      {edu.institution}
-                    </p>
-                    <p className="text-xs mt-1 flex items-center gap-1" style={{ color: "var(--portfolio-accent)", fontFamily: "'Inter', sans-serif" }}>
-                      <BookOpen className="w-3 h-3" />
-                      {edu.period}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-        </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }

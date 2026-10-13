@@ -1,135 +1,86 @@
-import { Linkedin, Mail, Phone, MapPin } from "lucide-react";
+const SECTIONS = [
+  { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
+  { name: "Skills", href: "#skills" },
+  { name: "Projects", href: "#projects" },
+  { name: "Experience", href: "#experience" },
+  { name: "Contact", href: "#contact" },
+];
+
+const CONNECT = [
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/hemanth-k-8609b4255" },
+  { name: "GitHub", href: "https://github.com/f1hunterr" },
+  { name: "WhatsApp", href: "https://wa.me/918088461724" },
+  { name: "Email", href: "mailto:Hemanth2608@hotmail.com" },
+];
 
 export function Footer() {
-  const scrollTo = (href: string) => {
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
     const el = document.querySelector(href);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 72;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 49, behavior: "smooth" });
   };
 
+  const linkClass = "text-[var(--muted)] hover:text-[var(--ink)] transition-colors";
+
   return (
-    <footer style={{ backgroundColor: "var(--portfolio-navy)" }} className="text-white">
-      <div className="container mx-auto px-4 md:px-8 py-12">
-        <div className="grid md:grid-cols-3 gap-8 pb-8 border-b border-white/10">
-          {/* Brand */}
-          <div>
-            <h2
-              className="text-xl font-bold mb-2"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Hemanth K
-            </h2>
-            <p
-              className="text-white/60 text-sm leading-relaxed"
-              style={{ fontFamily: "'Inter', sans-serif" }}
-            >
-              Manager - IT, Production Automation & Infrastructure | House of Blue Beans (HOBB)
-            </p>
-            <div className="flex items-center gap-3 mt-4">
-              <a
-                href="https://www.linkedin.com/in/hemanth-k-8609b4255"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors hover:bg-white/20"
-                style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={17} className="text-white" />
-              </a>
-              <a
-                href="mailto:Hemanth2608@hotmail.com"
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors hover:bg-white/20"
-                style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
-                aria-label="Email"
-              >
-                <Mail size={17} className="text-white" />
-              </a>
-              <a
-                href="tel:+918088461724"
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors hover:bg-white/20"
-                style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
-                aria-label="Phone"
-              >
-                <Phone size={17} className="text-white" />
-              </a>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div>
-            <h3
-              className="text-sm font-semibold uppercase tracking-wider mb-4 text-white/80"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Quick Links
-            </h3>
-            <ul className="space-y-2">
-              {[
-                { name: "Home", href: "#home" },
-                { name: "About", href: "#about" },
-                { name: "Skills", href: "#skills" },
-                { name: "Projects", href: "#projects" },
-                { name: "Experience", href: "#experience" },
-                { name: "Contact", href: "#contact" },
-              ].map((link) => (
-                <li key={link.name}>
-                  <button
-                    onClick={() => scrollTo(link.href)}
-                    className="text-sm text-white/60 hover:text-white transition-colors text-left"
-                    style={{ fontFamily: "'Inter', sans-serif" }}
-                  >
-                    {link.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Details */}
-          <div>
-            <h3
-              className="text-sm font-semibold uppercase tracking-wider mb-4 text-white/80"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Contact
-            </h3>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-sm text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <Mail size={15} className="text-white/40 shrink-0" />
-                Hemanth2608@hotmail.com
-              </li>
-              <li className="flex items-center gap-3 text-sm text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <Phone size={15} className="text-white/40 shrink-0" />
-                +91 80884 61724
-              </li>
-              <li className="flex items-center gap-3 text-sm text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <MapPin size={15} className="text-white/40 shrink-0" />
-                Hennur, Bangalore, Karnataka
-              </li>
-              <li className="flex items-center gap-3 text-sm text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <Linkedin size={15} className="text-white/40 shrink-0" />
-                linkedin.com/in/hemanth-k-8609b4255
-              </li>
-            </ul>
-          </div>
+    <footer className="relative cross-top border-t border-[var(--line)]">
+      <div className="hairgrid md:grid-cols-[2fr_1fr_1fr_1fr] border-t-0">
+        <div className="px-5 md:px-10 py-10">
+          <div className="display-wide text-[22px] text-[var(--ink-strong)]">Hemanth K</div>
+          <p className="mt-4 max-w-[22rem] text-[var(--muted)] leading-relaxed">
+            Manager - IT, Production Automation &amp; Infrastructure | House of Blue Beans (HOBB)
+          </p>
+          <p className="mt-5 mono-label text-[var(--muted)]">Hennur, Bangalore, Karnataka</p>
         </div>
 
-        <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p
-            className="text-sm text-white/40"
-            style={{ fontFamily: "'Inter', sans-serif" }}
-          >
-            &copy; 2026 Hemanth K – IT Infrastructure | Automation | Systems Administration
-          </p>
-          <p
-            className="text-xs text-white/30"
-            style={{ fontFamily: "'Inter', sans-serif" }}
-          >
-            Hennur, Bangalore, Karnataka
-          </p>
+        <div className="px-5 md:px-8 py-10">
+          <h3 className="mono-label text-[var(--muted)] font-medium">Sections</h3>
+          <ul className="mt-5 space-y-2">
+            {SECTIONS.map((l) => (
+              <li key={l.name}>
+                <a href={l.href} onClick={(e) => scrollTo(e, l.href)} className={linkClass}>
+                  {l.name}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        <div className="px-5 md:px-8 py-10">
+          <h3 className="mono-label text-[var(--muted)] font-medium">Connect</h3>
+          <ul className="mt-5 space-y-2">
+            {CONNECT.map((l) => (
+              <li key={l.name}>
+                <a
+                  href={l.href}
+                  className={linkClass}
+                  {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {l.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="px-5 md:px-8 py-10">
+          <h3 className="mono-label text-[var(--muted)] font-medium">Contact</h3>
+          <ul className="mt-5 space-y-2 text-[var(--muted)]">
+            <li className="break-words">Hemanth2608@hotmail.com</li>
+            <li>+91 80884 61724</li>
+            <li>
+              <a href={`${import.meta.env.BASE_URL}resume.html`} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                Resume ↗
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-5 md:px-10 py-5 border-t border-[var(--line)] mono-label text-[var(--muted)]">
+        <span>© 2026 Hemanth K</span>
+        <span>IT Infrastructure · Automation · Systems Administration</span>
       </div>
     </footer>
   );

@@ -46,12 +46,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
       (function() {
         var stored = null;
         try { stored = localStorage.getItem('portfolio-theme'); } catch (e) {}
-        var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Light by default (paper look); dark only when the visitor chose it
+        var dark = stored === 'dark';
         if (dark) document.documentElement.classList.add('dark');
 
         // Boot screen: once per tab session, never for reduced-motion users
@@ -66,19 +67,19 @@
     <!-- Boot screen styles live here (not in the bundle) so it paints before any JS/CSS arrives -->
     <style>
       #boot {
-        --boot-bg: #ffffff; --boot-fg: #1f3a5f; --boot-muted: #6b7280; --boot-track: #e5e7eb; --boot-ok: #16a34a;
+        --boot-bg: #f2f1ee; --boot-fg: #101014; --boot-muted: #1010149e; --boot-track: #10101429; --boot-ok: #15803d;
         position: fixed; inset: 0; z-index: 10000;
         display: flex; align-items: center; justify-content: center;
         background: var(--boot-bg); color: var(--boot-fg);
-        font-family: Menlo, Consolas, 'Courier New', monospace;
+        font-family: 'Geist Mono', ui-monospace, Menlo, Consolas, monospace;
         transition: opacity .45s ease, visibility .45s ease;
       }
-      .dark #boot { --boot-bg: #0b1220; --boot-fg: #93c5fd; --boot-muted: #94a3b8; --boot-track: #1e293b; --boot-ok: #4ade80; }
+      .dark #boot { --boot-bg: #121316; --boot-fg: #f2f1ee; --boot-muted: #f2f1ee99; --boot-track: #f2f1ee26; --boot-ok: #4ade80; }
       .no-boot #boot { display: none; }
       #boot.boot-done { opacity: 0; visibility: hidden; }
       .boot-inner { width: min(340px, calc(100vw - 48px)); }
-      .boot-name { margin-bottom: 20px; font: 600 24px 'Poppins', system-ui, sans-serif; }
-      .boot-lines { list-style: none; margin: 0 0 18px; padding: 0; font-size: 12.5px; line-height: 1.9; color: var(--boot-muted); }
+      .boot-name { margin-bottom: 22px; font: 800 26px 'Archivo', system-ui, sans-serif; font-stretch: 125%; font-variation-settings: "wdth" 125; text-transform: uppercase; letter-spacing: -0.01em; }
+      .boot-lines { list-style: none; margin: 0 0 18px; padding: 0; font-size: 11px; line-height: 2; letter-spacing: .12em; text-transform: uppercase; color: var(--boot-muted); }
       .boot-lines li { opacity: 0; transform: translateY(4px); animation: boot-in .35s ease forwards; }
       .boot-lines li:nth-child(1) { animation-delay: .05s; }
       .boot-lines li:nth-child(2) { animation-delay: .3s; }
@@ -86,9 +87,9 @@
       .boot-lines li::before { content: '> '; color: var(--boot-fg); }
       .boot-lines .boot-ok { color: var(--boot-ok); animation-play-state: paused; }
       #boot.boot-ready .boot-ok { animation-play-state: running; animation-delay: 0s; }
-      .boot-track { height: 3px; border-radius: 3px; background: var(--boot-track); overflow: hidden; }
+      .boot-track { height: 1px; background: var(--boot-track); overflow: hidden; }
       .boot-bar {
-        height: 100%; width: 0; background: var(--boot-fg); border-radius: 3px;
+        height: 100%; width: 0; background: var(--boot-fg);
         /* Creeps toward 85% while loading; jumps to 100% only when the page is actually ready */
         animation: boot-progress 2.5s cubic-bezier(.1,.7,.3,1) forwards;
       }

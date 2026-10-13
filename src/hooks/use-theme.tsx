@@ -10,12 +10,11 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Mirrors the inline script in index.html: saved choice first, then the OS preference
+  // Mirrors the inline script in index.html: the saved choice, otherwise light (the paper look)
   const [theme, setThemeState] = useState<Theme>(() => {
     let stored: string | null = null;
     try { stored = localStorage.getItem("portfolio-theme"); } catch { /* storage blocked */ }
-    if (stored === "dark" || stored === "light") return stored;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return stored === "dark" ? "dark" : "light";
   });
 
   useEffect(() => {

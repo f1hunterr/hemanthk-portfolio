@@ -9,17 +9,22 @@ import { Footer } from "@/components/layout/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground flex flex-col">
+    <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--ink)]">
       <Navbar />
-      <main className="flex-1">
+      <main>
+        {/* The hero runs edge to edge; everything after sits inside the hairline frame */}
         <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
+        <div className="frame">
+          <About />
+          <Skills />
+          <Projects />
+          <Experience />
+          <Contact />
+        </div>
       </main>
-      <Footer />
+      <div className="frame">
+        <Footer />
+      </div>
     </div>
   );
 }
