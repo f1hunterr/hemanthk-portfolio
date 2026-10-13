@@ -37,6 +37,37 @@ const projects: Project[] = [
     spec: "v1.0 · 230+ automated tests · UE 5.6 · Docker"
   },
   {
+    category: "Platform",
+    title: "Suol — Unified IT Operations Dashboard",
+    description: "A self-hosted dashboard that pulls Windows PCs, Linux servers, Proxmox, TrueNAS and Zabbix into one view, one alert stream, one audit log and one permission model — sitting on top of the tools already in place instead of replacing them.",
+    problem: "Infrastructure status was spread across a separate console for every system.",
+    result: "Working Proxmox, TrueNAS and Zabbix integrations with role-based access (4 roles), an audit log and encrypted integration settings; Wazuh, GLPI, n8n and Sophos in preview.",
+    tags: [
+      "FastAPI",
+      "React",
+      "PostgreSQL",
+      "Docker",
+      "Proxmox",
+      "Zabbix"
+    ],
+    spec: "In development · ~13,000 lines · self-hosted"
+  },
+  {
+    category: "Render automation",
+    title: "BlendFlow — Blender Batch Rendering",
+    description: "Automates batch-rendering 3D product images in Blender: a job list says which model, materials and frames, and render PCs open Blender in the background, swap models and materials, render, and save the images to the NAS.",
+    problem: "Rendering product image variations meant setting up each model and material by hand in Blender.",
+    result: "Batches imported from Google Sheets run unattended across render PCs, with a web app to track, edit and re-trigger them.",
+    tags: [
+      "Python",
+      "Blender",
+      "Flask",
+      "Google Sheets",
+      "NAS"
+    ],
+    spec: "Master + render clients · Google Sheets import"
+  },
+  {
     category: "Automation",
     title: "IT Automation System (n8n + GLPI + Slack)",
     description: "Automated IT ticket alerts to Slack, daily IT reports, and system notifications using n8n workflows and GLPI integration. Eliminated nearly all manual IT work and improved team response times.",
@@ -78,6 +109,20 @@ const projects: Project[] = [
     ],
     spec: "v1.2 · 8 copy threads · 28 regression checks",
     repo: "https://github.com/f1hunterr/studio-copy"
+  },
+  {
+    category: "Pipeline tool",
+    title: "VSE Media Collector (Blender Add-on)",
+    description: "A Blender add-on that makes Video Sequencer projects portable: it copies every image sequence, movie and sound an edit uses into one folder, verifies each copy with SHA-256, and can restore the original links.",
+    problem: "Edit projects broke when moved between machines because their footage was spread across the network.",
+    result: "Portable edit projects with a scan preview before anything is copied, tested automatically on Windows and Linux. Co-developed with a colleague.",
+    tags: [
+      "Python",
+      "Blender",
+      "SHA-256",
+      "GitHub Actions"
+    ],
+    spec: "v1.7 · Blender 4.5 · CI on Windows + Linux"
   },
   {
     category: "Remote access",
@@ -240,7 +285,7 @@ export function Projects() {
         lede="Showcasing robust systems, automated workflows, and internal tools built to solve real operational challenges."
       />
 
-      {/* 14 projects + 1 closing cell: 15 fills 3 columns exactly; at 2 columns the closing cell spans both */}
+      {/* 17 projects + 1 closing cell = 18, so the grid has no empty slots at 2 or 3 columns */}
       <div className="hairgrid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, idx) => (
           <article key={p.title} className="flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)]" data-testid={`card-project-${idx}`}>
@@ -291,7 +336,7 @@ export function Projects() {
           </article>
         ))}
 
-        <div className="flex flex-col md:col-span-2 lg:col-span-1">
+        <div className="flex flex-col">
           <div className="cell-strip mono-label">
             <span>Next</span>
             <span className="text-[var(--faint)]">{String(projects.length + 1).padStart(2, "0")}</span>
