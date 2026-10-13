@@ -15,6 +15,8 @@ type Project = {
   result: string;
   tags: string[];
   href?: string;
+  repo?: string;
+  spec?: string;
   game?: boolean;
 };
 
@@ -22,15 +24,17 @@ const projects: Project[] = [
   {
     category: "Rendering",
     title: "Unreal Engine Distributed Render Farm",
-    description: "Built a distributed render farm system with a master node and multiple render nodes. Features job distribution, node status monitoring, and per-node job cancellation. Cut render times noticeably and streamlined studio workflow across the team.",
+    description: "A distributed render farm for Unreal Engine 5 Movie Render Queue, run from a web dashboard. A priority job queue splits each shot across free render PCs (on camera cuts), retries failures on another machine, checks every written frame, and shows live progress with CPU, GPU, RAM and VRAM per node.",
     tags: [
-      "Distributed Computing",
-      "Node Management",
+      "Python",
+      "Unreal Engine 5",
+      "Docker",
       "Job Scheduling",
-      "Rendering"
+      "Distributed Computing"
     ],
     problem: "Manual rendering was slow and could not utilize multiple machines.",
-    result: "Automated multi-node rendering with centralized job management."
+    result: "Automated multi-node rendering with centralized job management — new render PCs join with a one-click setup.",
+    spec: "v1.0 · 230+ automated tests · UE 5.6 · Docker"
   },
   {
     category: "Automation",
@@ -61,6 +65,21 @@ const projects: Project[] = [
     result: "Centralized storage with automated backup and access control in place."
   },
   {
+    category: "Tooling",
+    title: "Studio Copy",
+    description: "A simple Windows app for copying large folders with a progress bar people can actually read. Robocopy runs underneath, multithreaded and restartable, with percent done, time left, speed and files copied shown in plain English.",
+    problem: "Artists moving large asset folders to and from the NAS could not see how far along a copy was or when it would finish.",
+    result: "A no-install tool for stock Windows 10/11 that rolls out from a network share and never deletes anything at the destination.",
+    tags: [
+      "PowerShell",
+      "WPF",
+      "Robocopy",
+      "NAS"
+    ],
+    spec: "v1.2 · 8 copy threads · 28 regression checks",
+    repo: "https://github.com/f1hunterr/studio-copy"
+  },
+  {
     category: "Remote access",
     title: "Remote Access VPN System",
     description: "Secure remote access infrastructure for 100+ freelancers using Tailscale and WireGuard. Enables secure file access, application access, and remote work support from any location.",
@@ -89,6 +108,21 @@ const projects: Project[] = [
     result: "Complete asset visibility with automated renewal alerts and audit trails."
   },
   {
+    category: "IT planning",
+    title: "Artist Workstation Audit",
+    description: "A web form that collects each artist's workstation usage, software, project types and hardware needs for IT infrastructure planning, with an admin dashboard to search, filter and export the results.",
+    problem: "Hardware planning needed a consistent picture of what every artist actually uses and needs.",
+    result: "Submissions land in Google Sheets; the admin dashboard exports CSV and Excel and also runs offline in demo mode.",
+    tags: [
+      "JavaScript",
+      "Google Apps Script",
+      "Google Sheets",
+      "SheetJS"
+    ],
+    spec: "Audit form + admin dashboard · CSV / XLSX export",
+    repo: "https://github.com/f1hunterr/artist-workstation-audit"
+  },
+  {
     category: "Internal tool",
     title: "Office LAN Messaging Tool",
     description: "Python-based internal LAN messaging system enabling broadcast messages to multiple computers across the office network. Supports targeted and group messaging without external services.",
@@ -103,6 +137,21 @@ const projects: Project[] = [
     result: "Instant LAN messaging across all office systems with no external dependency."
   },
   {
+    category: "Internal tool",
+    title: "Prompt Ledger",
+    description: "A self-hosted prompt manager that keeps day-to-day prompts sorted by client, ready to copy, download or share — as a shared web app for the team and as Chrome side-panel extensions.",
+    problem: "Prompts used across client work were scattered and hard to share across the team.",
+    result: "One shared library on the LAN plus an offline extension, all using the same export/import format.",
+    tags: [
+      "Node.js",
+      "SQLite",
+      "Docker",
+      "Chrome Extension"
+    ],
+    spec: "Web app + 2 Chrome extensions · Docker",
+    repo: "https://github.com/f1hunterr/prompt-ledger"
+  },
+  {
     category: "Knowledge base",
     title: "IT Help Center",
     description: "Built an internal IT Help Center web portal with step-by-step guides for the most common staff IT tasks. Covers software setup, VPN access, printer configuration, account management, and general troubleshooting.",
@@ -115,7 +164,8 @@ const projects: Project[] = [
     ],
     problem: "Staff repeatedly raised tickets for the same common IT tasks and issues.",
     result: "Self-service portal empowering users to resolve issues independently, reducing support load.",
-    href: "https://portal.hobb-dashboard.com/index.html"
+    repo: "https://github.com/f1hunterr/it-help-centre",
+    spec: "4 step-by-step guides · search · dark mode · Docker"
   },
   {
     category: "Monitoring",
@@ -190,7 +240,7 @@ export function Projects() {
         lede="Showcasing robust systems, automated workflows, and internal tools built to solve real operational challenges."
       />
 
-      {/* 11 projects + 1 closing cell = 12, so the grid has no empty slots at 2 or 3 columns */}
+      {/* 14 projects + 1 closing cell: 15 fills 3 columns exactly; at 2 columns the closing cell spans both */}
       <div className="hairgrid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, idx) => (
           <article key={p.title} className="flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)]" data-testid={`card-project-${idx}`}>
@@ -200,6 +250,7 @@ export function Projects() {
             </div>
             <Reveal delay={(idx % 3) * 0.06} className="flex-1 flex flex-col px-5 md:px-8 py-8">
               <h3 className="text-2xl leading-[1.15] tracking-[-0.02em]">{p.title}</h3>
+              {p.spec && <p className="mt-2 mono-label text-[var(--accent-ink)]">{p.spec}</p>}
               <p className="mt-3 text-[var(--muted)] leading-relaxed">{p.description}</p>
 
               <dl className="mt-6 space-y-3 text-[15px] leading-relaxed">
@@ -217,15 +268,21 @@ export function Projects() {
                 {p.tags.join("  /  ")}
               </p>
 
-              {(p.href || p.game) && (
-                <div className="mt-5">
-                  {p.game ? (
+              {(p.href || p.repo || p.game) && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {p.game && (
                     <button className="btn btn-solid btn-sm" onClick={() => setGameOpen(true)}>
                       <Play size={12} /> Play game
                     </button>
-                  ) : (
+                  )}
+                  {p.href && (
                     <a className="btn btn-outline btn-sm" href={p.href} target="_blank" rel="noopener noreferrer">
                       Visit site <ArrowUpRight size={12} />
+                    </a>
+                  )}
+                  {p.repo && (
+                    <a className="btn btn-outline btn-sm" href={p.repo} target="_blank" rel="noopener noreferrer">
+                      View code <ArrowUpRight size={12} />
                     </a>
                   )}
                 </div>
@@ -234,10 +291,10 @@ export function Projects() {
           </article>
         ))}
 
-        <div className="flex flex-col">
+        <div className="flex flex-col md:col-span-2 lg:col-span-1">
           <div className="cell-strip mono-label">
             <span>Next</span>
-            <span className="text-[var(--faint)]">12</span>
+            <span className="text-[var(--faint)]">{String(projects.length + 1).padStart(2, "0")}</span>
           </div>
           <Reveal className="flex-1 flex flex-col justify-between gap-8 px-5 md:px-8 py-8 bg-[var(--bg-sunken)]">
             <h3 className="headline text-[2.5rem]">
