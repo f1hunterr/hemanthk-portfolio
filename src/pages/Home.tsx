@@ -6,11 +6,15 @@ import { Projects } from "@/components/sections/Projects";
 import { Experience } from "@/components/sections/Experience";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollRuler } from "@/components/frame/ScrollRuler";
+import { SectionIndex } from "@/components/frame/SectionIndex";
 
 export default function Home() {
   return (
     <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--ink)]">
       <Navbar />
+      <ScrollRuler />
+      <SectionIndex />
       <main>
         {/* The hero runs edge to edge; everything after sits inside the hairline frame */}
         <Hero />

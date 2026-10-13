@@ -1,48 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X, Sun, Moon, Github } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
+import { SECTIONS, NAV_HEIGHT, useActiveSection, scrollToSection } from "@/hooks/use-active-section";
 
-const NAV_LINKS = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#experience" },
-  { name: "Contact", href: "#contact" },
-];
-
-const NAV_HEIGHT = 49;
+const NAV_LINKS = SECTIONS.map((s) => ({ name: s.label, href: `#${s.id}` }));
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
+  const activeSection = useActiveSection();
   const { theme, setTheme } = useTheme();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = NAV_LINKS.map((l) => l.href.replace("#", ""));
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        // Measured from the viewport, not offsetTop: sections sit inside the positioned frame
-        if (el && el.getBoundingClientRect().top <= 120) {
-          setActiveSection(sections[i]);
-          break;
-        }
-      }
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      const top = element.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    scrollToSection(href.replace("#", ""));
   };
 
   const resumeHref = `${import.meta.env.BASE_URL}resume.html`;

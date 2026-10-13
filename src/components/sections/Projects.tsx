@@ -193,7 +193,7 @@ export function Projects() {
       {/* 11 projects + 1 closing cell = 12, so the grid has no empty slots at 2 or 3 columns */}
       <div className="hairgrid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, idx) => (
-          <article key={p.title} className="flex flex-col" data-testid={`card-project-${idx}`}>
+          <article key={p.title} className="flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)]" data-testid={`card-project-${idx}`}>
             <div className="cell-strip mono-label">
               <span>{p.category}</span>
               <span className="text-[var(--faint)]">{String(idx + 1).padStart(2, "0")}</span>

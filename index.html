@@ -44,6 +44,7 @@
     </script>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f2f1ee" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -53,7 +54,11 @@
         try { stored = localStorage.getItem('portfolio-theme'); } catch (e) {}
         // Light by default (paper look); dark only when the visitor chose it
         var dark = stored === 'dark';
-        if (dark) document.documentElement.classList.add('dark');
+        if (dark) {
+          document.documentElement.classList.add('dark');
+          var tc = document.querySelector('meta[name="theme-color"]');
+          if (tc) tc.setAttribute('content', '#121316');
+        }
 
         // Boot screen: once per tab session, never for reduced-motion users
         var seen = false;
@@ -129,6 +134,9 @@
             boot.classList.add('boot-ready');
             setTimeout(function() {
               boot.classList.add('boot-done');
+              // The hero waits for this so its entrance is not hidden behind the boot screen
+              window.__hkBootDone = true;
+              window.dispatchEvent(new Event('hk:boot-done'));
               setTimeout(function() { boot.remove(); }, 500);
             }, 450);
           }, Math.max(0, MIN_MS - (Date.now() - start)));

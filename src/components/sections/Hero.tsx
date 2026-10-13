@@ -25,6 +25,19 @@ const STATS = [
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  // Hold the entrance until the boot screen starts fading, otherwise it plays unseen behind it
+  const [bootDone, setBootDone] = useState(
+    () =>
+      !document.getElementById("boot") ||
+      document.documentElement.classList.contains("no-boot") ||
+      Boolean((window as Window & { __hkBootDone?: boolean }).__hkBootDone)
+  );
+  useEffect(() => {
+    if (bootDone) return;
+    const onDone = () => setBootDone(true);
+    window.addEventListener("hk:boot-done", onDone);
+    return () => window.removeEventListener("hk:boot-done", onDone);
+  }, [bootDone]);
   const [wordIdx, setWordIdx] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
@@ -94,7 +107,7 @@ export function Hero() {
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={bootDone ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
           className="relative z-10 text-center px-5 py-20 md:py-28 max-w-5xl"
         >

@@ -19,6 +19,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
+    // Phone browser bar matches the page
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#121316" : "#f2f1ee");
   }, [theme]);
 
   const setTheme = (next: Theme) => {
