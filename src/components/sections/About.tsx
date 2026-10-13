@@ -1,4 +1,4 @@
-import { Section, Reveal } from "@/components/frame/Section";
+import { Section, Reveal, ScrubIn } from "@/components/frame/Section";
 
 const FACTS = [
   { label: "Role", value: "Manager - IT, Production Automation & Infrastructure" },
@@ -26,9 +26,11 @@ export function About() {
       {/* Headline, story and portrait */}
       <div className="grid lg:grid-cols-[1fr_auto] gap-12 px-5 md:px-10 pt-14 pb-14 md:pt-20 md:pb-20">
         <Reveal>
-          <h2 className="headline max-w-[14ch]">
-            Systems-first. <em>Always</em> on.
-          </h2>
+          <ScrubIn>
+            <h2 className="headline max-w-[14ch]">
+              Systems-first. <em>Always</em> on.
+            </h2>
+          </ScrubIn>
           <p className="lede mt-6 max-w-[38rem]">
             IT professional with a systems-first mindset — building infrastructure that scales, automating what
             slows teams down, and keeping everything running reliably.

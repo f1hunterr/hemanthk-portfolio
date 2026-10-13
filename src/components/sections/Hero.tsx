@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download } from "lucide-react";
 
 // The italic word in the tagline cycles through these
@@ -68,10 +68,22 @@ export function Hero() {
 
   const resumeHref = `${import.meta.env.BASE_URL}resume.html`;
 
+  // Scroll-linked (and reversible) exit: the rings zoom towards the viewer while the text lifts away
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const orbitScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
+  const orbitOpacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.2]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -90]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
-    <section id="home" className="relative pt-[49px] min-h-[100svh] flex flex-col overflow-hidden">
+    <section ref={heroRef} id="home" className="hero-vignette relative pt-[49px] min-h-[100svh] flex flex-col overflow-hidden">
       {/* Rings, colour arcs and orbiting photo cards, centred on the content block */}
       <div className="relative flex-1 flex items-center justify-center">
+        <motion.div
+          className="absolute inset-0"
+          style={reduceMotion ? undefined : { scale: orbitScale, opacity: orbitOpacity }}
+        >
         <div className="hero-orbit" aria-hidden="true">
           <span className="hero-ring hero-ring-0" />
           {[1, 2, 3].map((r) => (
@@ -101,10 +113,12 @@ export function Hero() {
             </div>
           ))}
         </div>
+        </motion.div>
 
         {/* Soft fade behind the text so it stays readable over the photos */}
         <div className="hero-veil" aria-hidden="true" />
 
+        <motion.div className="relative z-10" style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={bootDone ? { opacity: 1, y: 0 } : undefined}
@@ -156,6 +170,7 @@ export function Hero() {
             <span className="text-[var(--faint)]">·</span>
             <a className="hover:text-[var(--ink)] transition-colors" href="https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           </p>
+        </motion.div>
         </motion.div>
       </div>
 

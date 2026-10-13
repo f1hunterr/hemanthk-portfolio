@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { useRef, type ReactNode } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 
 /** A framed page section: "+" marks on the frame, then a "01 / LABEL ····· meta" tag row. */
 export function Section({
@@ -31,10 +31,16 @@ export function Section({
 /** Headline + lede block at the top of a section. Pass the italic word as <em>. */
 export function SectionIntro({ title, lede }: { title: ReactNode; lede?: ReactNode }) {
   return (
-    <Reveal className="px-5 md:px-10 pt-14 pb-14 md:pt-20 md:pb-20">
-      <h2 className="headline max-w-[16ch]">{title}</h2>
-      {lede && <p className="lede mt-6 max-w-[38rem]">{lede}</p>}
-    </Reveal>
+    <div className="px-5 md:px-10 pt-14 pb-14 md:pt-20 md:pb-20">
+      <ScrubIn>
+        <h2 className="headline max-w-[16ch]">{title}</h2>
+      </ScrubIn>
+      {lede && (
+        <Reveal delay={0.1}>
+          <p className="lede mt-6 max-w-[38rem]">{lede}</p>
+        </Reveal>
+      )}
+    </div>
   );
 }
 
@@ -56,6 +62,24 @@ export function Reveal({
       transition={{ duration: 0.5, delay, ease: [0.2, 0.7, 0.2, 1] }}
       className={className}
     >
+      {children}
+    </motion.div>
+  );
+}
+
+/**
+ * Scroll-linked entrance: slides in from the left as it rises into view, tied to the scroll
+ * position rather than played once, so it reverses when scrolling back up.
+ */
+export function ScrubIn({ children, className }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start 55%"] });
+  const x = useTransform(scrollYProgress, [0, 1], [-32, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.15, 1]);
+
+  return (
+    <motion.div ref={ref} className={className} style={reduceMotion ? undefined : { x, opacity }}>
       {children}
     </motion.div>
   );
