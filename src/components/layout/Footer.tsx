@@ -21,7 +21,8 @@ export function Footer() {
     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 49, behavior: "smooth" });
   };
 
-  const linkClass = "text-[var(--muted)] hover:text-[var(--ink)] transition-colors";
+  // py-1 lifts the tap area to ~28px without changing the look
+  const linkClass = "inline-block py-1 text-[var(--muted)] hover:text-[var(--ink)] transition-colors";
 
   return (
     <footer className="relative cross-top border-t border-[var(--line)]">
@@ -36,7 +37,7 @@ export function Footer() {
 
         <div className="px-5 md:px-8 py-10">
           <h3 className="mono-label text-[var(--muted)] font-medium">Sections</h3>
-          <ul className="mt-5 space-y-2">
+          <ul className="mt-5 space-y-1">
             {SECTIONS.map((l) => (
               <li key={l.name}>
                 <a href={l.href} onClick={(e) => scrollTo(e, l.href)} className={linkClass}>
@@ -49,7 +50,7 @@ export function Footer() {
 
         <div className="px-5 md:px-8 py-10">
           <h3 className="mono-label text-[var(--muted)] font-medium">Connect</h3>
-          <ul className="mt-5 space-y-2">
+          <ul className="mt-5 space-y-1">
             {CONNECT.map((l) => (
               <li key={l.name}>
                 <a
@@ -67,7 +68,7 @@ export function Footer() {
         <div className="px-5 md:px-8 py-10">
           <h3 className="mono-label text-[var(--muted)] font-medium">Contact</h3>
           <ul className="mt-5 space-y-2 text-[var(--muted)]">
-            <li className="break-words">Hemanth2608@hotmail.com</li>
+            <li className="[overflow-wrap:anywhere]">Hemanth2608@hotmail.com</li>
             <li>+91 80884 61724</li>
             <li>
               <a href={`${import.meta.env.BASE_URL}resume.html`} target="_blank" rel="noopener noreferrer" className={linkClass}>

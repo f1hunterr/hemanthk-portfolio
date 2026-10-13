@@ -123,7 +123,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={bootDone ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
-          className="relative z-10 text-center px-5 py-20 md:py-28 max-w-5xl"
+          className="relative z-10 text-center px-5 py-20 md:py-28 [@media(max-height:560px)]:py-10 max-w-5xl min-[1800px]:max-w-7xl"
         >
           <p className="legible mono-label text-[var(--muted)] mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             <span className="inline-flex items-center gap-2 whitespace-nowrap">
@@ -137,7 +137,7 @@ export function Hero() {
             <span className="whitespace-nowrap">IT &amp; Automation Manager · HOBB</span>
           </p>
 
-          <h1 className="display-wide whitespace-nowrap text-[var(--ink-strong)] text-[clamp(2.6rem,8.6vw,8rem)]">Hemanth K</h1>
+          <h1 className="hero-wordmark display-wide whitespace-nowrap text-[var(--ink-strong)]">Hemanth K</h1>
 
           <p className="legible mt-8 font-[family-name:var(--font-display)] font-[620] text-[clamp(1.6rem,3.2vw,2.25rem)] leading-[1.05] tracking-[-0.03em] text-[var(--ink-strong)]">
             Infrastructure that stays{" "}
@@ -149,7 +149,7 @@ export function Hero() {
             </span>
           </p>
 
-          <p className="legible lede mt-6 max-w-[34rem] mx-auto">
+          <p className="legible lede hero-lede mt-6 max-w-[34rem] mx-auto">
             Building reliable IT systems, automating day-to-day operations, and managing infrastructure at scale — with
             hands-on experience across servers, networks, and enterprise IT environments.
           </p>
@@ -163,12 +163,12 @@ export function Hero() {
             </a>
           </div>
 
-          <p className="legible mt-8 mono-label text-[var(--muted)] flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <a className="hover:text-[var(--ink)] transition-colors" href="https://www.linkedin.com/in/hemanth-k-8609b4255" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <p className="legible mt-6 mono-label text-[var(--muted)] flex flex-wrap items-center justify-center gap-x-1 gap-y-0">
+            <a className="tap-pad hover:text-[var(--ink)] transition-colors" href="https://www.linkedin.com/in/hemanth-k-8609b4255" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <span className="text-[var(--faint)]">·</span>
-            <a className="hover:text-[var(--ink)] transition-colors" href="https://github.com/f1hunterr" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a className="tap-pad hover:text-[var(--ink)] transition-colors" href="https://github.com/f1hunterr" target="_blank" rel="noopener noreferrer">GitHub</a>
             <span className="text-[var(--faint)]">·</span>
-            <a className="hover:text-[var(--ink)] transition-colors" href="https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a className="tap-pad hover:text-[var(--ink)] transition-colors" href="https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           </p>
         </motion.div>
         </motion.div>

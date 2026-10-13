@@ -247,6 +247,12 @@
   }
   .btn-outline:hover { border-color: var(--ink); }
   .btn-sm { height: 34px; padding: 0 14px; }
+  /* Touch screens get full-size tap targets (about 44px), even on the compact buttons */
+  @media (pointer: coarse) {
+    .btn-sm { height: 44px; padding: 0 18px; }
+  }
+  /* Inline text links that need a comfortable tap area without changing how they look */
+  .tap-pad { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
   .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ---------- The frame: a centred column with hairline sides ---------- */
@@ -442,7 +448,7 @@
       right: 24px;
       top: -6px;
       font-family: var(--font-mono);
-      font-size: 9px;
+      font-size: 10px;
       letter-spacing: 0.05em;
       color: var(--muted);
     }
@@ -459,7 +465,7 @@
       right: 2px;
       top: 2px;
       font-family: var(--font-mono);
-      font-size: 9px;
+      font-size: 10px;
       color: var(--accent-ink);
       background: var(--bg);
       padding: 0 2px;
@@ -528,6 +534,27 @@
       color-mix(in oklab, var(--bg) 80%, transparent) 58%,
       transparent 100%
     );
+  }
+
+  /* ---------- Hero sizing across screen shapes ---------- */
+  .hero-wordmark { font-size: clamp(2rem, 8.6vw, 8rem); }
+  /* Very wide screens: a bigger name in a wider column, so the hero doesn't look lost */
+  @media (min-width: 1800px) {
+    .hero-wordmark { font-size: clamp(8rem, 6vw, 10rem); }
+  }
+  /* Tiny phones: a slightly smaller paragraph so the buttons stay near the fold */
+  @media (max-width: 379px) {
+    .hero-lede { font-size: 16px; }
+  }
+  /* Tablets in portrait: the inner ring would sit right on the name */
+  @media (max-width: 1023px) {
+    .orbit-spin-1, .hero-arc-1 { display: none; }
+  }
+  /* Short screens (a phone held sideways, small laptop windows): size the name by height,
+     tighten the spacing and keep only the outer ring */
+  @media (max-height: 560px) {
+    .hero-wordmark { font-size: clamp(2rem, 12vh, 5rem); }
+    .orbit-spin-1, .orbit-spin-2, .hero-arc-1, .hero-arc-2 { display: none; }
   }
 
   /* Phones: smaller cards, the innermost ring would sit right under the text */

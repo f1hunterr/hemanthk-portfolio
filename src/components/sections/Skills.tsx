@@ -28,10 +28,13 @@ export function Skills() {
             </Reveal>
             <Reveal delay={0.05}>
               <p className="text-[var(--ink)] leading-relaxed md:pt-[3px]">
+                {/* Each skill keeps its separator; the space after each one is where lines may wrap */}
                 {cat.skills.map((s, i) => (
                   <span key={s}>
-                    {s}
-                    {i < cat.skills.length - 1 && <span className="text-[var(--faint)] mx-2">/</span>}
+                    <span className="whitespace-nowrap">
+                      {s}
+                      {i < cat.skills.length - 1 && <span className="text-[var(--faint)] ml-2">/</span>}
+                    </span>{" "}
                   </span>
                 ))}
               </p>

@@ -75,7 +75,9 @@ export function ScrubIn({ children, className }: { children: ReactNode; classNam
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start 55%"] });
-  const x = useTransform(scrollYProgress, [0, 1], [-32, 0]);
+  // Smaller travel on phones so the headline never starts past the screen edge
+  const travel = typeof window !== "undefined" && window.innerWidth < 640 ? -12 : -32;
+  const x = useTransform(scrollYProgress, [0, 1], [travel, 0]);
   const opacity = useTransform(scrollYProgress, [0, 1], [0.15, 1]);
 
   return (

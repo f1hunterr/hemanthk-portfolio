@@ -135,14 +135,14 @@ export function Contact() {
           </div>
           <dl>
             {contactInfo.map((item) => (
-              <div key={item.label} className="grid grid-cols-[110px_1fr] gap-4 px-5 md:px-8 py-4 border-b border-[var(--line)] last:border-b-0">
+              <div key={item.label} className="grid grid-cols-[96px_1fr] sm:grid-cols-[110px_1fr] gap-4 px-5 md:px-8 py-3 border-b border-[var(--line)] last:border-b-0">
                 <dt className="mono-label text-[var(--muted)] pt-[3px]">{item.label}</dt>
-                <dd className="min-w-0 break-words">
+                <dd className="min-w-0 [overflow-wrap:anywhere]">
                   {item.href ? (
                     <a
                       href={item.href}
                       {...(item.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      className="text-[var(--ink)] underline decoration-[var(--line-strong)] underline-offset-4 hover:decoration-[var(--ink)] transition-colors"
+                      className="inline-block py-1 text-[var(--ink)] underline decoration-[var(--line-strong)] underline-offset-4 hover:decoration-[var(--ink)] transition-colors"
                     >
                       {item.value}
                     </a>
