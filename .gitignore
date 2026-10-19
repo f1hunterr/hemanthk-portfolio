@@ -47,3 +47,7 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local tooling: Claude Code worktrees and superpowers brainstorm mockups
+.claude/worktrees/
+.superpowers/
