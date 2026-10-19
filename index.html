@@ -76,14 +76,16 @@
         position: fixed; inset: 0; z-index: 10000;
         display: flex; align-items: center; justify-content: center;
         background: var(--boot-bg); color: var(--boot-fg);
-        font-family: 'Geist Mono', ui-monospace, Menlo, Consolas, monospace;
+        /* System fonts only: using the web fonts here made the browser download ~112KB of fonts
+           straight away, competing with the app's JavaScript on slow phones (~0.8s later hero) */
+        font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
         transition: opacity .45s ease, visibility .45s ease;
       }
       .dark #boot { --boot-bg: #121316; --boot-fg: #f2f1ee; --boot-muted: #f2f1ee99; --boot-track: #f2f1ee26; --boot-ok: #4ade80; }
       .no-boot #boot { display: none; }
       #boot.boot-done { opacity: 0; visibility: hidden; }
       .boot-inner { width: min(340px, calc(100vw - 48px)); }
-      .boot-name { margin-bottom: 22px; font: 800 26px 'Archivo', system-ui, sans-serif; font-stretch: 125%; font-variation-settings: "wdth" 125; text-transform: uppercase; letter-spacing: -0.01em; }
+      .boot-name { margin-bottom: 22px; font: 800 26px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-stretch: 125%; text-transform: uppercase; letter-spacing: 0.02em; }
       .boot-lines { list-style: none; margin: 0 0 18px; padding: 0; font-size: 11px; line-height: 2; letter-spacing: .12em; text-transform: uppercase; color: var(--boot-muted); }
       .boot-lines li { opacity: 0; transform: translateY(4px); animation: boot-in .35s ease forwards; }
       .boot-lines li:nth-child(1) { animation-delay: .05s; }
@@ -123,7 +125,9 @@
           return;
         }
         var start = Date.now();
-        var MIN_MS = 900, MAX_MS = 3000, finished = false;
+        // Ends as soon as the app has rendered (hk:app-ready from main.tsx), not on window load:
+        // load waits for every hero photo, which held the hero back by about a second on phones
+        var MIN_MS = 600, MAX_MS = 3000, finished = false;
 
         function finish() {
           if (finished) return;
@@ -138,13 +142,13 @@
               window.__hkBootDone = true;
               window.dispatchEvent(new Event('hk:boot-done'));
               setTimeout(function() { boot.remove(); }, 500);
-            }, 450);
+            }, 250);
           }, Math.max(0, MIN_MS - (Date.now() - start)));
         }
 
-        if (document.readyState === 'complete') finish();
-        else window.addEventListener('load', finish);
-        setTimeout(finish, MAX_MS); // never hold a visitor hostage on a slow image
+        if (window.__hkAppReady) finish();
+        else window.addEventListener('hk:app-ready', finish);
+        setTimeout(finish, MAX_MS); // never hold a visitor hostage if the app is slow or fails
       })();
     </script>
     <div id="root"></div>

@@ -51,6 +51,8 @@ export function About() {
             <div className="border border-[var(--line-strong)] p-2 bg-[var(--bg-raised)]">
               <img
                 src={`${import.meta.env.BASE_URL}profile.jpg`}
+                srcSet={`${import.meta.env.BASE_URL}profile-320.jpg 320w, ${import.meta.env.BASE_URL}profile.jpg 640w`}
+                sizes="(min-width: 768px) 204px, 184px"
                 alt="Hemanth K"
                 width={640}
                 height={791}

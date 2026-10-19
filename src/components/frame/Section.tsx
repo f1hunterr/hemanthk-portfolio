@@ -78,7 +78,8 @@ export function ScrubIn({ children, className }: { children: ReactNode; classNam
   // Smaller travel on phones so the headline never starts past the screen edge
   const travel = typeof window !== "undefined" && window.innerWidth < 640 ? -12 : -32;
   const x = useTransform(scrollYProgress, [0, 1], [travel, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.15, 1]);
+  // Starts at 0.5, not lower: even mid-slide the headline keeps 3.9:1 contrast (large text needs 3)
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
 
   return (
     <motion.div ref={ref} className={className} style={reduceMotion ? undefined : { x, opacity }}>

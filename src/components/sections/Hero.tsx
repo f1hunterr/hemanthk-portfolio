@@ -13,7 +13,14 @@ const RINGS: { ring: 1 | 2 | 3; reverse?: boolean; offset: number; photos: numbe
   // 19 photos, 27 slots: the outer ring reuses some, spaced so repeats never sit side by side
   { ring: 3, offset: 20, photos: [16, 17, 18, 19, 2, 8, 5, 12, 1, 10, 4, 14] },
 ];
-const photoSrc = (n: number) => `${import.meta.env.BASE_URL}hero/h${String(n).padStart(2, "0")}.webp`;
+const photoSrc = (n: number, w?: 240) =>
+  `${import.meta.env.BASE_URL}hero/h${String(n).padStart(2, "0")}${w ? `-${w}` : ""}.webp`;
+// Displayed card widths per ring (match .orbit-card-N in index.css) so the browser picks 240w or 360w
+const CARD_SIZES: Record<1 | 2 | 3, string> = {
+  1: "(min-width: 1600px) 128px, 8vw",
+  2: "(min-width: 1600px) 168px, 10.5vw",
+  3: "(max-width: 767px) 112px, (min-width: 1643px) 230px, 14vw",
+};
 
 const STATS = [
   { value: "200+", label: "Systems managed" },
@@ -105,7 +112,16 @@ export function Hero() {
                     }}
                   >
                     <div className={`orbit-card orbit-card-${ring}`}>
-                      <img src={photoSrc(n)} alt="" width={360} height={225} decoding="async" fetchPriority="low" />
+                      <img
+                        src={photoSrc(n)}
+                        srcSet={`${photoSrc(n, 240)} 240w, ${photoSrc(n)} 360w`}
+                        sizes={CARD_SIZES[ring]}
+                        alt=""
+                        width={360}
+                        height={225}
+                        decoding="async"
+                        fetchPriority="low"
+                      />
                     </div>
                   </div>
                 );
