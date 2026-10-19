@@ -47,17 +47,17 @@ export function About() {
         </Reveal>
 
         <Reveal delay={0.1} className="lg:pt-2">
-          <figure className="w-[200px] md:w-[220px]">
+          <figure className="w-[240px] md:w-[300px] lg:w-[340px]">
             <div className="border border-[var(--line-strong)] p-2 bg-[var(--bg-raised)]">
               <img
                 src={`${import.meta.env.BASE_URL}profile.jpg`}
-                srcSet={`${import.meta.env.BASE_URL}profile-320.jpg 320w, ${import.meta.env.BASE_URL}profile.jpg 640w`}
-                sizes="(min-width: 768px) 204px, 184px"
+                srcSet={`${import.meta.env.BASE_URL}profile-320.jpg 360w, ${import.meta.env.BASE_URL}profile.jpg 720w`}
+                sizes="(min-width: 1024px) 322px, (min-width: 768px) 282px, 222px"
                 alt="Hemanth K"
-                width={640}
-                height={800}
+                width={720}
+                height={1080}
                 loading="lazy"
-                className="w-full aspect-[4/5] object-cover object-top grayscale-[35%]"
+                className="w-full aspect-[2/3] object-cover grayscale-[35%]"
               />
             </div>
             <figcaption className="mono-label text-[var(--muted)] mt-3 flex justify-between">
