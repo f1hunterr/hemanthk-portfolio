@@ -3,6 +3,11 @@ import { ArrowUpRight, Play } from "lucide-react";
 import { Section, SectionIntro, Reveal } from "@/components/frame/Section";
 import { BorderBeam } from "@/components/magic/BorderBeam";
 import { AnimatedList, type FeedItem } from "@/components/magic/AnimatedList";
+import { Terminal, type TerminalLine } from "@/components/magic/Terminal";
+import { ProgressRing } from "@/components/magic/ProgressRing";
+import { BlendFlowDiagram } from "@/components/magic/BlendFlowDiagram";
+import { SpotlightGlow, spotlightHandlers } from "@/components/magic/Spotlight";
+import { FileTree, type TreeNode } from "@/components/magic/FileTree";
 
 // Loaded on demand: most visitors never open the game, so keep it out of the main bundle
 const NetworkDefenseGame = lazy(() =>
@@ -24,6 +29,16 @@ type Project = {
   featured?: boolean;
   /** Illustrative ops lines shown as an animated "example feed" (no real system names) */
   feed?: FeedItem[];
+  /** Wide featured card: spans two columns and shows its extras beside the story */
+  wide?: boolean;
+  /** Illustrative terminal session (no real machine names) */
+  terminal?: TerminalLine[];
+  /** A real, verifiable figure shown as a filling ring */
+  ring?: { value: string; label: string };
+  /** Show the animated pipeline diagram (BlendFlow) */
+  diagram?: boolean;
+  /** The project's real file layout (public repos only) */
+  files?: TreeNode;
 };
 
 const projects: Project[] = [
@@ -31,6 +46,17 @@ const projects: Project[] = [
     category: "Rendering",
     title: "Unreal Engine Distributed Render Farm",
     featured: true,
+    wide: true,
+    ring: { value: "230+", label: "Automated tests passing" },
+    terminal: [
+      { kind: "cmd", text: "SETUP.bat" },
+      { kind: "info", text: "installing render agent… done" },
+      { kind: "ok", text: "node render-pc-03 joined the farm" },
+      { kind: "cmd", text: "farm submit shot_040 --split auto" },
+      { kind: "info", text: "planning pieces on camera cuts…" },
+      { kind: "ok", text: "shot_040 split across 4 PCs" },
+      { kind: "ok", text: "240 / 240 frames verified" },
+    ],
     description: "A distributed render farm for Unreal Engine 5 Movie Render Queue, run from a web dashboard. A priority job queue splits each shot across free render PCs (on camera cuts), retries failures on another machine, checks every written frame, and shows live progress with CPU, GPU, RAM and VRAM per node.",
     tags: [
       "Python",
@@ -69,6 +95,7 @@ const projects: Project[] = [
   {
     category: "Render automation",
     title: "BlendFlow — Blender Batch Rendering",
+    diagram: true,
     description: "Automates batch-rendering 3D product images in Blender: a job list says which model, materials and frames, and render PCs open Blender in the background, swap models and materials, render, and save the images to the NAS.",
     problem: "Rendering product image variations meant setting up each model and material by hand in Blender.",
     result: "Batches imported from Google Sheets run unattended across render PCs, with a web app to track, edit and re-trigger them.",
@@ -112,6 +139,17 @@ const projects: Project[] = [
   {
     category: "Tooling",
     title: "Studio Copy",
+    files: {
+      name: "studio-copy/",
+      children: [
+        { name: "StudioCopy.ps1" },
+        { name: "Studio Copy.cmd" },
+        { name: "Install Shortcuts.cmd" },
+        { name: "Install-Shortcuts.ps1" },
+        { name: "Tests/", children: [{ name: "Run-Tests.ps1" }] },
+        { name: "docs/", children: [{ name: "screenshot.png" }] },
+      ],
+    },
     description: "A simple Windows app for copying large folders with a progress bar people can actually read. Robocopy runs underneath, multithreaded and restartable, with percent done, time left, speed and files copied shown in plain English.",
     problem: "Artists moving large asset folders to and from the NAS could not see how far along a copy was or when it would finish.",
     result: "A no-install tool for stock Windows 10/11 that rolls out from a network share and never deletes anything at the destination.",
@@ -299,16 +337,26 @@ export function Projects() {
         lede="Showcasing robust systems, automated workflows, and internal tools built to solve real operational challenges."
       />
 
-      {/* 17 projects + 1 closing cell = 18, so the grid has no empty slots at 2 or 3 columns */}
+      {/* 17 projects (render farm spans 2) + closing row: 18 + 3 = 21 slots at 3 columns, 18 + 2 = 20 at 2 */}
       <div className="hairgrid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, idx) => (
-          <article key={p.title} className="relative flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)]" data-testid={`card-project-${idx}`}>
+          <article
+            key={p.title}
+            className={`relative flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)] ${p.wide ? "md:col-span-2" : ""}`}
+            data-testid={`card-project-${idx}`}
+            {...spotlightHandlers}
+          >
+            <SpotlightGlow />
             {p.featured && <BorderBeam />}
             <div className="cell-strip mono-label">
               <span>{p.category}</span>
               <span className="text-[var(--faint)]">{String(idx + 1).padStart(2, "0")}</span>
             </div>
-            <Reveal delay={(idx % 3) * 0.06} className="flex-1 flex flex-col px-5 md:px-8 py-8">
+            <Reveal
+              delay={(idx % 3) * 0.06}
+              className={`flex-1 px-5 md:px-8 py-8 ${p.wide ? "grid lg:grid-cols-2 gap-x-10 gap-y-8" : "flex flex-col"}`}
+            >
+              <div className="flex flex-col h-full">
               <h3 className="text-2xl leading-[1.15] tracking-[-0.02em]">{p.title}</h3>
               {p.spec && <p className="mt-2 mono-label text-[var(--accent-ink)]">{p.spec}</p>}
               <p className="mt-3 text-[var(--muted)] leading-relaxed">{p.description}</p>
@@ -325,6 +373,16 @@ export function Projects() {
               </dl>
 
               {p.feed && <AnimatedList items={p.feed} label="Example feed" />}
+              {p.diagram && (
+                <div className="mt-6">
+                  <BlendFlowDiagram />
+                </div>
+              )}
+              {p.files && (
+                <div className="mt-6">
+                  <FileTree root={p.files} />
+                </div>
+              )}
 
               <p className="mt-auto pt-6 mono-label text-[var(--muted)] text-[10px]">
                 {p.tags.join("  /  ")}
@@ -349,11 +407,20 @@ export function Projects() {
                   )}
                 </div>
               )}
+              </div>
+
+              {p.wide && (p.ring || p.terminal) && (
+                <div className="flex flex-col gap-6">
+                  {p.ring && <ProgressRing value={p.ring.value} label={p.ring.label} />}
+                  {p.terminal && <Terminal lines={p.terminal} label="Example render farm session" />}
+                </div>
+              )}
             </Reveal>
           </article>
         ))}
 
-        <div className="flex flex-col">
+        {/* Spans the full row: with the wide render farm card, this keeps the grid free of empty slots */}
+        <div className="flex flex-col md:col-span-2 lg:col-span-3">
           <div className="cell-strip mono-label">
             <span>Next</span>
             <span className="text-[var(--faint)]">{String(projects.length + 1).padStart(2, "0")}</span>

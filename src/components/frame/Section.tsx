@@ -1,5 +1,6 @@
 import { useRef, type ReactNode } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { HyperText } from "@/components/magic/HyperText";
 
 /** A framed page section: "+" marks on the frame, then a "01 / LABEL ····· meta" tag row. */
 export function Section({
@@ -18,9 +19,7 @@ export function Section({
   return (
     <section id={id} className="relative cross-top border-t border-[var(--line)] scroll-mt-12" data-section={label}>
       <div className="h-[42px] flex items-center justify-between gap-4 px-5 md:px-10 border-b border-[var(--line)] mono-label text-[var(--muted)]">
-        <span>
-          {index} <span className="text-[var(--faint)]">/</span> {label}
-        </span>
+        <HyperText text={`${index} / ${label}`} />
         {meta && <span className="hidden sm:inline truncate">{meta}</span>}
       </div>
       {children}

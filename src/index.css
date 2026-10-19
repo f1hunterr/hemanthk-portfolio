@@ -520,6 +520,89 @@
     background: radial-gradient(ellipse 80% 75% at 50% 45%, transparent 50%, var(--vignette) 100%);
   }
 
+  /* ---------- Terminal (example session, typed once) ---------- */
+  .terminal {
+    background: #101014;
+    color: #e7e6e3;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    min-height: 15.5rem; /* room for every line up front, so the card never grows while typing */
+    border: 1px solid var(--line);
+  }
+  .terminal-bar { display: flex; gap: 6px; margin: -2px 0 10px; }
+  .terminal-bar i { width: 9px; height: 9px; border-radius: 9999px; background: #3a3a40; display: block; }
+  .terminal-line { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .terminal-cmd .terminal-prefix { color: #74aaff; }
+  .terminal-info { color: #a3a3ab; }
+  .terminal-ok { color: #4ade80; }
+  .terminal-caret {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    margin-left: 1px;
+    vertical-align: -2px;
+    background: #e7e6e3;
+    animation: caret-blink 1s steps(1) infinite;
+  }
+  @keyframes caret-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .terminal-caret { animation: none; }
+  }
+
+  /* ---------- BlendFlow pipeline diagram (animated beams) ---------- */
+  .beam-diagram { display: block; width: 100%; max-width: 380px; height: auto; border: 1px solid var(--line); background: var(--bg-raised); }
+  .beam-wire { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+  .beam-pulse {
+    fill: none;
+    stroke: url(#beam-gradient);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 24 240;
+    animation: beam-flow 2.8s linear infinite;
+  }
+  .beam-d1 { animation-delay: .35s; } .beam-d2 { animation-delay: .7s; } .beam-d3 { animation-delay: 1.05s; } .beam-d4 { animation-delay: 1.4s; }
+  @keyframes beam-flow { from { stroke-dashoffset: 264; } to { stroke-dashoffset: 0; } }
+  .beam-node rect { fill: var(--bg); stroke: var(--line-strong); }
+  .beam-node text { font: 600 11px var(--font-mono); letter-spacing: .04em; fill: var(--ink); text-anchor: middle; }
+  .beam-node-dark rect { fill: var(--invert-bg); stroke: var(--invert-bg); }
+  .beam-node-dark text { fill: var(--invert-fg); }
+  @media (prefers-reduced-motion: reduce) {
+    .beam-pulse { animation: none; stroke-dasharray: none; opacity: .35; }
+  }
+
+  /* ---------- File tree (native details/summary) ---------- */
+  .file-tree, .file-tree-children { list-style: none; margin: 0; padding: 0; }
+  .file-tree {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.95;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+  }
+  .file-tree-children { padding-left: 16px; margin-left: 5px; border-left: 1px solid var(--line); }
+  .file-tree-file { color: var(--muted); padding-left: 14px; }
+  .file-tree-folder { cursor: pointer; list-style: none; color: var(--ink); }
+  .file-tree-folder::-webkit-details-marker { display: none; }
+  .file-tree-folder::before { content: "▸ "; color: var(--muted); }
+  details[open] > .file-tree-folder::before { content: "▾ "; }
+
+  /* ---------- Spotlight glow on project cards (mouse only) ---------- */
+  .spotlight-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .25s ease;
+    background: radial-gradient(260px circle at var(--spot-x, -999px) var(--spot-y, -999px), color-mix(in oklab, var(--accent) 12%, transparent), transparent 65%);
+  }
+  article:hover > .spotlight-glow { opacity: 1; }
+  @media (hover: none), (pointer: coarse) {
+    .spotlight-glow { display: none; }
+  }
+
   /* ---------- Dot pattern behind section intros (static) ---------- */
   .dot-pattern {
     position: absolute;
