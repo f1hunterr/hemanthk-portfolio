@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download } from "lucide-react";
+import { NumberTicker } from "@/components/magic/NumberTicker";
+import { Marquee } from "@/components/magic/Marquee";
 
 // The italic word in the tagline cycles through these
 const WORDS = ["reliable.", "automated.", "secure.", "monitored."];
@@ -21,6 +23,11 @@ const CARD_SIZES: Record<1 | 2 | 3, string> = {
   2: "(min-width: 1600px) 168px, 10.5vw",
   3: "(max-width: 767px) 112px, (min-width: 1643px) 230px, 14vw",
 };
+
+const TOOLS = [
+  "Proxmox", "TrueNAS", "Zabbix", "n8n", "GLPI", "Tailscale",
+  "WireGuard", "Sophos", "Unreal Engine", "PowerShell", "Docker", "Cloudflare",
+];
 
 const STATS = [
   { value: "200+", label: "Systems managed" },
@@ -192,11 +199,12 @@ export function Hero() {
 
       {/* Stats strip, inside the frame so its hairlines continue down the page */}
       <div className="frame relative z-10">
+        <Marquee items={TOOLS} label="Tools" />
         <div className="hairgrid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 [&>*:last-child]:col-span-2 lg:[&>*:last-child]:col-span-1">
           {STATS.map((s) => (
             <div key={s.label} className="px-5 md:px-8 py-6">
               <div className="font-[family-name:var(--font-display)] font-[620] text-[2.5rem] leading-none tracking-[-0.04em] text-[var(--ink-strong)]">
-                {s.value}
+                <NumberTicker value={parseInt(s.value, 10)} suffix={s.value.replace(/^\d+/, "")} />
               </div>
               <div className="mono-label text-[var(--muted)] mt-3">{s.label}</div>
             </div>

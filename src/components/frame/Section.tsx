@@ -31,7 +31,9 @@ export function Section({
 /** Headline + lede block at the top of a section. Pass the italic word as <em>. */
 export function SectionIntro({ title, lede }: { title: ReactNode; lede?: ReactNode }) {
   return (
-    <div className="px-5 md:px-10 pt-14 pb-14 md:pt-20 md:pb-20">
+    <div className="relative px-5 md:px-10 pt-14 pb-14 md:pt-20 md:pb-20">
+      {/* Drafting-paper dots, after Magic UI's Dot Pattern (MIT, magicui.design); decoration only */}
+      <div className="dot-pattern" data-dot-pattern aria-hidden="true" />
       <ScrubIn>
         <h2 className="headline max-w-[16ch]">{title}</h2>
       </ScrubIn>

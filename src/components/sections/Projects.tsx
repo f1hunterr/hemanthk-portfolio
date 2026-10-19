@@ -1,6 +1,8 @@
 import { lazy, Suspense, useCallback, useState } from "react";
 import { ArrowUpRight, Play } from "lucide-react";
 import { Section, SectionIntro, Reveal } from "@/components/frame/Section";
+import { BorderBeam } from "@/components/magic/BorderBeam";
+import { AnimatedList, type FeedItem } from "@/components/magic/AnimatedList";
 
 // Loaded on demand: most visitors never open the game, so keep it out of the main bundle
 const NetworkDefenseGame = lazy(() =>
@@ -18,12 +20,17 @@ type Project = {
   repo?: string;
   spec?: string;
   game?: boolean;
+  /** Headline projects get the border beam; keep this to one or two so it stays meaningful */
+  featured?: boolean;
+  /** Illustrative ops lines shown as an animated "example feed" (no real system names) */
+  feed?: FeedItem[];
 };
 
 const projects: Project[] = [
   {
     category: "Rendering",
     title: "Unreal Engine Distributed Render Farm",
+    featured: true,
     description: "A distributed render farm for Unreal Engine 5 Movie Render Queue, run from a web dashboard. A priority job queue splits each shot across free render PCs (on camera cuts), retries failures on another machine, checks every written frame, and shows live progress with CPU, GPU, RAM and VRAM per node.",
     tags: [
       "Python",
@@ -39,6 +46,13 @@ const projects: Project[] = [
   {
     category: "Platform",
     title: "Suol — Unified IT Operations Dashboard",
+    featured: true,
+    feed: [
+      { level: "ok", text: "backup · nightly snapshot verified" },
+      { level: "warn", text: "monitoring · disk at 82% on a storage node" },
+      { level: "ok", text: "render farm · shot finished across 4 nodes" },
+      { level: "ok", text: "tickets · 3 new, routed to Slack" },
+    ],
     description: "A self-hosted dashboard that pulls Windows PCs, Linux servers, Proxmox, TrueNAS and Zabbix into one view, one alert stream, one audit log and one permission model — sitting on top of the tools already in place instead of replacing them.",
     problem: "Infrastructure status was spread across a separate console for every system.",
     result: "Working Proxmox, TrueNAS and Zabbix integrations with role-based access (4 roles), an audit log and encrypted integration settings; Wazuh, GLPI, n8n and Sophos in preview.",
@@ -288,7 +302,8 @@ export function Projects() {
       {/* 17 projects + 1 closing cell = 18, so the grid has no empty slots at 2 or 3 columns */}
       <div className="hairgrid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, idx) => (
-          <article key={p.title} className="flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)]" data-testid={`card-project-${idx}`}>
+          <article key={p.title} className="relative flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)]" data-testid={`card-project-${idx}`}>
+            {p.featured && <BorderBeam />}
             <div className="cell-strip mono-label">
               <span>{p.category}</span>
               <span className="text-[var(--faint)]">{String(idx + 1).padStart(2, "0")}</span>
@@ -308,6 +323,8 @@ export function Projects() {
                   <dd className="text-[var(--ink)]">{p.result}</dd>
                 </div>
               </dl>
+
+              {p.feed && <AnimatedList items={p.feed} label="Example feed" />}
 
               <p className="mt-auto pt-6 mono-label text-[var(--muted)] text-[10px]">
                 {p.tags.join("  /  ")}
