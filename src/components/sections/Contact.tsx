@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { GlyphMatrix } from "@/components/magic/GlyphMatrix";
+import { useTheme } from "@/hooks/use-theme";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -55,6 +57,7 @@ const contactInfo = [
 
 export function Contact() {
   const { toast } = useToast();
+  const { theme } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Honeypot: hidden from people, bots fill it in; Formspree silently drops submissions where it's set
   const gotchaRef = useRef<HTMLInputElement>(null);
@@ -105,8 +108,12 @@ export function Contact() {
 
   return (
     <Section id="contact" index="05" label="Contact" meta="Bangalore · IST (UTC+5:30)">
-      {/* Closing call to action */}
-      <Reveal className="px-5 md:px-10 py-20 md:py-28 text-center">
+      {/* Closing call to action, over a faint glyph field that clears around the copy */}
+      <div className="relative overflow-hidden">
+        <div className="glyph-field absolute inset-0">
+          <GlyphMatrix glyphs="01·:+/\<>=_" color={theme === "dark" ? "#f2f1ee" : "#101014"} />
+        </div>
+      <Reveal className="relative px-5 md:px-10 py-20 md:py-28 text-center">
         <p className="mono-label text-[var(--muted)]">Open to opportunities <span className="text-[var(--faint)]">·</span> full-time or consulting</p>
         <h2 className="headline mx-auto mt-6">
           Let's <em>talk</em>.
@@ -125,6 +132,7 @@ export function Contact() {
           )}
         </div>
       </Reveal>
+      </div>
 
       {/* Details + form */}
       <div className="hairgrid lg:grid-cols-[2fr_3fr]">

@@ -617,6 +617,20 @@
   /* Keep the headline and lede above the dots */
   .dot-pattern ~ * { position: relative; }
 
+  /* ---------- Glyph field behind the contact call to action: clear in the middle, glyphs at the edges ---------- */
+  .glyph-field {
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse 42% 58% at 50% 50%, transparent 30%, #000 100%);
+    mask-image: radial-gradient(ellipse 42% 58% at 50% 50%, transparent 30%, #000 100%);
+  }
+  @media (max-width: 639px) {
+    .glyph-field {
+      /* Copy spans the full width on phones, so glyphs stay in bands above and below it */
+      -webkit-mask-image: linear-gradient(#000, transparent 16%, transparent 82%, #000);
+      mask-image: linear-gradient(#000, transparent 16%, transparent 82%, #000);
+    }
+  }
+
   /* ---------- Border beam: a short light travelling around a featured card ---------- */
   @property --beam-angle {
     syntax: "<angle>";
