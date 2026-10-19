@@ -55,7 +55,7 @@ export function About() {
                 sizes="(min-width: 768px) 204px, 184px"
                 alt="Hemanth K"
                 width={640}
-                height={791}
+                height={800}
                 loading="lazy"
                 className="w-full aspect-[4/5] object-cover object-top grayscale-[35%]"
               />
