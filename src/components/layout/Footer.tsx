@@ -71,8 +71,8 @@ export function Footer() {
             <li className="[overflow-wrap:anywhere]">Hemanth2608@hotmail.com</li>
             <li>+91 80884 61724</li>
             <li>
-              <a href={`${import.meta.env.BASE_URL}resume.html`} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                Resume ↗
+              <a href={`${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`} download="Hemanth-K-Resume.pdf" className={linkClass}>
+                Resume (PDF) ↓
               </a>
             </li>
           </ul>

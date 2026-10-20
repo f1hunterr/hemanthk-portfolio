@@ -12,7 +12,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "playwright test"
+    "test": "playwright test",
+    "resume:pdf": "node scripts/resume-pdf.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

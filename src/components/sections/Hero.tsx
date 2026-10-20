@@ -80,7 +80,8 @@ export function Hero() {
     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 49, behavior: "smooth" });
   };
 
-  const resumeHref = `${import.meta.env.BASE_URL}resume.html`;
+  // The PDF itself, so HR gets a file to keep or forward (resume.html is the web version)
+  const resumeHref = `${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`;
 
   // Scroll-linked (and reversible) exit: the rings zoom towards the viewer while the text lifts away
   const heroRef = useRef<HTMLElement>(null);
@@ -195,7 +196,7 @@ export function Hero() {
             <button className="btn btn-solid w-full sm:w-auto" onClick={() => scrollTo("#projects")} data-testid="button-view-projects">
               View projects <ArrowDown size={14} />
             </button>
-            <a className="btn btn-outline w-full sm:w-auto" href={resumeHref} target="_blank" rel="noopener noreferrer" data-testid="button-download-resume">
+            <a className="btn btn-outline w-full sm:w-auto" href={resumeHref} download="Hemanth-K-Resume.pdf" data-testid="button-download-resume">
               <Download size={14} /> Download resume
             </a>
           </div>

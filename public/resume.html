@@ -4,245 +4,180 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hemanth K — Resume</title>
+  <meta name="description" content="Resume of Hemanth K — Manager, IT, Production Automation & Infrastructure at House of Blue Beans (HOBB), Bangalore." />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
+    /* Portfolio tokens. The sheet itself is white so it prints and photocopies cleanly. */
+    :root {
+      --bg: #f2f1ee; --sheet: #fff; --ink: #101014; --ink-strong: #000;
+      --muted: #10101499; --soft: #101014b8; --line: #10101424; --line-strong: #10101452;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--bg); }
+    body { font-family: Inter, "Segoe UI", Arial, sans-serif; color: var(--ink); font-size: 9.3pt; line-height: 1.45;
+      -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    .mono { font-family: "Geist Mono", ui-monospace, Consolas, monospace; text-transform: uppercase; letter-spacing: .12em; }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #1a1a1a;
-      background: #f3f4f6;
-      font-size: 10pt;
-      line-height: 1.5;
-    }
+    /* ---------- Screen toolbar ---------- */
+    .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; }
+    .bar .who { font-size: 11px; color: var(--muted); }
+    .bar nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--ink); padding: 9px 14px; font-size: 11px;
+      font-family: "Geist Mono", monospace; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; cursor: pointer;
+      background: none; color: var(--ink); transition: background .2s, color .2s; }
+    .btn:hover, .btn-solid { background: var(--ink); color: var(--bg); }
+    .btn-solid:hover { background: var(--ink-strong); }
 
-    /* Print bar */
-    .print-bar {
-      background: #1f3a5f;
-      color: white;
-      text-align: center;
-      padding: 10px 16px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-    .print-bar button {
-      background: white;
-      color: #1f3a5f;
-      border: none;
-      padding: 7px 22px;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 5px;
-      cursor: pointer;
-      letter-spacing: 0.3px;
-    }
-    .print-bar button:hover { background: #e0e7ff; }
-
-    /* Page */
-    .page {
-      max-width: 820px;
-      margin: 24px auto;
-      background: white;
-      padding: 40px 48px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-    }
+    /* ---------- The A4 sheet ---------- */
+    .sheet { width: 210mm; max-width: calc(100% - 32px); margin: 24px auto 48px; background: var(--sheet);
+      border: 1px solid var(--line); padding: 14mm 15mm 12mm; position: relative; }
+    .sheet::before, .sheet::after { content: ""; position: absolute; width: 11px; height: 11px;
+      background: linear-gradient(var(--line-strong), var(--line-strong)) center / 1px 100% no-repeat,
+                  linear-gradient(var(--line-strong), var(--line-strong)) center / 100% 1px no-repeat; }
+    .sheet::before { top: -6px; left: -6px; } .sheet::after { bottom: -6px; right: -6px; }
 
     /* Header */
-    .header { margin-bottom: 22px; }
-    .name {
-      font-size: 26pt;
-      font-weight: 800;
-      color: #1f3a5f;
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-    }
-    .job-title-top {
-      font-size: 11pt;
-      color: #374151;
-      margin-top: 5px;
-      font-weight: 500;
-    }
-    .contact-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 20px;
-      margin-top: 10px;
-      font-size: 9pt;
-      color: #4b5563;
-      border-top: 2px solid #1f3a5f;
-      padding-top: 10px;
-    }
-    .contact-row a { color: #1f3a5f; text-decoration: none; }
+    .head { display: grid; grid-template-columns: 1fr auto; gap: 8mm; align-items: end; padding-bottom: 4.2mm; border-bottom: 1px solid var(--ink); }
+    .eyebrow { font-size: 7.4pt; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .eyebrow b { width: 6px; height: 6px; background: var(--ink); display: inline-block; }
+    h1 { margin-top: 3mm; font-family: Archivo, sans-serif; font-variation-settings: "wdth" 125; font-stretch: 125%; font-weight: 800;
+      font-size: 30pt; line-height: .92; text-transform: uppercase; color: var(--ink-strong); letter-spacing: -0.005em; }
+    .role { margin-top: 3mm; font-size: 10.6pt; font-weight: 500; color: var(--ink-strong); }
+    .tagline { margin-top: 1.2mm; font-family: Archivo, sans-serif; font-weight: 560; font-size: 10.6pt; letter-spacing: -0.02em; color: var(--soft); }
+    .tagline em { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 12pt; letter-spacing: 0; }
+    .contact { display: grid; grid-template-columns: auto auto; gap: 1.1mm 4mm; font-size: 8.6pt; }
+    .contact dt { font-size: 6.8pt; color: var(--muted); padding-top: .6mm; }
+    .contact dd { color: var(--ink); }
 
-    /* Section */
-    .section { margin-bottom: 20px; }
-    .section-title {
-      font-size: 8.5pt;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: #1f3a5f;
-      border-bottom: 1.5px solid #dbeafe;
-      padding-bottom: 4px;
-      margin-bottom: 12px;
-    }
+    /* Key numbers */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
+    .stats div { padding: 2.4mm 0 2.4mm 3.5mm; border-left: 1px solid var(--line); }
+    .stats div:first-child { border-left: 0; padding-left: 0; }
+    .stats b { display: block; font-family: Archivo, sans-serif; font-weight: 640; font-size: 15pt; letter-spacing: -0.03em; color: var(--ink-strong); line-height: 1.1; }
+    .stats span { font-size: 6.8pt; color: var(--muted); }
 
-    /* Summary */
-    .summary { font-size: 9.5pt; color: #374151; line-height: 1.65; }
+    /* Sections */
+    section { margin-top: 4.1mm; }
+    h2 { display: flex; align-items: baseline; gap: 3mm; font-size: 7.4pt; font-weight: 500; color: var(--ink); padding-bottom: 1.6mm;
+      border-bottom: 1px solid var(--line); margin-bottom: 3mm; break-after: avoid; }
+    h2 small { color: var(--muted); font-size: inherit; }
+    .summary { color: var(--soft); font-size: 9.3pt; line-height: 1.55; }
 
-    /* Experience */
-    .job { margin-bottom: 13px; }
-    .job-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .job-title-text {
-      font-size: 10.5pt;
-      font-weight: 700;
-      color: #111827;
-    }
-    .job-company-text {
-      font-size: 9.5pt;
-      color: #1f3a5f;
-      font-weight: 500;
-      margin-top: 1px;
-    }
-    .job-period {
-      font-size: 8.5pt;
-      color: #6b7280;
-      white-space: nowrap;
-      margin-top: 2px;
-      font-weight: 600;
-      text-align: right;
-    }
-    .current-badge {
-      display: inline-block;
-      background: #1f3a5f;
-      color: #93c5fd;
-      font-size: 7.5pt;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 3px;
-      letter-spacing: 0.5px;
-    }
-    .job ul {
-      margin-top: 6px;
-      padding-left: 14px;
-    }
-    .job li {
-      font-size: 9.5pt;
-      color: #374151;
-      margin-bottom: 3px;
-      line-height: 1.55;
+    .job { margin-bottom: 2.8mm; }
+    .job-head { display: grid; grid-template-columns: 1fr auto; gap: 4mm; align-items: baseline; break-after: avoid; }
+    h3 { font-size: 10.4pt; font-weight: 600; color: var(--ink-strong); letter-spacing: -0.005em; }
+    .org { font-size: 9pt; color: var(--soft); margin-top: .3mm; }
+    .when { font-size: 7.4pt; color: var(--muted); white-space: nowrap; }
+    .now { border: 1px solid var(--ink); color: var(--ink); padding: .4mm 1.6mm; }
+    ul.points { list-style: none; margin-top: 1.6mm; }
+    ul.points li { position: relative; padding-left: 4.2mm; margin-bottom: .55mm; color: var(--soft); break-inside: avoid; }
+    ul.points li::before { content: ""; position: absolute; left: .6mm; top: 1.95mm; width: 1.5mm; height: 1.5mm; background: var(--ink); }
+    .job.past ul.points li::before { background: none; border: 1px solid var(--ink); }
+
+    .ach { display: grid; grid-template-columns: 1fr 1fr; gap: .8mm 7mm; list-style: none; }
+    .ach li { position: relative; padding-left: 4.2mm; color: var(--soft); break-inside: avoid; }
+    .ach li::before { content: "→"; position: absolute; left: 0; top: 0; color: var(--ink); font-size: 8.4pt; }
+
+    .skills { display: grid; grid-template-columns: 1fr; }
+    .skills div { display: grid; grid-template-columns: 44mm 1fr; gap: 4mm; padding: 1.05mm 0; border-bottom: 1px solid var(--line); break-inside: avoid; }
+    .skills dt { font-size: 6.9pt; color: var(--ink); padding-top: .5mm; line-height: 1.45; }
+    .skills dd { color: var(--soft); font-size: 9pt; }
+
+    .edu div { display: grid; grid-template-columns: 1fr auto; gap: 4mm; padding: 1.4mm 0; border-bottom: 1px solid var(--line); }
+    .edu div:last-child { border-bottom: 0; }
+    .edu b { font-weight: 600; color: var(--ink-strong); }
+    .edu span { color: var(--soft); }
+
+    .foot { margin-top: 6mm; padding-top: 2.5mm; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 6.8pt; color: var(--muted); }
+
+    /* Phones: the sheet becomes a normal page */
+    @media (max-width: 760px) {
+      .sheet { width: auto; padding: 22px 18px; }
+      .head { grid-template-columns: 1fr; gap: 16px; }
+      h1 { font-size: 26pt; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stats div:nth-child(3) { border-left: 0; padding-left: 0; }
+      .stats div:nth-child(n+3) { border-top: 1px solid var(--line); }
+      .ach, .skills { grid-template-columns: 1fr; }
+      .skills div { grid-template-columns: 1fr; gap: 2px; }
+      .bar .who { display: none; }
     }
 
-    /* Achievements */
-    .achievements-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px 24px;
-    }
-    .ach-item {
-      font-size: 9.5pt;
-      color: #374151;
-      padding-left: 12px;
-      position: relative;
-      line-height: 1.5;
-    }
-    .ach-item::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: #1f3a5f;
-      font-size: 9pt;
-    }
-
-    /* Skills */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px 24px;
-    }
-    .skill-row { font-size: 9.5pt; line-height: 1.55; }
-    .skill-label { font-weight: 700; color: #111827; }
-    .skill-values { color: #4b5563; }
-
-    /* Education */
-    .edu-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 7px;
-    }
-    .edu-degree-text { font-size: 10pt; font-weight: 600; color: #111827; }
-    .edu-school-text { font-size: 9pt; color: #4b5563; margin-top: 1px; }
-    .edu-year { font-size: 9pt; color: #6b7280; font-weight: 600; white-space: nowrap; }
-
-    /* Print */
+    /* ---------- Print / PDF ---------- */
+    @page { size: A4; margin: 12mm 0 14mm; }
+    @page :first { margin-top: 0; }
     @media print {
-      body { background: white; font-size: 9pt; }
-      .print-bar { display: none !important; }
-      .page {
-        margin: 0;
-        padding: 20px 28px;
-        max-width: 100%;
-        box-shadow: none;
-      }
-      .section { margin-bottom: 14px; }
-      .job { margin-bottom: 10px; }
-      a { color: inherit !important; text-decoration: none; }
+      html, body { background: #fff; }
+      .bar { display: none !important; }
+      .sheet { width: auto; max-width: none; margin: 0; border: 0; padding: 0 15mm; }
+      .sheet::before, .sheet::after { display: none; }
+      .head { padding-top: 13mm; }
+      .foot { display: none; }
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
 </head>
 <body>
 
-  <div class="print-bar">
-    <span>To download: click <strong>Save as PDF</strong> and choose "Save as PDF" as the destination</span>
-    <button onclick="window.print()">Save as PDF</button>
+  <div class="bar">
+    <span class="who mono">Hemanth K — Resume</span>
+    <nav>
+      <a class="btn btn-solid" href="Hemanth-K-Resume.pdf" download="Hemanth-K-Resume.pdf">Download PDF ↓</a>
+      <button class="btn" type="button" onclick="window.print()">Print</button>
+      <a class="btn" href="./">Portfolio ↗</a>
+    </nav>
   </div>
 
-  <div class="page">
+  <main class="sheet">
 
-    <!-- Header -->
-    <div class="header">
-      <div class="name">Hemanth K</div>
-      <div class="job-title-top">Manager — IT, Production Automation &amp; Infrastructure &nbsp;|&nbsp; House of Blue Beans (HOBB)</div>
-      <div class="contact-row">
-        <span>Hemanth2608@hotmail.com</span>
-        <span>+91 80884 61724</span>
-        <span>Hennur, Bangalore, Karnataka</span>
-        <span><a href="https://www.linkedin.com/in/hemanth-k-8609b4255" target="_blank" rel="noopener noreferrer">linkedin.com/in/hemanth-k-8609b4255</a></span>
-        <span><a href="https://github.com/f1hunterr" target="_blank" rel="noopener noreferrer">github.com/f1hunterr</a></span>
+    <header class="head">
+      <div>
+        <div class="eyebrow mono"><b></b>IT · Production Automation · Infrastructure</div>
+        <h1>Hemanth K</h1>
+        <p class="role">Manager — IT, Production Automation &amp; Infrastructure · House of Blue Beans (HOBB)</p>
+        <p class="tagline">Systems-first. <em>Always</em> on.</p>
       </div>
+      <dl class="contact">
+        <dt class="mono">Email</dt><dd><a href="mailto:Hemanth2608@hotmail.com">Hemanth2608@hotmail.com</a></dd>
+        <dt class="mono">Phone</dt><dd><a href="tel:+918088461724">+91 80884 61724</a></dd>
+        <dt class="mono">Location</dt><dd>Hennur, Bangalore, Karnataka</dd>
+        <dt class="mono">LinkedIn</dt><dd><a href="https://www.linkedin.com/in/hemanth-k-8609b4255">linkedin.com/in/hemanth-k-8609b4255</a></dd>
+        <dt class="mono">GitHub</dt><dd><a href="https://github.com/f1hunterr">github.com/f1hunterr</a></dd>
+        <dt class="mono">Portfolio</dt><dd><a href="https://f1hunterr.github.io/hemanthk-portfolio/">f1hunterr.github.io/hemanthk-portfolio</a></dd>
+      </dl>
+    </header>
+
+    <div class="stats">
+      <div><b>6+ yrs</b><span class="mono">Experience</span></div>
+      <div><b>200+</b><span class="mono">Systems managed</span></div>
+      <div><b>100+</b><span class="mono">Freelancers on VPN</span></div>
+      <div><b>~0</b><span class="mono">Manual ticketing</span></div>
     </div>
 
-    <!-- Summary -->
-    <div class="section">
-      <div class="section-title">Professional Summary</div>
+    <section>
+      <h2 class="mono"><small>01</small>Professional Summary</h2>
       <p class="summary">
         IT Manager with 6+ years of experience owning complete IT operations for House of Blue Beans (HOBB). Expertise spans server administration (TrueNAS, Proxmox, VMware ESXi), network infrastructure, VPN, security, hardware maintenance, and IT automation. Managed 200+ endpoints, performed hands-on hardware repairs and upgrades across computers and servers, enabled secure remote access for 100+ freelancers, built a distributed Unreal Engine render farm, and automated IT operations to near-zero manual workload. Also maintained the company website, published client case studies, and supported the Customer Success Team with client research, brief structuring, and cross-functional documentation.
       </p>
-    </div>
+    </section>
 
-    <!-- Work Experience -->
-    <div class="section">
-      <div class="section-title">Work Experience</div>
+    <section>
+      <h2 class="mono"><small>02</small>Work Experience</h2>
 
       <div class="job">
-        <div class="job-header">
+        <div class="job-head">
           <div>
-            <div class="job-title-text">Manager — IT, Production Automation &amp; Infrastructure</div>
-            <div class="job-company-text">House of Blue Beans (HOBB) &nbsp;·&nbsp; Bangalore, India</div>
+            <h3>Manager — IT, Production Automation &amp; Infrastructure</h3>
+            <p class="org">House of Blue Beans (HOBB) · Bangalore, India</p>
           </div>
-          <div class="job-period"><span class="current-badge">CURRENT</span></div>
+          <span class="when mono now">Current</span>
         </div>
-        <ul>
+        <ul class="points">
           <li>Own and operate the full IT stack for 200+ users — servers, network, endpoints, security, and end-user support</li>
           <li>Performed end-to-end hardware maintenance and repairs across 200+ computers and servers — CPU, RAM, storage, PSU, and motherboard-level troubleshooting</li>
           <li>Managed computer upgrades (RAM, SSD, GPU) and resolved OS issues including boot failures, driver conflicts, system corruption, and fresh installs</li>
@@ -262,15 +197,15 @@
         </ul>
       </div>
 
-      <div class="job">
-        <div class="job-header">
+      <div class="job past">
+        <div class="job-head">
           <div>
-            <div class="job-title-text">IT Administrator</div>
-            <div class="job-company-text">Coequal Services &nbsp;·&nbsp; Bangalore, India</div>
+            <h3>IT Administrator</h3>
+            <p class="org">Coequal Services · Bangalore, India</p>
           </div>
-          <div class="job-period">Jan 2023 – Sep 2023</div>
+          <span class="when mono">Jan 2023 – Sep 2023</span>
         </div>
-        <ul>
+        <ul class="points">
           <li>Directed IT budget analysis and identified impactful infrastructure enhancements for clients</li>
           <li>Led technical upgrade projects coordinating with consultants and developers</li>
           <li>Designed and evaluated WAN/LAN connectivity and optimized network performance</li>
@@ -278,100 +213,88 @@
         </ul>
       </div>
 
-      <div class="job">
-        <div class="job-header">
+      <div class="job past">
+        <div class="job-head">
           <div>
-            <div class="job-title-text">Office Administrator</div>
-            <div class="job-company-text">Mipl Global &nbsp;·&nbsp; Bangalore, India</div>
+            <h3>Office Administrator</h3>
+            <p class="org">Mipl Global · Bangalore, India</p>
           </div>
-          <div class="job-period">2021 – 2022</div>
+          <span class="when mono">2021 – 2022</span>
         </div>
-        <ul>
+        <ul class="points">
           <li>Assisted executive management with scheduling, coordination, and client communications</li>
         </ul>
       </div>
 
-      <div class="job">
-        <div class="job-header">
+      <div class="job past">
+        <div class="job-head">
           <div>
-            <div class="job-title-text">Office Administrator</div>
-            <div class="job-company-text">Olympus Medical Systems India Pvt Ltd &nbsp;·&nbsp; Bangalore, India</div>
+            <h3>Office Administrator</h3>
+            <p class="org">Olympus Medical Systems India Pvt Ltd · Bangalore, India</p>
           </div>
-          <div class="job-period">2019 – 2021</div>
+          <span class="when mono">2019 – 2021</span>
         </div>
-        <ul>
+        <ul class="points">
           <li>Managed day-to-day administrative operations, communications, and recordkeeping functions</li>
           <li>Coordinated payroll processing and maintained electronic filing systems</li>
         </ul>
       </div>
 
-      <div class="job">
-        <div class="job-header">
+      <div class="job past">
+        <div class="job-head">
           <div>
-            <div class="job-title-text">Field Representative</div>
-            <div class="job-company-text">HBS (Halcyon Business Solutions) &nbsp;·&nbsp; Bangalore, India</div>
+            <h3>Field Representative</h3>
+            <p class="org">HBS (Halcyon Business Solutions) · Bangalore, India</p>
           </div>
-          <div class="job-period">2018 – 2019</div>
+          <span class="when mono">2018 – 2019</span>
         </div>
-        <ul>
+        <ul class="points">
           <li>Visited client sites for on-site support and customer relationship management</li>
           <li>Submitted performance reports to senior management to support business decisions</li>
         </ul>
       </div>
-    </div>
+    </section>
 
-    <!-- Key Achievements -->
-    <div class="section">
-      <div class="section-title">Key Achievements</div>
-      <div class="achievements-grid">
-        <div class="ach-item">Built distributed Unreal Engine render farm from scratch, cutting production turnaround time</div>
-        <div class="ach-item">Automated IT operations — zero manual ticketing or reporting</div>
-        <div class="ach-item">Managed and repaired 200+ computer and server systems with full hardware expertise</div>
-        <div class="ach-item">Enabled secure remote work for 100+ freelancers via VPN</div>
-        <div class="ach-item">Built IT Help Center portal for staff self-service, reducing support load</div>
-        <div class="ach-item">Deployed Zabbix monitoring reducing infrastructure downtime</div>
-        <div class="ach-item">Centralized NAS storage with automated backup and disaster recovery</div>
-        <div class="ach-item">Led full server room setup, virtualization, and process automation</div>
-        <div class="ach-item">Maintained company website and published client case studies regularly</div>
-        <div class="ach-item">Supported Customer Success Team with research, brief templates, and QC</div>
-      </div>
-    </div>
+    <section>
+      <h2 class="mono"><small>03</small>Key Achievements</h2>
+      <ul class="ach">
+        <li>Built distributed Unreal Engine render farm from scratch, cutting production turnaround time</li>
+        <li>Automated IT operations — zero manual ticketing or reporting</li>
+        <li>Managed and repaired 200+ computer and server systems with full hardware expertise</li>
+        <li>Enabled secure remote work for 100+ freelancers via VPN</li>
+        <li>Built IT Help Center portal for staff self-service, reducing support load</li>
+        <li>Deployed Zabbix monitoring reducing infrastructure downtime</li>
+        <li>Centralized NAS storage with automated backup and disaster recovery</li>
+        <li>Led full server room setup, virtualization, and process automation</li>
+        <li>Maintained company website and published client case studies regularly</li>
+        <li>Supported Customer Success Team with research, brief templates, and QC</li>
+      </ul>
+    </section>
 
-    <!-- Technical Skills -->
-    <div class="section">
-      <div class="section-title">Technical Skills</div>
-      <div class="skills-grid">
-        <div class="skill-row"><span class="skill-label">Servers &amp; Virtualization: </span><span class="skill-values">TrueNAS, Proxmox, VMware ESXi, Windows Server, Linux (Debian/Ubuntu)</span></div>
-        <div class="skill-row"><span class="skill-label">Networking &amp; Security: </span><span class="skill-values">VLANs, Sophos Firewall, Tailscale, WireGuard, Switch &amp; AP Management</span></div>
-        <div class="skill-row"><span class="skill-label">Hardware Maintenance: </span><span class="skill-values">Computer &amp; Server Repairs, Component Upgrades, OS Troubleshooting, Printer Support</span></div>
-        <div class="skill-row"><span class="skill-label">Automation &amp; Scripting: </span><span class="skill-values">n8n, GLPI Automation, Slack Integrations, PowerShell, Bash</span></div>
-        <div class="skill-row"><span class="skill-label">Monitoring: </span><span class="skill-values">Zabbix, Infrastructure Alerting, Temperature &amp; UPS Monitoring</span></div>
-        <div class="skill-row"><span class="skill-label">Cloud &amp; DNS: </span><span class="skill-values">Microsoft Azure, Google Cloud (GCP), Cloudflare, Amazon S3, DNS Management</span></div>
-        <div class="skill-row"><span class="skill-label">Software &amp; Licensing: </span><span class="skill-values">Autodesk, Adobe, V-Ray License Management, Asset Lifecycle (GLPI)</span></div>
-        <div class="skill-row"><span class="skill-label">Development: </span><span class="skill-values">PHP, MySQL, Apache, Python, HTML / CSS / JS, Web Content Management</span></div>
-        <div class="skill-row"><span class="skill-label">Languages: </span><span class="skill-values">English, Tamil, Kannada, Hindi, Telugu</span></div>
-      </div>
-    </div>
+    <section>
+      <h2 class="mono"><small>04</small>Technical Skills</h2>
+      <dl class="skills">
+        <div><dt class="mono">Servers &amp; Virtualization</dt><dd>TrueNAS, Proxmox, VMware ESXi, Windows Server, Linux (Debian/Ubuntu)</dd></div>
+        <div><dt class="mono">Networking &amp; Security</dt><dd>VLANs, Sophos Firewall, Tailscale, WireGuard, Switch &amp; AP Management</dd></div>
+        <div><dt class="mono">Hardware Maintenance</dt><dd>Computer &amp; Server Repairs, Component Upgrades, OS Troubleshooting, Printer Support</dd></div>
+        <div><dt class="mono">Automation &amp; Scripting</dt><dd>n8n, GLPI Automation, Slack Integrations, PowerShell, Bash</dd></div>
+        <div><dt class="mono">Monitoring</dt><dd>Zabbix, Infrastructure Alerting, Temperature &amp; UPS Monitoring</dd></div>
+        <div><dt class="mono">Cloud &amp; DNS</dt><dd>Microsoft Azure, Google Cloud (GCP), Cloudflare, Amazon S3, DNS Management</dd></div>
+        <div><dt class="mono">Software &amp; Licensing</dt><dd>Autodesk, Adobe, V-Ray License Management, Asset Lifecycle (GLPI)</dd></div>
+        <div><dt class="mono">Development</dt><dd>PHP, MySQL, Apache, Python, HTML / CSS / JS, Web Content Management</dd></div>
+        <div><dt class="mono">Languages</dt><dd>English, Tamil, Kannada, Hindi, Telugu</dd></div>
+      </dl>
+    </section>
 
-    <!-- Education -->
-    <div class="section">
-      <div class="section-title">Education</div>
-      <div class="edu-row">
-        <div>
-          <div class="edu-degree-text">ITI Diploma in Electronics</div>
-          <div class="edu-school-text">ITI</div>
-        </div>
-        <div class="edu-year">2016 – 2017</div>
+    <section>
+      <h2 class="mono"><small>05</small>Education</h2>
+      <div class="edu">
+        <div><p><b>ITI Diploma in Electronics</b><br /><span>ITI</span></p><span class="when mono">2016 – 2017</span></div>
+        <div><p><b>High School Diploma</b><br /><span>St Patrick's Boys High School</span></p><span class="when mono">2015 – 2016</span></div>
       </div>
-      <div class="edu-row">
-        <div>
-          <div class="edu-degree-text">High School Diploma</div>
-          <div class="edu-school-text">St Patrick's Boys High School</div>
-        </div>
-        <div class="edu-year">2015 – 2016</div>
-      </div>
-    </div>
+    </section>
 
-  </div>
+    <div class="foot mono"><span>Hemanth K — Resume</span><span>f1hunterr.github.io/hemanthk-portfolio</span></div>
+  </main>
 </body>
 </html>

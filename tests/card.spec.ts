@@ -38,7 +38,7 @@ test.describe("contact card", () => {
     // The resolved destination, so relative links like ../ are judged by where they go
     const href = (name: RegExp) => page.getByRole("link", { name }).first().evaluate((a: HTMLAnchorElement) => a.href);
     expect(await href(/View portfolio/)).toMatch(/\/hemanthk-portfolio\/$/);
-    expect(await href(/Resume/)).toMatch(/resume\.html$/);
+    expect(await href(/Resume/)).toMatch(/Hemanth-K-Resume\.pdf$/);
     expect(await href(/Save contact/)).toMatch(/hemanth-k\.vcf$/);
     expect(await href(/WhatsApp/)).toMatch(/^https:\/\/wa\.me\/918088461724/);
     expect(await href(/Email/)).toBe("mailto:Hemanth2608@hotmail.com");

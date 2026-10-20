@@ -16,7 +16,8 @@ export function Navbar() {
     scrollToSection(href.replace("#", ""));
   };
 
-  const resumeHref = `${import.meta.env.BASE_URL}resume.html`;
+  // The PDF itself, so HR gets a file to keep or forward (resume.html is the web version)
+  const resumeHref = `${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`;
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
   const ThemeIcon = theme === "dark" ? Sun : Moon;
 
@@ -83,8 +84,7 @@ export function Navbar() {
         </button>
         <a
           href={resumeHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          download="Hemanth-K-Resume.pdf"
           className="hidden sm:flex items-center px-6 bg-[var(--invert-bg)] text-[var(--invert-fg)] mono-label font-bold hover:opacity-85 transition-opacity"
           data-testid="button-download-resume-nav"
         >
@@ -118,8 +118,7 @@ export function Navbar() {
           ))}
           <a
             href={resumeHref}
-            target="_blank"
-            rel="noopener noreferrer"
+            download="Hemanth-K-Resume.pdf"
             className="flex items-center justify-center h-12 bg-[var(--invert-bg)] text-[var(--invert-fg)] mono-label font-bold"
           >
             Download Resume
