@@ -92,8 +92,10 @@ export function CustomCursor() {
   return (
     <>
       {/* Inner dot — mix-blend-mode keeps it visible on any background */}
+      {/* data-prerender-skip: pointer-only UI, left out of the build-time snapshot */}
       <div
         ref={dotRef}
+        data-prerender-skip
         style={{
           position: "fixed",
           top: 0,
@@ -113,6 +115,7 @@ export function CustomCursor() {
       {/* Outer ring — lerp trails the dot */}
       <div
         ref={ringRef}
+        data-prerender-skip
         style={{
           position: "fixed",
           top: 0,

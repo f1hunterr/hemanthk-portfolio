@@ -3,6 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowDown, Download } from "lucide-react";
 import { NumberTicker } from "@/components/magic/NumberTicker";
 import { Marquee } from "@/components/magic/Marquee";
+import { instantStart } from "@/lib/prerender";
 
 // The italic word in the tagline cycles through these
 const WORDS = ["reliable.", "automated.", "secure.", "monitored."];
@@ -52,8 +53,11 @@ export function Hero() {
     window.addEventListener("hk:boot-done", onDone);
     return () => window.removeEventListener("hk:boot-done", onDone);
   }, [bootDone]);
+  // Prerendered page already showing (return visit): start finished, so nothing blinks when React takes over
+  const [instant] = useState(instantStart);
   const [wordIdx, setWordIdx] = useState(0);
-  const [displayed, setDisplayed] = useState("");
+  // A full word holds on screen (typing branch waits 1.9s at full length) before the cycle continues
+  const [displayed, setDisplayed] = useState(instant ? WORDS[0] : "");
   const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
 
   useEffect(() => {
@@ -158,7 +162,8 @@ export function Hero() {
 
         <motion.div className="relative z-10" style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}>
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          data-hero-copy
+          initial={instant ? false : { opacity: 0, y: 16 }}
           animate={bootDone ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
           className="relative z-10 text-center px-5 py-20 md:py-28 [@media(max-height:560px)]:py-10 max-w-5xl min-[1800px]:max-w-7xl"
