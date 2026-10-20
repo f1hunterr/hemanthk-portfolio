@@ -65,3 +65,12 @@ test.describe("contact card", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
   });
 });
+
+test.describe("resume page", () => {
+  // Break: no icon declared, so browsers request /favicon.ico at the domain root and log a 404
+  test("declares the site icon", async ({ page, request }) => {
+    await page.goto("/hemanthk-portfolio/resume.html");
+    const href = await page.locator('link[rel="icon"]').evaluate((l: HTMLLinkElement) => l.href);
+    expect((await request.get(href)).status()).toBe(200);
+  });
+});
