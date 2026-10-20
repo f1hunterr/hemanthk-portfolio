@@ -65,8 +65,12 @@
         // Boot screen: once per tab session, never for reduced-motion users
         var seen = false;
         try { seen = sessionStorage.getItem('hk-booted') === '1'; } catch (e) {}
+        // The boot screen is hidden unless this script opts in, so without JavaScript it never
+        // covers the (prerendered) page
         if (seen || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.classList.add('no-boot');
+        } else {
+          document.documentElement.classList.add('boot-on');
         }
       })();
     </script>
@@ -76,7 +80,7 @@
       #boot {
         --boot-bg: #f2f1ee; --boot-fg: #101014; --boot-muted: #1010149e; --boot-track: #10101429; --boot-ok: #15803d;
         position: fixed; inset: 0; z-index: 10000;
-        display: flex; align-items: center; justify-content: center;
+        display: none; align-items: center; justify-content: center;
         background: var(--boot-bg); color: var(--boot-fg);
         /* System fonts only: using the web fonts here made the browser download ~112KB of fonts
            straight away, competing with the app's JavaScript on slow phones (~0.8s later hero) */
@@ -84,6 +88,7 @@
         transition: opacity .45s ease, visibility .45s ease;
       }
       .dark #boot { --boot-bg: #121316; --boot-fg: #f2f1ee; --boot-muted: #f2f1ee99; --boot-track: #f2f1ee26; --boot-ok: #4ade80; }
+      .boot-on #boot { display: flex; }
       .no-boot #boot { display: none; }
       #boot.boot-done { opacity: 0; visibility: hidden; }
       .boot-inner { width: min(340px, calc(100vw - 48px)); }
@@ -150,10 +155,15 @@
 
         if (window.__hkAppReady) finish();
         else window.addEventListener('hk:app-ready', finish);
+        // A prerendered page is already drawn in the HTML: lift after MIN_MS without waiting for JS
+        window.__hkBootFinish = finish;
         setTimeout(finish, MAX_MS); // never hold a visitor hostage if the app is slow or fails
       })();
     </script>
     <div id="root"></div>
+    <script>
+      if (document.getElementById('root').firstElementChild && window.__hkBootFinish) window.__hkBootFinish();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

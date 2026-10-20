@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download } from "lucide-react";
 import { NumberTicker } from "@/components/magic/NumberTicker";
@@ -8,6 +8,7 @@ import { scrollToSection } from "@/hooks/use-active-section";
 import { useBootDone } from "@/hooks/use-boot-done";
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { HeroOrbit } from "./HeroOrbit";
+import { instantStart } from "@/lib/prerender";
 
 // The italic word in the tagline cycles through these
 const WORDS = ["reliable.", "automated.", "secure.", "monitored."];
@@ -28,8 +29,10 @@ const STATS = [
 export function Hero() {
   const reduceMotion = useReducedMotion();
   // Hold the entrance until the boot screen starts fading, otherwise it plays unseen behind it
+  // Prerendered page already showing (return visit): start finished, so nothing blinks when React takes over
+  const [instant] = useState(instantStart);
   const bootDone = useBootDone();
-  const displayed = useTypewriter(WORDS, Boolean(reduceMotion));
+  const displayed = useTypewriter(WORDS, Boolean(reduceMotion), instant ? WORDS[0] : "");
 
   // Scroll-linked (and reversible) exit: the rings zoom towards the viewer while the text lifts away
   const heroRef = useRef<HTMLElement>(null);
@@ -55,7 +58,8 @@ export function Hero() {
 
         <motion.div className="relative z-10" style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}>
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          data-hero-copy
+          initial={instant ? false : { opacity: 0, y: 16 }}
           animate={bootDone ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
           className="relative z-10 text-center px-5 py-20 md:py-28 [@media(max-height:560px)]:py-10 max-w-5xl min-[1800px]:max-w-7xl"

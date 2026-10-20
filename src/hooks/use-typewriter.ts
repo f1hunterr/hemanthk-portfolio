@@ -8,9 +8,9 @@ const DELETE_MS = 40;
 type Phase = "typing" | "pause" | "deleting";
 
 /** Types each word out, holds it, deletes it, then moves to the next. Stops while `paused`. */
-export function useTypewriter(words: string[], paused: boolean) {
+export function useTypewriter(words: string[], paused: boolean, initial = "") {
   const [wordIdx, setWordIdx] = useState(0);
-  const [displayed, setDisplayed] = useState("");
+  const [displayed, setDisplayed] = useState(initial);
   const [phase, setPhase] = useState<Phase>("typing");
 
   useEffect(() => {

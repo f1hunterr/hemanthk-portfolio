@@ -1,8 +1,12 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import { markInstantStart } from "./lib/prerender";
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(<App />);
+const root = document.getElementById("root")!;
+// Read before React replaces the prerendered markup
+markInstantStart(root);
+createRoot(root).render(<App />);
 
 // Tell the boot screen (index.html) the page is drawn: wait one frame after React commits
 requestAnimationFrame(() => {

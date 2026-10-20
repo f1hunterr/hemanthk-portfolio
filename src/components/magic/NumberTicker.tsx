@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, useInView, useReducedMotion } from "framer-motion";
+import { instantStart } from "@/lib/prerender";
 
 // Adapted from Magic UI's Number Ticker (MIT, https://magicui.design), rebuilt on framer-motion so
 // it adds no dependency. Counts up once, the first time it scrolls into view.
@@ -8,10 +9,24 @@ export function NumberTicker({ value, suffix = "", className }: { value: number;
   const reduceMotion = useReducedMotion();
   // Any visible edge counts: the hero stats peek above the fold on common laptop screens
   const inView = useInView(ref, { once: true });
-  const [shown, setShown] = useState(0);
+  // Prerendered page already showing: a number on screen keeps its final value (no drop to 0 and
+  // recount); one below the fold resets before paint and still counts up when scrolled to
+  const [settled, setSettled] = useState(instantStart);
+  const [shown, setShown] = useState(settled ? value : 0);
+
+  useLayoutEffect(() => {
+    if (!settled || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    if (r.bottom <= 0 || r.top >= window.innerHeight) {
+      setSettled(false);
+      setShown(0);
+    }
+    // Only the first layout decides; later scrolling is the normal count-up path
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (reduceMotion) {
+    if (reduceMotion || settled) {
       setShown(value);
       return;
     }
@@ -22,7 +37,7 @@ export function NumberTicker({ value, suffix = "", className }: { value: number;
       onUpdate: (v) => setShown(Math.round(v)),
     });
     return () => controls.stop();
-  }, [inView, reduceMotion, value]);
+  }, [inView, reduceMotion, settled, value]);
 
   return (
     <span ref={ref} data-stat-value className={className} style={{ fontVariantNumeric: "tabular-nums" }}>
