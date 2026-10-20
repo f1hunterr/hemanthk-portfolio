@@ -84,7 +84,7 @@ export function Navbar() {
         </button>
         <a
           href={resumeHref}
-          download="Hemanth-K-Resume.pdf"
+          download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf"
           className="hidden sm:flex items-center px-6 bg-[var(--invert-bg)] text-[var(--invert-fg)] mono-label font-bold hover:opacity-85 transition-opacity"
           data-testid="button-download-resume-nav"
         >
@@ -118,7 +118,7 @@ export function Navbar() {
           ))}
           <a
             href={resumeHref}
-            download="Hemanth-K-Resume.pdf"
+            download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf"
             className="flex items-center justify-center h-12 bg-[var(--invert-bg)] text-[var(--invert-fg)] mono-label font-bold"
           >
             Download Resume

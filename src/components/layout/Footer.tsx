@@ -71,12 +71,12 @@ export function Footer() {
             <li className="[overflow-wrap:anywhere]">Hemanth2608@hotmail.com</li>
             <li>+91 80884 61724</li>
             <li>
-              <a href={`${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`} download="Hemanth-K-Resume.pdf" className={linkClass}>
+              <a href={`${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`} download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf" className={linkClass}>
                 Resume (PDF) ↓
               </a>
             </li>
             <li>
-              <a href={`${import.meta.env.BASE_URL}card/`} className={linkClass}>
+              <a href={`${import.meta.env.BASE_URL}card/`} data-goatcounter-click="contact-card" className={linkClass}>
                 Contact card ↗
               </a>
             </li>

@@ -196,7 +196,7 @@ export function Hero() {
             <button className="btn btn-solid w-full sm:w-auto" onClick={() => scrollTo("#projects")} data-testid="button-view-projects">
               View projects <ArrowDown size={14} />
             </button>
-            <a className="btn btn-outline w-full sm:w-auto" href={resumeHref} download="Hemanth-K-Resume.pdf" data-testid="button-download-resume">
+            <a className="btn btn-outline w-full sm:w-auto" href={resumeHref} download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf" data-testid="button-download-resume">
               <Download size={14} /> Download resume
             </a>
           </div>

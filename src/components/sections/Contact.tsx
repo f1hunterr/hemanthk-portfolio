@@ -134,6 +134,7 @@ export function Contact() {
         <a
           className="mono-label inline-block mt-6 text-[var(--muted)] underline decoration-[var(--line-strong)] underline-offset-4 hover:text-[var(--ink)] hover:decoration-[var(--ink)] transition-colors"
           href={`${import.meta.env.BASE_URL}card/`}
+          data-goatcounter-click="contact-card"
         >
           Contact card · save my details in one tap ↗
         </a>
