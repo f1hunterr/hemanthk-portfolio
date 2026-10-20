@@ -1,0 +1,2 @@
+# vCard spec requires CRLF line endings; keep the file byte-for-byte
+*.vcf -text
