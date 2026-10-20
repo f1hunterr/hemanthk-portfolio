@@ -74,3 +74,21 @@ test.describe("resume page", () => {
     expect((await request.get(href)).status()).toBe(200);
   });
 });
+
+test.describe("card is reachable from the site", () => {
+  // Break: the card only reachable by someone who already has the link
+  test("Contact section and footer link to the contact card", async ({ page }) => {
+    await page.addInitScript(() => {
+      try {
+        sessionStorage.setItem("hk-booted", "1");
+      } catch {
+        /* storage blocked */
+      }
+    });
+    await page.goto("/hemanthk-portfolio/");
+    for (const scope of [page.locator("#contact"), page.locator("footer")]) {
+      const link = scope.getByRole("link", { name: /Contact card/ });
+      expect(await link.evaluate((a: HTMLAnchorElement) => a.href)).toMatch(/\/hemanthk-portfolio\/card\/$/);
+    }
+  });
+});

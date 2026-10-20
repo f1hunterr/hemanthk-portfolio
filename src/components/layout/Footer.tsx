@@ -75,6 +75,11 @@ export function Footer() {
                 Resume (PDF) ↓
               </a>
             </li>
+            <li>
+              <a href={`${import.meta.env.BASE_URL}card/`} className={linkClass}>
+                Contact card ↗
+              </a>
+            </li>
           </ul>
         </div>
       </div>
