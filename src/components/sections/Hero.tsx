@@ -119,6 +119,20 @@ export function Hero() {
                     }}
                   >
                     <div className={`orbit-card orbit-card-${ring}`}>
+                      {/* Backlight (after Magic UI): a blurred, saturated copy of the photo glowing behind it.
+                          Same file as the photo, so no extra download; CSS shows it on desktop only. */}
+                      <img
+                        className="orbit-glow"
+                        src={photoSrc(n)}
+                        srcSet={`${photoSrc(n, 240)} 240w, ${photoSrc(n)} 360w`}
+                        sizes={CARD_SIZES[ring]}
+                        alt=""
+                        aria-hidden="true"
+                        width={360}
+                        height={225}
+                        decoding="async"
+                        fetchPriority="low"
+                      />
                       <img
                         src={photoSrc(n)}
                         srcSet={`${photoSrc(n, 240)} 240w, ${photoSrc(n)} 360w`}

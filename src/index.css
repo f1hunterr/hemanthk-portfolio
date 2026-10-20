@@ -377,6 +377,25 @@
     border: 1px solid var(--line-strong);
     box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.45);
   }
+  /* Backlight behind each card: CSS filters (GPU) rather than Magic UI's SVG filter, which would
+     repaint on the CPU every frame for 27 spinning cards. Desktop with a mouse only. */
+  .orbit-card { position: relative; }
+  .orbit-card img.orbit-glow { display: none; }
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    .orbit-card img.orbit-glow {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border: 0;
+      box-shadow: none;
+      filter: blur(18px) saturate(3);
+      opacity: 0.5;
+      transform: translateY(8px) scale(1.05);
+      pointer-events: none;
+    }
+    .dark .orbit-card img.orbit-glow { opacity: 0.6; }
+  }
   /* Outer rings feel closer: bigger cards */
   .orbit-card-1 { --card-w: clamp(84px, 8vw, 128px); opacity: 0.9; }
   .orbit-card-2 { --card-w: clamp(100px, 10.5vw, 168px); }
