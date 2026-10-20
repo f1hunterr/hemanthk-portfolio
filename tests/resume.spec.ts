@@ -51,6 +51,15 @@ test.describe("resume pdf", () => {
     expect(await link.evaluate((a: HTMLAnchorElement) => a.href)).toMatch(new RegExp(`${PDF}$`));
   });
 
+  // Break: a headline number HR can misread ("~0 manual ticketing" read as "handles no tickets")
+  test("headlines the projects count, not a zero", async ({ page }) => {
+    await page.goto(`${HOME}resume.html`);
+    const stats = page.locator(".stats");
+    await expect(stats).toContainText("10+");
+    await expect(stats).toContainText(/Projects delivered/i);
+    await expect(stats).not.toContainText(/Manual ticketing/i);
+  });
+
   // Break: someone opening the web version with no way to get the file
   test("is offered from the web version of the resume", async ({ page }) => {
     await page.goto(`${HOME}resume.html`);
