@@ -86,8 +86,10 @@ test.describe("glyph matrix", () => {
     await page.waitForTimeout(400);
     const lum = await matrix(page).evaluate((c: HTMLCanvasElement) => {
       const d = c.getContext("2d")!.getImageData(0, 0, c.width, c.height).data;
-      for (let i = 0; i < d.length; i += 4) if (d[i + 3] > 0) return d[i] + d[i + 1] + d[i + 2];
-      return -1;
+      // Brightest inked pixel: a faint anti-aliased edge pixel loses colour precision at near-zero alpha
+      let max = -1;
+      for (let i = 0; i < d.length; i += 4) if (d[i + 3] > 0) max = Math.max(max, d[i] + d[i + 1] + d[i + 2]);
+      return max;
     });
     expect(lum).toBeGreaterThan(600);
   });
