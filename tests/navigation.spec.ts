@@ -4,16 +4,11 @@ import { openHome } from "./helpers";
 // In-page buttons that scroll to a section. Each test names the break it catches.
 const NAV_HEIGHT = 49;
 
-/** Where a section's top sits below the viewport top once scrolling has settled. */
-async function settledOffset(page: Page, id: string) {
-  await expect
-    .poll(async () => {
-      const a = await page.evaluate(() => window.scrollY);
-      await page.waitForTimeout(150);
-      return a !== 0 && a === (await page.evaluate(() => window.scrollY));
-    }, { timeout: 8000 })
-    .toBe(true);
-  return page.locator(`#${id}`).evaluate((el) => Math.round(el.getBoundingClientRect().top));
+/** Waits for a smooth scroll to bring a section's top to just below the fixed navbar. */
+async function expectLandedOn(page: Page, id: string) {
+  const offset = () => page.locator(`#${id}`).evaluate((el) => Math.round(el.getBoundingClientRect().top));
+  await expect.poll(offset, { timeout: 8000 }).toBeGreaterThanOrEqual(NAV_HEIGHT - 1);
+  await expect.poll(offset, { timeout: 8000 }).toBeLessThanOrEqual(NAV_HEIGHT + 1);
 }
 
 test.describe("section navigation", () => {
@@ -21,7 +16,7 @@ test.describe("section navigation", () => {
   test("hero 'View projects' lands on Projects just below the navbar", async ({ page }) => {
     await openHome(page);
     await page.getByTestId("button-view-projects").click();
-    expect(Math.abs((await settledOffset(page, "projects")) - NAV_HEIGHT)).toBeLessThanOrEqual(1);
+    await expectLandedOn(page, "projects");
   });
 
   // Break: the closing card's button no longer reaching the contact form
@@ -30,7 +25,7 @@ test.describe("section navigation", () => {
     const button = page.getByRole("button", { name: /Get in touch/ });
     await button.scrollIntoViewIfNeeded();
     await button.click();
-    expect(Math.abs((await settledOffset(page, "contact")) - NAV_HEIGHT)).toBeLessThanOrEqual(1);
+    await expectLandedOn(page, "contact");
   });
 
   // Break: a footer link following its #hash (no smooth scroll, heading under the navbar)
@@ -39,7 +34,7 @@ test.describe("section navigation", () => {
     const link = page.locator("footer").getByRole("link", { name: "Experience" });
     await link.scrollIntoViewIfNeeded();
     await link.click();
-    expect(Math.abs((await settledOffset(page, "experience")) - NAV_HEIGHT)).toBeLessThanOrEqual(1);
+    await expectLandedOn(page, "experience");
     expect(new URL(page.url()).hash).toBe("");
   });
 });

@@ -1,30 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Download } from "lucide-react";
 import { NumberTicker } from "@/components/magic/NumberTicker";
 import { Marquee } from "@/components/magic/Marquee";
 import { ResumeLink } from "@/components/ResumeLink";
 import { scrollToSection } from "@/hooks/use-active-section";
+import { useBootDone } from "@/hooks/use-boot-done";
+import { useTypewriter } from "@/hooks/use-typewriter";
+import { HeroOrbit } from "./HeroOrbit";
 
 // The italic word in the tagline cycles through these
 const WORDS = ["reliable.", "automated.", "secure.", "monitored."];
-
-// Photo cards on the rotating rings (public/hero, see CREDITS.txt there).
-// Each ring holds its cards at fixed angles; the whole ring spins and each card spins back to stay upright.
-const RINGS: { ring: 1 | 2 | 3; reverse?: boolean; offset: number; photos: number[] }[] = [
-  { ring: 1, offset: 30, photos: [1, 2, 3, 4, 5, 6] },
-  { ring: 2, reverse: true, offset: 10, photos: [7, 8, 9, 10, 11, 12, 13, 14, 15] },
-  // 19 photos, 27 slots: the outer ring reuses some, spaced so repeats never sit side by side
-  { ring: 3, offset: 20, photos: [16, 17, 18, 19, 2, 8, 5, 12, 1, 10, 4, 14] },
-];
-const photoSrc = (n: number, w?: 240) =>
-  `${import.meta.env.BASE_URL}hero/h${String(n).padStart(2, "0")}${w ? `-${w}` : ""}.webp`;
-// Displayed card widths per ring (match .orbit-card-N in index.css) so the browser picks 240w or 360w
-const CARD_SIZES: Record<1 | 2 | 3, string> = {
-  1: "(min-width: 1600px) 128px, 8vw",
-  2: "(min-width: 1600px) 168px, 10.5vw",
-  3: "(max-width: 767px) 112px, (min-width: 1643px) 230px, 14vw",
-};
 
 const TOOLS = [
   "Proxmox", "TrueNAS", "Zabbix", "n8n", "GLPI", "Tailscale",
@@ -42,40 +28,8 @@ const STATS = [
 export function Hero() {
   const reduceMotion = useReducedMotion();
   // Hold the entrance until the boot screen starts fading, otherwise it plays unseen behind it
-  const [bootDone, setBootDone] = useState(
-    () =>
-      !document.getElementById("boot") ||
-      document.documentElement.classList.contains("no-boot") ||
-      Boolean((window as Window & { __hkBootDone?: boolean }).__hkBootDone)
-  );
-  useEffect(() => {
-    if (bootDone) return;
-    const onDone = () => setBootDone(true);
-    window.addEventListener("hk:boot-done", onDone);
-    return () => window.removeEventListener("hk:boot-done", onDone);
-  }, [bootDone]);
-  const [wordIdx, setWordIdx] = useState(0);
-  const [displayed, setDisplayed] = useState("");
-  const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
-
-  useEffect(() => {
-    if (reduceMotion) return;
-    const current = WORDS[wordIdx];
-    let timer: ReturnType<typeof setTimeout>;
-    if (phase === "typing") {
-      timer = displayed.length < current.length
-        ? setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 80)
-        : setTimeout(() => setPhase("pause"), 1900);
-    } else if (phase === "pause") {
-      timer = setTimeout(() => setPhase("deleting"), 100);
-    } else if (displayed.length > 0) {
-      timer = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 40);
-    } else {
-      setWordIdx((i) => (i + 1) % WORDS.length);
-      setPhase("typing");
-    }
-    return () => clearTimeout(timer);
-  }, [displayed, phase, wordIdx, reduceMotion]);
+  const bootDone = useBootDone();
+  const displayed = useTypewriter(WORDS, Boolean(reduceMotion));
 
   // Scroll-linked (and reversible) exit: the rings zoom towards the viewer while the text lifts away
   const heroRef = useRef<HTMLElement>(null);
@@ -93,58 +47,7 @@ export function Hero() {
           className="absolute inset-0"
           style={reduceMotion ? undefined : { scale: orbitScale, opacity: orbitOpacity }}
         >
-        <div className="hero-orbit" aria-hidden="true">
-          <span className="hero-ring hero-ring-0" />
-          {[1, 2, 3].map((r) => (
-            <span key={r} className={`hero-ring hero-ring-${r}`} />
-          ))}
-          <span className="hero-arc hero-arc-1" />
-          <span className="hero-arc hero-arc-2" />
-
-          {RINGS.map(({ ring, reverse, offset, photos }) => (
-            <div key={ring} className={`orbit-spin orbit-spin-${ring}${reverse ? " orbit-rev" : ""}`}>
-              {photos.map((n, i) => {
-                const a = ((offset + (360 / photos.length) * i) * Math.PI) / 180;
-                return (
-                  <div
-                    key={n}
-                    className="orbit-slot"
-                    style={{
-                      transform: `translate(calc(${Math.cos(a).toFixed(4)} * var(--orbit-${ring})), calc(${Math.sin(a).toFixed(4)} * var(--orbit-${ring})))`,
-                    }}
-                  >
-                    <div className={`orbit-card orbit-card-${ring}`}>
-                      {/* Backlight (after Magic UI): a blurred, saturated copy of the photo glowing behind it.
-                          Same file as the photo, so no extra download; CSS shows it on desktop only. */}
-                      <img
-                        className="orbit-glow"
-                        src={photoSrc(n)}
-                        srcSet={`${photoSrc(n, 240)} 240w, ${photoSrc(n)} 360w`}
-                        sizes={CARD_SIZES[ring]}
-                        alt=""
-                        aria-hidden="true"
-                        width={360}
-                        height={225}
-                        decoding="async"
-                        fetchPriority="low"
-                      />
-                      <img
-                        src={photoSrc(n)}
-                        srcSet={`${photoSrc(n, 240)} 240w, ${photoSrc(n)} 360w`}
-                        sizes={CARD_SIZES[ring]}
-                        alt=""
-                        width={360}
-                        height={225}
-                        decoding="async"
-                        fetchPriority="low"
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <HeroOrbit />
         </motion.div>
 
         {/* Soft fade behind the text so it stays readable over the photos */}
