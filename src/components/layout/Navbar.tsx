@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Sun, Moon, Github } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
+import { ResumeLink } from "@/components/ResumeLink";
 import { SECTIONS, NAV_HEIGHT, useActiveSection, scrollToSection } from "@/hooks/use-active-section";
 
 const NAV_LINKS = SECTIONS.map((s) => ({ name: s.label, href: `#${s.id}` }));
@@ -16,8 +17,6 @@ export function Navbar() {
     scrollToSection(href.replace("#", ""));
   };
 
-  // The PDF itself, so HR gets a file to keep or forward (resume.html is the web version)
-  const resumeHref = `${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`;
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
   const ThemeIcon = theme === "dark" ? Sun : Moon;
 
@@ -82,14 +81,12 @@ export function Navbar() {
         >
           <ThemeIcon size={16} />
         </button>
-        <a
-          href={resumeHref}
-          download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf"
+        <ResumeLink
           className="hidden sm:flex items-center px-6 bg-[var(--invert-bg)] text-[var(--invert-fg)] mono-label font-bold hover:opacity-85 transition-opacity"
           data-testid="button-download-resume-nav"
         >
           Resume
-        </a>
+        </ResumeLink>
         <button
           className="lg:hidden flex w-12 items-center justify-center border-l border-[var(--line)] text-[var(--ink)]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -116,13 +113,11 @@ export function Navbar() {
               <span className="text-[var(--faint)]">{String(i).padStart(2, "0")}</span>
             </a>
           ))}
-          <a
-            href={resumeHref}
-            download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf"
+          <ResumeLink
             className="flex items-center justify-center h-12 bg-[var(--invert-bg)] text-[var(--invert-fg)] mono-label font-bold"
           >
             Download Resume
-          </a>
+          </ResumeLink>
         </div>
       )}
     </header>

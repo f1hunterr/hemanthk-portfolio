@@ -8,6 +8,7 @@ import { ProgressRing } from "@/components/magic/ProgressRing";
 import { BlendFlowDiagram } from "@/components/magic/BlendFlowDiagram";
 import { SpotlightGlow, spotlightHandlers } from "@/components/magic/Spotlight";
 import { FileTree, type TreeNode } from "@/components/magic/FileTree";
+import { scrollToSection } from "@/hooks/use-active-section";
 
 // Loaded on demand: most visitors never open the game, so keep it out of the main bundle
 const NetworkDefenseGame = lazy(() =>
@@ -325,11 +326,6 @@ export function Projects() {
   const [gameOpen, setGameOpen] = useState(false);
   const closeGame = useCallback(() => setGameOpen(false), []);
 
-  const scrollToContact = () => {
-    const el = document.querySelector("#contact");
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 49, behavior: "smooth" });
-  };
-
   return (
     <Section id="projects" index="03" label="Projects" meta="Built and run at HOBB">
       <SectionIntro
@@ -433,7 +429,7 @@ export function Projects() {
               <p className="text-[var(--muted)] leading-relaxed mb-5">
                 Infrastructure, automation or a farm of your own — happy to talk it through.
               </p>
-              <button className="btn btn-solid btn-sm" onClick={scrollToContact}>
+              <button className="btn btn-solid btn-sm" onClick={() => scrollToSection("contact")}>
                 Get in touch <ArrowUpRight size={12} />
               </button>
             </div>

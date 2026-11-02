@@ -3,6 +3,8 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowDown, Download } from "lucide-react";
 import { NumberTicker } from "@/components/magic/NumberTicker";
 import { Marquee } from "@/components/magic/Marquee";
+import { ResumeLink } from "@/components/ResumeLink";
+import { scrollToSection } from "@/hooks/use-active-section";
 
 // The italic word in the tagline cycles through these
 const WORDS = ["reliable.", "automated.", "secure.", "monitored."];
@@ -74,14 +76,6 @@ export function Hero() {
     }
     return () => clearTimeout(timer);
   }, [displayed, phase, wordIdx, reduceMotion]);
-
-  const scrollTo = (href: string) => {
-    const el = document.querySelector(href);
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 49, behavior: "smooth" });
-  };
-
-  // The PDF itself, so HR gets a file to keep or forward (resume.html is the web version)
-  const resumeHref = `${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`;
 
   // Scroll-linked (and reversible) exit: the rings zoom towards the viewer while the text lifts away
   const heroRef = useRef<HTMLElement>(null);
@@ -193,12 +187,12 @@ export function Hero() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <button className="btn btn-solid w-full sm:w-auto" onClick={() => scrollTo("#projects")} data-testid="button-view-projects">
+            <button className="btn btn-solid w-full sm:w-auto" onClick={() => scrollToSection("projects")} data-testid="button-view-projects">
               View projects <ArrowDown size={14} />
             </button>
-            <a className="btn btn-outline w-full sm:w-auto" href={resumeHref} download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf" data-testid="button-download-resume">
+            <ResumeLink className="btn btn-outline w-full sm:w-auto" data-testid="button-download-resume">
               <Download size={14} /> Download resume
-            </a>
+            </ResumeLink>
           </div>
 
           <p className="legible mt-6 mono-label text-[var(--muted)] flex flex-wrap items-center justify-center gap-x-1 gap-y-0">

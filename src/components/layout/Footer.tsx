@@ -1,3 +1,6 @@
+import { ResumeLink } from "@/components/ResumeLink";
+import { scrollToSection } from "@/hooks/use-active-section";
+
 const SECTIONS = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
@@ -17,8 +20,7 @@ const CONNECT = [
 export function Footer() {
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const el = document.querySelector(href);
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 49, behavior: "smooth" });
+    scrollToSection(href.replace("#", ""));
   };
 
   // py-1 lifts the tap area to ~28px without changing the look
@@ -71,9 +73,9 @@ export function Footer() {
             <li className="[overflow-wrap:anywhere]">Hemanth2608@hotmail.com</li>
             <li>+91 80884 61724</li>
             <li>
-              <a href={`${import.meta.env.BASE_URL}Hemanth-K-Resume.pdf`} download="Hemanth-K-Resume.pdf" data-goatcounter-click="resume-pdf" className={linkClass}>
+              <ResumeLink className={linkClass}>
                 Resume (PDF) ↓
-              </a>
+              </ResumeLink>
             </li>
             <li>
               <a href={`${import.meta.env.BASE_URL}card/`} data-goatcounter-click="contact-card" className={linkClass}>
