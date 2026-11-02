@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { openHome } from "./helpers";
 
 // WhatsApp kit: the contact card page, its link preview, and the saved contact. Each test names the break it catches.
 const CARD = "/hemanthk-portfolio/card/";
@@ -78,14 +79,7 @@ test.describe("resume page", () => {
 test.describe("card is reachable from the site", () => {
   // Break: the card only reachable by someone who already has the link
   test("Contact section and footer link to the contact card", async ({ page }) => {
-    await page.addInitScript(() => {
-      try {
-        sessionStorage.setItem("hk-booted", "1");
-      } catch {
-        /* storage blocked */
-      }
-    });
-    await page.goto("/hemanthk-portfolio/");
+    await openHome(page);
     for (const scope of [page.locator("#contact"), page.locator("footer")]) {
       const link = scope.getByRole("link", { name: /Contact card/ });
       expect(await link.evaluate((a: HTMLAnchorElement) => a.href)).toMatch(/\/hemanthk-portfolio\/card\/$/);

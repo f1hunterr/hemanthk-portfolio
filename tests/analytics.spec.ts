@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { HOME, openHome } from "./helpers";
 
 // GoatCounter (cookie-free analytics). Each test names the break it catches.
-const HOME = "/hemanthk-portfolio/";
 const COUNTER = "https://hemanth9908.goatcounter.com/count";
 
 test.describe("analytics", () => {
@@ -16,14 +16,7 @@ test.describe("analytics", () => {
 
   // Break: resume downloads and card opens not being counted as events
   test("tags resume downloads and card links as click events", async ({ page }) => {
-    await page.addInitScript(() => {
-      try {
-        sessionStorage.setItem("hk-booted", "1");
-      } catch {
-        /* storage blocked */
-      }
-    });
-    await page.goto(HOME);
+    await openHome(page);
     for (const id of ["button-download-resume", "button-download-resume-nav"]) {
       await expect(page.getByTestId(id)).toHaveAttribute("data-goatcounter-click", "resume-pdf");
     }

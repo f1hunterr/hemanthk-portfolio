@@ -1,20 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
+import { openHome } from "./helpers";
 
 // Behaviour tests for the Magic UI-style polish components. Each test names the break it catches.
-const HOME = "/hemanthk-portfolio/";
-
-async function open(page: Page, { reduced = false } = {}) {
-  await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
-  // Skip the once-per-session boot screen so the page is interactive straight away
-  await page.addInitScript(() => {
-    try {
-      sessionStorage.setItem("hk-booted", "1");
-    } catch {
-      /* storage blocked */
-    }
-  });
-  await page.goto(HOME);
-}
 
 const statValues = (page: Page) => page.locator("[data-stat-value]");
 
@@ -26,14 +13,14 @@ const translateX = (page: Page, selector: string) =>
 test.describe("number ticker", () => {
   // Break: a wrong target value, or the ticker stopping short of it
   test("stats settle on their real values once scrolled into view", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     await statValues(page).first().scrollIntoViewIfNeeded();
     await expect(statValues(page)).toHaveText(["200+", "100+", "6+", "10+", "5+"], { timeout: 5000 });
   });
 
   // Break: the numbers being rendered at their final value with no counting
   test("stats visibly count up rather than appearing at the final value", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     await statValues(page).first().scrollIntoViewIfNeeded();
     const samples: number[] = [];
     for (let i = 0; i < 20; i++) {
@@ -45,7 +32,7 @@ test.describe("number ticker", () => {
 
   // Break: ignoring the reduced-motion preference
   test("reduced motion shows the final stat values immediately", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     await expect(statValues(page)).toHaveText(["200+", "100+", "6+", "10+", "5+"], { timeout: 500 });
   });
 });
@@ -59,7 +46,7 @@ const TOOLS = [
 test.describe("tools marquee", () => {
   // Break: a missing tool, or the looping duplicate being read out to screen readers twice
   test("lists every tool once for assistive technology", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const strip = page.getByRole("region", { name: "Tools" });
     await expect(strip).toBeVisible();
     const spoken = await strip.evaluate((el) =>
@@ -70,7 +57,7 @@ test.describe("tools marquee", () => {
 
   // Break: the strip not animating
   test("moves on its own", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const a = await translateX(page, "[data-marquee-track]");
     await page.waitForTimeout(800);
     const b = await translateX(page, "[data-marquee-track]");
@@ -79,7 +66,7 @@ test.describe("tools marquee", () => {
 
   // Break: no pause-on-hover, so a visitor can't read a moving name
   test("pauses while hovered", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     // Hover the strip (stable), not the moving track: Playwright waits for a hover target to stop moving
     await page.getByRole("region", { name: "Tools" }).hover();
     await page.waitForTimeout(300);
@@ -90,7 +77,7 @@ test.describe("tools marquee", () => {
 
   // Break: ignoring the reduced-motion preference
   test("stays still under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     const a = await translateX(page, "[data-marquee-track]");
     await page.waitForTimeout(800);
     expect(await translateX(page, "[data-marquee-track]")).toBe(a);
@@ -101,7 +88,7 @@ test.describe("tools marquee", () => {
 test.describe("border beam", () => {
   // Break: the beam missing, or spread to every card so it stops meaning "headline project"
   test("marks exactly the render farm and Suol cards", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const titles = await page
       .locator("[data-border-beam]")
       .evaluateAll((els) => els.map((el) => el.closest("article")?.querySelector("h3")?.textContent?.trim()));
@@ -110,7 +97,7 @@ test.describe("border beam", () => {
 
   // Break: the beam being drawn but never moving
   test("animates", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const running = await page
       .locator("[data-border-beam]")
       .first()
@@ -120,7 +107,7 @@ test.describe("border beam", () => {
 
   // Break: ignoring the reduced-motion preference
   test("is still under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     const running = await page
       .locator("[data-border-beam]")
       .first()
@@ -133,7 +120,7 @@ test.describe("border beam", () => {
 test.describe("dot pattern", () => {
   // Break: the decoration missing, read out by screen readers, or swallowing clicks
   test("sits behind each section intro without being announced or blocking clicks", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     for (const id of ["skills", "projects", "experience"]) {
       const pattern = page.locator(`#${id} [data-dot-pattern]`);
       await expect(pattern, `#${id} has a dot pattern`).toHaveCount(1);
@@ -149,13 +136,13 @@ const suolCard = (page: Page) => page.locator("article", { has: page.getByRole("
 test.describe("animated ops feed", () => {
   // Break: the feed missing, or not labelled as an example (it must not pass for real system data)
   test("appears in the Suol card, labelled as an example", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     await expect(suolCard(page).getByText("Example feed", { exact: true })).toBeVisible();
   });
 
   // Break: all lines appearing at once instead of arriving one by one
   test("lines arrive one after another", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const items = suolCard(page).locator("[data-animated-list] li");
     await suolCard(page).scrollIntoViewIfNeeded();
     const early = await items.count();
@@ -165,7 +152,7 @@ test.describe("animated ops feed", () => {
 
   // Break: ignoring the reduced-motion preference
   test("reduced motion shows the whole feed at once", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     await suolCard(page).scrollIntoViewIfNeeded();
     await expect(suolCard(page).locator("[data-animated-list] li")).toHaveCount(4, { timeout: 500 });
   });

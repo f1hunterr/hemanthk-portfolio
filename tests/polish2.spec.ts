@@ -1,19 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
+import { openHome } from "./helpers";
 
 // Second batch of Magic UI-style components. Each test names the break it catches.
-const HOME = "/hemanthk-portfolio/";
-
-async function open(page: Page, { reduced = false } = {}) {
-  await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
-  await page.addInitScript(() => {
-    try {
-      sessionStorage.setItem("hk-booted", "1");
-    } catch {
-      /* storage blocked */
-    }
-  });
-  await page.goto(HOME);
-}
 
 const card = (page: Page, title: RegExp) => page.locator("article", { has: page.getByRole("heading", { name: title }) });
 const renderFarm = (page: Page) => card(page, /^Unreal Engine Distributed Render Farm/);
@@ -32,7 +20,7 @@ const TERMINAL_LINES = [
 test.describe("terminal", () => {
   // Break: lines appearing all at once, or the session never finishing
   test("types its session line by line in the render farm card", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const lines = renderFarm(page).locator("[data-terminal-line]");
     await renderFarm(page).locator("[data-terminal]").scrollIntoViewIfNeeded();
     const early = await lines.count();
@@ -42,7 +30,7 @@ test.describe("terminal", () => {
 
   // Break: screen readers hearing half-typed text, or nothing at all
   test("gives assistive technology the whole transcript, once", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const spoken = await renderFarm(page)
       .locator("[data-terminal]")
       .evaluate((el) =>
@@ -56,7 +44,7 @@ test.describe("terminal", () => {
 
   // Break: ignoring the reduced-motion preference
   test("shows the whole session at once under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     await renderFarm(page).locator("[data-terminal]").scrollIntoViewIfNeeded();
     await expect(renderFarm(page).locator("[data-terminal-line]")).toHaveCount(TERMINAL_LINES.length, { timeout: 500 });
   });
@@ -66,14 +54,14 @@ test.describe("terminal", () => {
 test.describe("architecture diagram", () => {
   // Break: the diagram missing, or not described for screen readers
   test("BlendFlow card shows a described diagram of its pipeline", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const diagram = card(page, /^BlendFlow/).getByRole("img", { name: /master.*render PCs.*NAS/i });
     await expect(diagram).toBeVisible();
   });
 
   // Break: pulses drawn but not travelling
   test("pulses travel along the connections", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const running = await card(page, /^BlendFlow/)
       .locator("[data-beam-diagram]")
       .evaluate((el) => el.getAnimations({ subtree: true }).some((a) => a.playState === "running"));
@@ -82,7 +70,7 @@ test.describe("architecture diagram", () => {
 
   // Break: ignoring the reduced-motion preference
   test("is still under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     const running = await card(page, /^BlendFlow/)
       .locator("[data-beam-diagram]")
       .evaluate((el) => el.getAnimations({ subtree: true }).some((a) => a.playState === "running"));
@@ -98,7 +86,7 @@ test.describe("decode-on-hover labels", () => {
 
   // Break: no scramble on hover, or the label never returning to its real text
   test("scramble on hover, then settle back on the real label", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const original = (await visible(page).textContent())?.trim();
     expect(original).toBe("02 / Skills");
     await label(page).hover();
@@ -113,7 +101,7 @@ test.describe("decode-on-hover labels", () => {
 
   // Break: screen readers hearing random characters, or nothing (aria-label is ignored on a plain span)
   test("keep the real label readable by screen readers, even mid-scramble", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const spoken = () =>
       label(page).evaluate((el) =>
         [...el.querySelectorAll("*")]
@@ -130,7 +118,7 @@ test.describe("decode-on-hover labels", () => {
 
   // Break: ignoring the reduced-motion preference
   test("never scramble under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     await label(page).hover();
     for (let i = 0; i < 8; i++) {
       await page.waitForTimeout(40);
@@ -143,7 +131,7 @@ test.describe("decode-on-hover labels", () => {
 test.describe("spotlight cards", () => {
   // Break: the glow not following the pointer
   test("glow follows the mouse across a project card", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const c = card(page, /^Studio Copy/);
     // Put the card's top well below the fixed 49px nav bar, so the pointer lands on the card itself
     await c.evaluate((el) => {
@@ -160,7 +148,7 @@ test.describe("spotlight cards", () => {
   test("is off on touch screens", async ({ browser }) => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     const page = await ctx.newPage();
-    await open(page);
+    await openHome(page);
     const glow = card(page, /^Studio Copy/).locator("[data-spotlight-glow]");
     await expect(glow).toHaveCSS("display", "none");
     await ctx.close();
@@ -171,7 +159,7 @@ test.describe("spotlight cards", () => {
 test.describe("file tree", () => {
   // Break: the tree missing, or folders not opening
   test("Studio Copy card shows its files and opens folders on click", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const tree = card(page, /^Studio Copy/).locator("[data-file-tree]");
     await expect(tree.getByText("StudioCopy.ps1", { exact: true })).toBeVisible();
     await expect(tree.getByText("Run-Tests.ps1", { exact: true })).toBeHidden();
@@ -187,7 +175,7 @@ const ringOffset = (page: Page) =>
 test.describe("progress ring", () => {
   // Break: the ring missing, or never filling
   test("render farm ring fills to complete once in view", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     await expect(renderFarm(page).locator("[data-progress-ring]")).toContainText("230+");
     await renderFarm(page).locator("[data-progress-ring]").scrollIntoViewIfNeeded();
     await expect.poll(() => ringOffset(page), { timeout: 4000 }).toBeLessThan(1);
@@ -195,7 +183,7 @@ test.describe("progress ring", () => {
 
   // Break: ignoring the reduced-motion preference
   test("is already full under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     await renderFarm(page).locator("[data-progress-ring]").scrollIntoViewIfNeeded();
     await expect.poll(() => ringOffset(page), { timeout: 400 }).toBeLessThan(1);
   });
@@ -207,7 +195,7 @@ test.describe("projects grid", () => {
   for (const width of [820, 1440]) {
     test(`has no empty slots at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
-      await open(page);
+      await openHome(page);
       const { cols, used } = await page.locator("#projects .hairgrid").evaluate((grid) => {
         const cols = getComputedStyle(grid).gridTemplateColumns.split(" ").length;
         const used = [...grid.children].reduce((n, el) => {

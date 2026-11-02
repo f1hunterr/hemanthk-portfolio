@@ -1,20 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
+import { openHome } from "./helpers";
 
 // Glyph Matrix behind the Contact call to action. Each test names the break it catches.
-const HOME = "/hemanthk-portfolio/";
-
-async function open(page: Page, { reduced = false, dark = false } = {}) {
-  await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
-  await page.addInitScript((dark) => {
-    try {
-      sessionStorage.setItem("hk-booted", "1");
-      if (dark) localStorage.setItem("portfolio-theme", "dark");
-    } catch {
-      /* storage blocked */
-    }
-  }, dark);
-  await page.goto(HOME);
-}
 
 const matrix = (page: Page) => page.locator("#contact canvas[data-glyph-matrix]");
 
@@ -33,7 +20,7 @@ const frame = (page: Page) =>
 test.describe("glyph matrix", () => {
   // Break: missing, exposed to screen readers, or covering the buttons
   test("sits decoratively behind the contact call to action", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const m = matrix(page);
     await m.scrollIntoViewIfNeeded();
     await expect(m).toHaveAttribute("aria-hidden", "true");
@@ -46,7 +33,7 @@ test.describe("glyph matrix", () => {
 
   // Break: a blank canvas, or a frozen one
   test("draws glyphs and keeps shifting them", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     await matrix(page).scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     const a = await frame(page);
@@ -58,7 +45,7 @@ test.describe("glyph matrix", () => {
 
   // Break: animating for people who asked for less motion
   test("draws one still frame under reduced motion", async ({ page }) => {
-    await open(page, { reduced: true });
+    await openHome(page, { reduced: true });
     await matrix(page).scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     const a = await frame(page);
@@ -69,7 +56,7 @@ test.describe("glyph matrix", () => {
 
   // Break: burning CPU while nobody can see it
   test("stops animating while scrolled out of view", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     await matrix(page).scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -81,7 +68,7 @@ test.describe("glyph matrix", () => {
 
   // Break: dark glyphs on the dark theme (invisible)
   test("uses light glyphs on the dark theme", async ({ page }) => {
-    await open(page, { dark: true });
+    await openHome(page, { dark: true });
     await matrix(page).scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     const lum = await matrix(page).evaluate((c: HTMLCanvasElement) => {

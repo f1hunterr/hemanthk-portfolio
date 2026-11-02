@@ -1,19 +1,8 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
+import { HOME, openHome } from "./helpers";
 
 // Downloadable PDF resume for HR. Each test names the break it catches.
-const HOME = "/hemanthk-portfolio/";
 const PDF = "Hemanth-K-Resume.pdf";
-
-async function open(page: Page) {
-  await page.addInitScript(() => {
-    try {
-      sessionStorage.setItem("hk-booted", "1");
-    } catch {
-      /* storage blocked */
-    }
-  });
-  await page.goto(HOME);
-}
 
 test.describe("resume pdf", () => {
   // Break: the PDF missing, or the host serving it as something else
@@ -36,7 +25,7 @@ test.describe("resume pdf", () => {
 
   // Break: HR clicking "Download resume" and landing on a web page instead of a file
   test("downloads from the hero and the navbar", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     for (const id of ["button-download-resume", "button-download-resume-nav"]) {
       const link = page.getByTestId(id);
       expect(await link.evaluate((a: HTMLAnchorElement) => a.href)).toMatch(new RegExp(`/hemanthk-portfolio/${PDF}$`));
@@ -46,7 +35,7 @@ test.describe("resume pdf", () => {
 
   // Break: the footer still pointing at the old web page
   test("is the footer's resume link", async ({ page }) => {
-    await open(page);
+    await openHome(page);
     const link = page.locator("footer").getByRole("link", { name: /Resume/ });
     expect(await link.evaluate((a: HTMLAnchorElement) => a.href)).toMatch(new RegExp(`${PDF}$`));
   });
