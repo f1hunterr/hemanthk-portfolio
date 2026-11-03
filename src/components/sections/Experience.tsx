@@ -24,6 +24,7 @@ const responsibilityCategories = [
     points: [
       "Automated IT operations using PowerShell, Bash, and n8n workflows",
       "Built automated alerting for monitoring and ticket escalation via Slack",
+      "Built a self-hosted AI agent that runs scheduled checks on the workstation fleet, inventory drift and backups",
       "Streamlined employee onboarding/offboarding processes end-to-end",
       "Created internal tools improving communication and operational efficiency",
     ],

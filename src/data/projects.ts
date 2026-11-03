@@ -19,6 +19,8 @@ export type Project = {
   feed?: FeedItem[];
   /** Wide featured card: spans two columns and shows its extras beside the story */
   wide?: boolean;
+  /** Full-row card: spans every column and shows its feed beside the story */
+  full?: boolean;
   /** Illustrative terminal session (no real machine names) */
   terminal?: TerminalLine[];
   /** A real, verifiable figure shown as a filling ring */
@@ -123,6 +125,28 @@ export const projects: Project[] = [
     ],
     problem: "Data was scattered across machines with no centralized control or backups.",
     result: "Centralized storage with automated backup and access control in place."
+  },
+  {
+    category: "AI operations",
+    title: "Gab — Self-Hosted AI Operations Agent",
+    full: true,
+    feed: [
+      { level: "ok", text: "fleet scan · a workstation came back online" },
+      { level: "warn", text: "inventory · RAM changed on a workstation" },
+      { level: "ok", text: "AD vs inventory · no drift this week" },
+      { level: "ok", text: "backups · all three copies fresh" },
+    ],
+    description: "A personal AI agent (Hermes Agent) running as a background service. On a schedule it scans the office network, watches hardware inventory for changes, checks Active Directory against the asset sheet, keeps a chained backup fresh and sorts two inboxes — and it can act on the workstations through Ansible.",
+    problem: "Routine checks on the fleet, inventory, backups and email took manual time every day, and problems were noticed late.",
+    result: "9 scheduled jobs and 8,000+ unattended runs since August 2026, alerting only when something changes. Silent failures (a service that never started, a retired AI model) were caught by checking real output, not \"success\" flags.",
+    tags: [
+      "Hermes Agent",
+      "Python",
+      "MCP",
+      "Ansible",
+      "Automation"
+    ],
+    spec: "9 scheduled jobs · 8,000+ runs · self-hosted"
   },
   {
     category: "Tooling",

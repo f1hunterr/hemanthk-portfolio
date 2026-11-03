@@ -27,12 +27,13 @@ export function Projects() {
         lede="Showcasing robust systems, automated workflows, and internal tools built to solve real operational challenges."
       />
 
-      {/* 17 projects (render farm spans 2) + closing row: 18 + 3 = 21 slots at 3 columns, 18 + 2 = 20 at 2 */}
+      {/* 18 projects (render farm spans 2, Gab spans the full row) + closing row: 24 slots at 3 columns, 22 at 2.
+          The full-row card must start a row at both widths: keep 6 slots (or a multiple) before it. */}
       <div className="hairgrid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, idx) => (
           <article
             key={p.title}
-            className={`relative flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)] ${p.wide ? "md:col-span-2" : ""}`}
+            className={`relative flex flex-col transition-colors duration-200 hover:bg-[var(--bg-raised)] ${p.full ? "md:col-span-2 lg:col-span-3" : p.wide ? "md:col-span-2" : ""}`}
             data-testid={`card-project-${idx}`}
             {...spotlightHandlers}
           >
@@ -44,7 +45,7 @@ export function Projects() {
             </div>
             <Reveal
               delay={(idx % 3) * 0.06}
-              className={`flex-1 px-5 md:px-8 py-8 ${p.wide ? "grid lg:grid-cols-2 gap-x-10 gap-y-8" : "flex flex-col"}`}
+              className={`flex-1 px-5 md:px-8 py-8 ${p.wide || p.full ? "grid lg:grid-cols-2 gap-x-10 gap-y-8" : "flex flex-col"}`}
             >
               <div className="flex flex-col h-full">
               <h3 className="text-2xl leading-[1.15] tracking-[-0.02em]">{p.title}</h3>
@@ -62,7 +63,7 @@ export function Projects() {
                 </div>
               </dl>
 
-              {p.feed && <AnimatedList items={p.feed} label="Example feed" />}
+              {p.feed && !p.full && <AnimatedList items={p.feed} label="Example feed" />}
               {p.diagram && (
                 <div className="mt-6">
                   <BlendFlowDiagram />
@@ -99,6 +100,11 @@ export function Projects() {
               )}
               </div>
 
+              {p.full && p.feed && (
+                <div className="flex flex-col">
+                  <AnimatedList items={p.feed} label="Example feed" />
+                </div>
+              )}
               {p.wide && (p.ring || p.terminal) && (
                 <div className="flex flex-col gap-6">
                   {p.ring && <ProgressRing value={p.ring.value} label={p.ring.label} />}

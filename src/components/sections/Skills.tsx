@@ -5,6 +5,7 @@ const skillCategories = [
   { title: "Networking & Security", skills: ["VLAN Configuration", "Switch Management", "Sophos Firewall", "Tailscale VPN", "WireGuard", "Access Point Management", "User Permission Management"] },
   { title: "Servers & Virtualization", skills: ["TrueNAS", "Proxmox", "VMware ESXi", "Windows Server", "Linux (Debian/Ubuntu)", "NAS Storage", "Disaster Recovery"] },
   { title: "Automation & Scripting", skills: ["n8n Workflows", "GLPI Automation", "Slack Integrations", "PowerShell Scripting", "Bash Scripting"] },
+  { title: "AI & Automation", skills: ["Hermes Agent", "Claude Code", "MCP Servers", "Ollama Local LLMs", "Scheduled AI Agents", "Agent Orchestration"] },
   { title: "Monitoring", skills: ["Zabbix", "Infrastructure Alerting", "SNMP Monitoring", "Temperature Monitoring", "UPS Monitoring", "Dashboard Management"] },
   { title: "Storage & Backup", skills: ["NAS Administration", "Backup Planning", "Backup Monitoring", "Data Recovery", "Shared Storage", "RAID Management"] },
   { title: "Software & Licensing", skills: ["Autodesk License Management", "Adobe License Management", "V-Ray License Management", "License Tracking", "Asset Lifecycle Management"] },
