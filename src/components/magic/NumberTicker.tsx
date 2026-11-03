@@ -6,7 +6,8 @@ import { animate, useInView, useReducedMotion } from "framer-motion";
 export function NumberTicker({ value, suffix = "", className }: { value: number; suffix?: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const reduceMotion = useReducedMotion();
-  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  // Any visible edge counts: the hero stats peek above the fold on common laptop screens
+  const inView = useInView(ref, { once: true });
   const [shown, setShown] = useState(0);
 
   useEffect(() => {

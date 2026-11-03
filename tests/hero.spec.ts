@@ -35,3 +35,15 @@ test.describe("hero entrance", () => {
     expect(await page.evaluate(() => (window as Window & { __hkBootDone?: boolean }).__hkBootDone)).toBe(true);
   });
 });
+
+test.describe("hero stats", () => {
+  // Break: stats peeking above the fold stay at "0+" until the visitor scrolls
+  test("count up when only their top edge is on screen", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await openHome(page);
+    const first = page.locator("[data-stat-value]").first();
+    const top = await first.evaluate((el) => el.getBoundingClientRect().top);
+    expect(top).toBeLessThan(900); // peeking, not fully in view
+    await expect.poll(() => first.textContent(), { timeout: 5000 }).not.toMatch(/^0\D*$/);
+  });
+});
