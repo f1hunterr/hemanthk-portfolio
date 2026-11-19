@@ -56,4 +56,16 @@ test.describe("resume pdf", () => {
     await expect(link).toHaveAttribute("href", PDF);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Hemanth K/);
   });
+
+  // Break: a printed resume with no quick way to reach the portfolio
+  test("has a QR code to the portfolio beside the key numbers, on screen and in print", async ({ page }) => {
+    await page.goto(`${HOME}resume.html`);
+    for (const media of ["screen", "print"] as const) {
+      await page.emulateMedia({ media });
+      const qr = page.locator(".stats a.qr");
+      await expect(qr).toBeVisible();
+      await expect(qr).toHaveAttribute("href", "https://f1hunterr.github.io/hemanthk-portfolio/");
+      await expect(qr.locator("svg path")).toHaveCount(1);
+    }
+  });
 });
