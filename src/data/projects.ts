@@ -17,6 +17,8 @@ export type Project = {
   featured?: boolean;
   /** Illustrative ops lines shown as an animated "example feed" (no real system names) */
   feed?: FeedItem[];
+  /** Heading over the feed; defaults to "Example feed" */
+  feedLabel?: string;
   /** Wide featured card: spans two columns and shows its extras beside the story */
   wide?: boolean;
   /** Full-row card: spans every column and shows its feed beside the story */
@@ -130,15 +132,17 @@ export const projects: Project[] = [
     category: "AI operations",
     title: "Gab — Self-Hosted AI Operations Agent",
     full: true,
+    // Real results from the agent's runs on 23 Nov 2026, with hostnames and addresses left out
+    feedLabel: "From real runs",
     feed: [
-      { level: "ok", text: "fleet scan · a workstation came back online" },
-      { level: "warn", text: "inventory · RAM changed on a workstation" },
-      { level: "ok", text: "AD vs inventory · no drift this week" },
-      { level: "ok", text: "backups · all three copies fresh" },
+      { level: "ok", text: "fleet scan · no PC changes, 1 new device flagged" },
+      { level: "warn", text: "inventory · IP from a virtual adapter, not a real move" },
+      { level: "warn", text: "AD vs sheet · a PC gone from AD is still listed" },
+      { level: "ok", text: "server updates · 65 pending, none security-critical" },
     ],
     description: "A personal AI agent (Hermes Agent) running as a background service. On a schedule it scans the office network, watches hardware inventory for changes, checks Active Directory against the asset sheet, keeps a chained backup fresh and sorts two inboxes — and it can act on the workstations through Ansible.",
     problem: "Routine checks on the fleet, inventory, backups and email took manual time every day, and problems were noticed late.",
-    result: "9 scheduled jobs and 8,000+ unattended runs since August 2026, alerting only when something changes. Silent failures (a service that never started, a retired AI model) were caught by checking real output, not \"success\" flags.",
+    result: "11 scheduled jobs and 10,000+ unattended runs since August 2026, alerting only when something changes. Silent failures (a service that never started, a retired AI model) were caught by checking real output, not \"success\" flags.",
     tags: [
       "Hermes Agent",
       "Python",
@@ -146,7 +150,7 @@ export const projects: Project[] = [
       "Ansible",
       "Automation"
     ],
-    spec: "9 scheduled jobs · 8,000+ runs · self-hosted"
+    spec: "11 scheduled jobs · 10,000+ runs · self-hosted"
   },
   {
     category: "Tooling",

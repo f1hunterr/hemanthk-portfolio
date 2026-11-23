@@ -102,7 +102,7 @@ export function Projects() {
 
               {p.full && p.feed && (
                 <div className="flex flex-col">
-                  <AnimatedList items={p.feed} label="Example feed" />
+                  <AnimatedList items={p.feed} label={p.feedLabel ?? "Example feed"} />
                 </div>
               )}
               {p.wide && (p.ring || p.terminal) && (

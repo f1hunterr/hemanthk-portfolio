@@ -140,6 +140,16 @@ test.describe("animated ops feed", () => {
     await expect(suolCard(page).getByText("Example feed", { exact: true })).toBeVisible();
   });
 
+  // Break: the Gab card's real run results relabelled as an example, or Suol's examples passed off as real
+  test("Gab's feed is labelled as real runs, Suol's as an example", async ({ page }) => {
+    await openHome(page, { reduced: true });
+    const gab = page.locator("article", { has: page.getByRole("heading", { name: /^Gab/ }) });
+    await gab.scrollIntoViewIfNeeded();
+    await expect(gab.getByText("From real runs", { exact: true })).toBeVisible();
+    await expect(gab.getByText("Example feed", { exact: true })).toHaveCount(0);
+    await expect(suolCard(page).getByText("From real runs", { exact: true })).toHaveCount(0);
+  });
+
   // Break: all lines appearing at once instead of arriving one by one
   test("lines arrive one after another", async ({ page }) => {
     await openHome(page);
