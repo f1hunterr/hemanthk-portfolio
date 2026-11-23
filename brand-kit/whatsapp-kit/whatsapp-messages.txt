@@ -1,0 +1,26 @@
+WHATSAPP MESSAGES - copy, paste, send. The link shows a preview card with my photo.
+
+--- 1. When someone asks for my resume / portfolio ---
+Hi! Thanks for asking 🙂
+Here's my contact card - portfolio, resume and one-tap "Save contact" in one place:
+https://f1hunterr.github.io/hemanthk-portfolio/card/
+
+I manage IT, production automation and infrastructure at House of Blue Beans (HOBB), Bangalore - 200+ endpoints, VPN for 100+ freelancers, and a distributed Unreal render farm.
+Happy to walk you through any of it.
+
+--- 2. Short version ---
+Hi! Here's my portfolio, resume and contact in one link:
+https://f1hunterr.github.io/hemanthk-portfolio/card/
+
+--- 3. Recruiter / formal ---
+Hello [Name],
+Thank you for reaching out. You can find my portfolio, resume and contact details here:
+https://f1hunterr.github.io/hemanthk-portfolio/card/
+I'd be glad to discuss how I can help [Company] with IT infrastructure and automation.
+Regards,
+Hemanth K
+
+--- Tips ---
+* Send the link on its own line - WhatsApp then shows the large preview with photo.
+* Send hemanth-k-poster.png as a photo (or post it to Status); the QR code opens the same card.
+* Full portfolio link: https://f1hunterr.github.io/hemanthk-portfolio/

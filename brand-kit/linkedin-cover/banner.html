@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  /* Portfolio tokens */
+  :root { --bg: #f2f1ee; --raised: #faf9f7; --ink: #101014; --ink-strong: #000; --muted: #1010149e; --faint: #10101470; --line: #10101429; --line-strong: #10101466; }
+  :root.dark { --bg: #121316; --raised: #18191d; --ink: #f2f1ee; --ink-strong: #fff; --muted: #f2f1eea6; --faint: #f2f1ee70; --line: #f2f1ee24; --line-strong: #f2f1ee5c; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1584px; height: 396px; overflow: hidden; background: var(--bg); }
+  body { position: relative; font-family: Inter, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .mono { font-family: "Geist Mono", monospace; text-transform: uppercase; letter-spacing: .14em; font-size: 12.5px; color: var(--muted); }
+  svg { position: absolute; inset: 0; }
+
+  .copy { position: absolute; left: 540px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  .label { display: flex; align-items: center; gap: 12px; }
+  .label b { width: 8px; height: 8px; background: var(--ink); display: inline-block; }
+  .name { margin-top: 20px; font-family: Archivo, sans-serif; font-variation-settings: "wdth" 125; font-stretch: 125%;
+    font-weight: 800; font-size: 64px; line-height: .9; letter-spacing: -0.01em; text-transform: uppercase; color: var(--ink-strong); }
+  .line { margin-top: 22px; font-family: Archivo, sans-serif; font-weight: 560; font-size: 34px; letter-spacing: -0.03em; color: var(--ink-strong); }
+  .line em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; font-size: 38px; letter-spacing: -0.01em; }
+  .role { margin-top: 14px; font-size: 16.5px; color: var(--muted); }
+  .fig { position: absolute; right: 44px; bottom: 34px; background: var(--bg); padding: 4px 8px; }
+  .fig2 { position: absolute; left: 1106px; top: 34px; background: var(--bg); padding: 4px 8px; }
+</style>
+</head>
+<body>
+  <svg id="art" width="1584" height="396" viewBox="0 0 1584 396"></svg>
+
+  <div class="copy">
+    <div class="label mono"><b></b>IT · Production Automation · Infrastructure</div>
+    <div class="name">Hemanth K</div>
+    <div class="line">Systems-first. <em>Always</em> on.</div>
+    <div class="role">Manager – IT at House of Blue Beans (HOBB) · Bangalore</div>
+  </div>
+
+  <div class="fig2 mono">Fig. 02 — Studio network</div>
+  <div class="fig mono">200+ endpoints · 1 core</div>
+
+<script>
+if (location.hash === "#dark") document.documentElement.classList.add("dark");
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const LINE = css("--line"), STRONG = css("--line-strong"), INK = css("--ink"), BG = css("--bg"), RAISED = css("--raised"), MUTED = css("--muted");
+const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("art");
+const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+let s = 5; const rnd = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
+
+// Hairline frame, corner ticks, and the column rule that keeps the photo corner empty
+el("rect", { x: 28.5, y: 22.5, width: 1527, height: 351, fill: "none", stroke: LINE });
+el("line", { x1: 496.5, y1: 22, x2: 496.5, y2: 374, stroke: LINE });
+el("line", { x1: 1090.5, y1: 22, x2: 1090.5, y2: 374, stroke: LINE });
+for (const [x, y] of [[28.5, 22.5], [1555.5, 22.5], [28.5, 373.5], [1555.5, 373.5], [496.5, 22.5], [1090.5, 22.5], [496.5, 373.5], [1090.5, 373.5]]) {
+  el("line", { x1: x - 6, y1: y, x2: x + 6, y2: y, stroke: STRONG });
+  el("line", { x1: x, y1: y - 6, x2: x, y2: y + 6, stroke: STRONG });
+}
+// Dot pattern in the diagram cell
+for (let x = 1106; x < 1550; x += 16) for (let y = 30; y < 370; y += 16) el("circle", { cx: x, cy: y, r: .8, fill: STRONG, opacity: .45 });
+
+// Network diagram, drawn like a figure: hairlines, labelled nodes, one solid core
+const core = { x: 1330, y: 206 };
+const hubs = [
+  { x: 1186, y: 126, label: "NAS" },
+  { x: 1196, y: 296, label: "RENDER" },
+  { x: 1446, y: 112, label: "VPN" },
+  { x: 1440, y: 296, label: "BACKUP" },
+];
+hubs.forEach((h, i) => {
+  // endpoints around each hub
+  for (let k = 0; k < 7; k++) {
+    const a = rnd() * Math.PI * 2, d = 30 + rnd() * 40;
+    const x = h.x + Math.cos(a) * d, y = Math.max(52, Math.min(360, h.y + Math.sin(a) * d * .8));
+    if (Math.abs(y - h.y) < 14 && x > h.x) continue; // keep the label clear
+    el("line", { x1: h.x, y1: h.y, x2: x, y2: y, stroke: LINE });
+    el("rect", { x: x - 2.5, y: y - 2.5, width: 5, height: 5, fill: RAISED, stroke: STRONG });
+  }
+  // elbow link to the core
+  const mx = (h.x + core.x) / 2;
+  el("path", { d: `M ${h.x} ${h.y} H ${mx} V ${core.y} H ${core.x}`, fill: "none", stroke: STRONG });
+});
+el("path", { d: `M ${hubs[0].x} ${hubs[0].y} V ${hubs[1].y}`, fill: "none", stroke: LINE, "stroke-dasharray": "3 4" });
+el("path", { d: `M ${hubs[2].x} ${hubs[2].y} V ${hubs[3].y}`, fill: "none", stroke: LINE, "stroke-dasharray": "3 4" });
+hubs.forEach((h) => {
+  el("rect", { x: h.x - 7, y: h.y - 7, width: 14, height: 14, fill: BG, stroke: INK });
+  el("rect", { x: h.x + 10, y: h.y - 8, width: h.label.length * 8.6 + 8, height: 16, fill: BG });
+  const t = el("text", { x: h.x + 14, y: h.y + 4, fill: MUTED, "font-size": 11, "font-family": "Geist Mono", "letter-spacing": 1.6 });
+  t.textContent = h.label;
+});
+el("circle", { cx: core.x, cy: core.y, r: 18, fill: "none", stroke: STRONG, "stroke-dasharray": "2 3" });
+el("circle", { cx: core.x, cy: core.y, r: 9, fill: INK });
+el("rect", { x: core.x - 22, y: core.y + 25, width: 44, height: 15, fill: BG });
+const ct = el("text", { x: core.x, y: core.y + 36, fill: MUTED, "font-size": 11, "font-family": "Geist Mono", "letter-spacing": 1.6, "text-anchor": "middle" });
+ct.textContent = "CORE";
+
+document.fonts.ready.then(() => (document.body.dataset.ready = "1"));
+</script>
+</body>
+</html>

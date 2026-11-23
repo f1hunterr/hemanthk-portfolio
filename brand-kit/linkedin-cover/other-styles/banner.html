@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=block" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1584px; height: 396px; overflow: hidden; }
+  body { position: relative; font-family: "Space Grotesk", sans-serif; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  svg.art { position: absolute; inset: 0; }
+  .text { position: absolute; left: 560px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  .eyebrow { font-size: 14px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; }
+  .name { font-size: 78px; font-weight: 700; letter-spacing: -0.035em; line-height: 1; margin-top: 14px; }
+  .title { font-size: 22px; font-weight: 400; margin-top: 14px; letter-spacing: -0.01em; }
+  .meta { font-size: 15px; margin-top: 20px; display: flex; gap: 18px; align-items: center; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .tags { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; max-width: 620px; }
+  .tag { font-size: 12.5px; padding: 6px 11px; border-radius: 999px; }
+
+  /* ---------- 1. Network: deep navy, live infrastructure map ---------- */
+  body.v1 { background: radial-gradient(120% 140% at 85% 50%, #0f2a44 0%, #081627 45%, #050b14 100%); color: #fff; }
+  .v1 .eyebrow { color: #4fd1c5; }
+  .v1 .title { color: #b9c6d6; }
+  .v1 .meta { color: #8193a8; }
+  .v1 .dot { background: #34d399; box-shadow: 0 0 10px #34d399; }
+
+  /* ---------- 2. Racks: charcoal with amber status lights ---------- */
+  body.v2 { background: linear-gradient(100deg, #0d0d0f 0%, #141417 55%, #1b1915 100%); color: #f5f3ee; }
+  .v2 .eyebrow { color: #f5a524; }
+  .v2 .title { color: #c9c5bc; }
+  .v2 .meta { color: #8c877d; }
+  .v2 .dot { background: #f5a524; box-shadow: 0 0 10px #f5a524; }
+  .v2 .tag { border: 1px solid #ffffff22; color: #d9d5cc; background: #ffffff08; }
+
+  /* ---------- 3. Cobalt: light, with a terminal panel ---------- */
+  body.v3 { background: #f6f5f1; color: #0d1117; }
+  .v3 .eyebrow { color: #2347ff; }
+  .v3 .title { color: #3b4250; }
+  .v3 .meta { color: #6b7280; }
+  .v3 .dot { background: #16a34a; }
+  .v3 .tag { background: #e8ebff; color: #1f3bd6; font-weight: 500; }
+  .panel { position: absolute; right: 0; top: 0; bottom: 0; width: 450px; background: linear-gradient(135deg, #2347ff, #1530c9);
+    clip-path: polygon(90px 0, 100% 0, 100% 100%, 0 100%); }
+  .term { position: absolute; right: 44px; top: 62px; width: 392px; background: #0d1117; border-radius: 12px; color: #c9d1d9;
+    box-shadow: 0 24px 60px -20px #00000099, 0 0 0 1px #ffffff14; overflow: hidden; }
+  .term .bar { height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #161b22; }
+  .term .bar i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .term .bar span { margin-left: 10px; font-size: 12px; color: #6e7681; }
+  .term pre { font-size: 13.5px; line-height: 1.75; padding: 14px 18px 18px; font-family: "JetBrains Mono", monospace; }
+  .p { color: #7ee787; } .c { color: #e6edf3; } .ok { color: #3fb950; } .dim { color: #6e7681; } .hi { color: #79c0ff; }
+</style>
+</head>
+<body>
+  <svg class="art" id="art" width="1584" height="396" viewBox="0 0 1584 396"></svg>
+  <div class="panel" hidden></div>
+  <div class="term" hidden>
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>hemanth@hobb — ops</span></div>
+<pre><span class="p">$</span> <span class="c">farm status</span>
+<span class="ok">✓</span> render nodes online   <span class="hi">all</span>
+<span class="p">$</span> <span class="c">backup verify --nightly</span>
+<span class="ok">✓</span> snapshots verified    <span class="dim">02:00</span>
+<span class="p">$</span> <span class="c">vpn sessions</span>
+<span class="ok">✓</span> remote artists       <span class="hi">100+</span>
+<span class="p">$</span> <span class="c">tickets --auto-triage</span>
+<span class="ok">✓</span> alerts routed         <span class="dim">0 manual</span></pre>
+  </div>
+
+  <div class="text">
+    <div class="eyebrow mono" id="eyebrow"></div>
+    <div class="name">Hemanth K</div>
+    <div class="title">IT Manager — Production Automation &amp; Infrastructure</div>
+    <div class="meta" id="meta"></div>
+    <div class="tags" id="tags"></div>
+  </div>
+
+<script>
+const v = (location.hash || "#v1").slice(1);
+document.body.className = v;
+const $ = (id) => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const svg = $("art");
+const el = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+let s = 11; const rnd = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
+
+$("meta").innerHTML = '<span><span class="dot"></span>House of Blue Beans · Bangalore</span>';
+const TAGS = ["Windows Server", "TrueNAS", "Networking & VPN", "Render farms", "Python automation", "Backup & DR"];
+const TAGS4 = ["Windows Server", "Networking & VPN", "Render farms", "Python automation"];
+
+if (v === "v1") {
+  $("eyebrow").textContent = "Infrastructure · Automation · Render pipelines";
+  const defs = el("defs", {});
+  defs.innerHTML = `<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="fadeL" x1="0" x2="1"><stop offset="0" stop-color="#4fd1c5" stop-opacity="0"/><stop offset=".55" stop-color="#4fd1c5" stop-opacity=".16"/><stop offset="1" stop-color="#4fd1c5" stop-opacity=".32"/></linearGradient>`;
+  // faint dot grid
+  for (let x = 12; x < 1584; x += 24) for (let y = 12; y < 396; y += 24)
+    el("circle", { cx: x, cy: y, r: 0.9, fill: "#ffffff", opacity: (x / 1584) * 0.13 });
+  // hubs and endpoints on the right
+  const hubs = [
+    { x: 1360, y: 200, r: 9, label: "CORE" },
+    { x: 1225, y: 112, r: 6, label: "NAS-01" },
+    { x: 1240, y: 300, r: 6, label: "RENDER" },
+    { x: 1470, y: 96, r: 6, label: "VPN" },
+    { x: 1480, y: 310, r: 6, label: "BACKUP" },
+  ];
+  const nodes = [];
+  hubs.slice(1).forEach((h) => {
+    for (let i = 0; i < 9; i++) {
+      const a = rnd() * Math.PI * 2, d = 34 + rnd() * 62;
+      const nx = h.x + Math.cos(a) * d, ny = h.y + Math.sin(a) * d * 0.8; if (nx > h.x && nx < h.x + 80 && Math.abs(ny - h.y) < 16) continue;
+      nodes.push({ x: nx, y: Math.max(14, Math.min(382, h.y + Math.sin(a) * d * 0.8)), h });
+    }
+  });
+  hubs.slice(1).forEach((h) => el("line", { x1: hubs[0].x, y1: hubs[0].y, x2: h.x, y2: h.y, stroke: "#4fd1c5", "stroke-opacity": .55, "stroke-width": 1.4 }));
+  el("line", { x1: hubs[1].x, y1: hubs[1].y, x2: hubs[2].x, y2: hubs[2].y, stroke: "#4fd1c5", "stroke-opacity": .25, "stroke-dasharray": "3 5" });
+  el("line", { x1: hubs[3].x, y1: hubs[3].y, x2: hubs[4].x, y2: hubs[4].y, stroke: "#4fd1c5", "stroke-opacity": .25, "stroke-dasharray": "3 5" });
+  nodes.forEach((n) => el("line", { x1: n.h.x, y1: n.h.y, x2: n.x, y2: n.y, stroke: "#7dd3fc", "stroke-opacity": .22 }));
+  // long links trailing off to the left, behind the text
+  for (let i = 0; i < 7; i++) {
+    const y = 40 + i * 52 + rnd() * 20;
+    el("path", { d: `M ${520 + rnd() * 200} ${y} H ${980 + rnd() * 60} L ${hubs[1 + (i % 4)].x} ${hubs[1 + (i % 4)].y}`, fill: "none", stroke: "url(#fadeL)", "stroke-width": 1 });
+  }
+  nodes.forEach((n) => el("circle", { cx: n.x, cy: n.y, r: 2.2 + rnd() * 1.6, fill: rnd() < 0.15 ? "#34d399" : "#7dd3fc", opacity: .85 }));
+  // packets on the core links
+  hubs.slice(1).forEach((h) => { const t = 0.35 + rnd() * 0.3; el("circle", { cx: hubs[0].x + (h.x - hubs[0].x) * t, cy: hubs[0].y + (h.y - hubs[0].y) * t, r: 2.6, fill: "#fff", filter: "url(#glow)" }); });
+  hubs.forEach((h, i) => {
+    el("circle", { cx: h.x, cy: h.y, r: h.r + 9, fill: "none", stroke: "#4fd1c5", "stroke-opacity": i ? .25 : .4 });
+    el("circle", { cx: h.x, cy: h.y, r: h.r, fill: "#4fd1c5", filter: "url(#glow)" });
+    const t = el("text", { x: h.x + h.r + 14, y: h.y + 4, fill: "#9fb3c8", "font-size": 11, "font-family": "JetBrains Mono", "letter-spacing": "1.5" });
+    t.textContent = h.label;
+  });
+}
+
+if (v === "v2") {
+  $("eyebrow").textContent = "Systems that keep studios rendering";
+  $("tags").innerHTML = TAGS4.map((t) => `<span class="tag mono">${t}</span>`).join("");
+  const defs = el("defs", {});
+  defs.innerHTML = `<filter id="led" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="rack" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#26262b"/><stop offset="1" stop-color="#1a1a1e"/></linearGradient>
+    <linearGradient id="floor" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f5a524" stop-opacity=".10"/><stop offset="1" stop-color="#f5a524" stop-opacity="0"/></linearGradient>
+    <linearGradient id="fadeRacks" x1="0" x2="1"><stop offset="0" stop-color="#0d0d0f"/><stop offset="1" stop-color="#0d0d0f" stop-opacity="0"/></linearGradient>`;
+  const LED = ["#34d399", "#34d399", "#34d399", "#f5a524", "#60a5fa"];
+  const racks = [1210, 1300, 1390, 1480];
+  racks.forEach((x, ri) => {
+    const top = 34, w = 78, h = 336;
+    el("rect", { x, y: top, width: w, height: h, rx: 4, fill: "url(#rack)", stroke: "#ffffff14" });
+    el("rect", { x: x + 4, y: top + 4, width: w - 8, height: 10, rx: 2, fill: "#111114" });
+    for (let u = 0; u < 14; u++) {
+      const y = top + 20 + u * 22.5;
+      const empty = rnd() < 0.12;
+      el("rect", { x: x + 6, y, width: w - 12, height: 18, rx: 2, fill: empty ? "#151518" : "#2c2c32", stroke: "#ffffff0d" });
+      if (empty) continue;
+      for (let k = 0; k < 4; k++) el("rect", { x: x + 12 + k * 6, y: y + 5, width: 3, height: 8, rx: 1, fill: "#18181c" });
+      const n = 1 + Math.floor(rnd() * 3);
+      for (let k = 0; k < n; k++) el("circle", { cx: x + w - 14 - k * 8, cy: y + 9, r: 2, fill: LED[Math.floor(rnd() * LED.length)], filter: "url(#led)" });
+    }
+  });
+  
+  // cable run from the racks back toward the text
+  for (let i = 0; i < 4; i++) {
+    const y = 120 + i * 46;
+    el("path", { d: `M 1210 ${y} C 1150 ${y}, 1130 ${y + 30}, 1060 ${y + 30} H 1110`, fill: "none", stroke: "#f5a524", "stroke-opacity": .16 + i * .04, "stroke-width": 1.2 });
+  }
+  el("rect", { x: 1100, y: 0, width: 140, height: 396, fill: "url(#fadeRacks)", opacity: .0 });
+}
+
+if (v === "v3") {
+  $("eyebrow").textContent = "IT Infrastructure · Automation";
+  $("tags").innerHTML = TAGS4.map((t) => `<span class="tag mono">${t}</span>`).join("");
+  document.querySelector(".panel").hidden = false;
+  document.querySelector(".term").hidden = false;
+  // fine grid on the light side
+  for (let x = 0; x < 1100; x += 32) el("line", { x1: x, y1: 0, x2: x, y2: 396, stroke: "#0d1117", "stroke-opacity": .035 });
+  for (let y = 0; y < 396; y += 32) el("line", { x1: 0, y1: y, x2: 1100, y2: y, stroke: "#0d1117", "stroke-opacity": .035 });
+}
+
+document.fonts.ready.then(() => (document.body.dataset.ready = "1"));
+</script>
+</body>
+</html>
